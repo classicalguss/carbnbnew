@@ -15,6 +15,12 @@ use yii\web\IdentityInterface;
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
+ * @property integer $user_type
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $birthdate
+ * @property string $gender
+ * @property string $phonenumber
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
@@ -51,6 +57,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+        	[['username','first_name','last_name'],'required'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
