@@ -11,6 +11,7 @@ use yii\filters\AccessControl;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
+use common\models\LoginForm;
 use common\models\User;
 use yii\filters\ContentNegotiator;
 use yii\web\Response;
@@ -85,7 +86,16 @@ class UserapiController extends \yii\rest\Controller {
 	 * @return mixed
 	 */
 	public function actionLogin() {
-		return User::findByUsername ( 'classicalguss' );
+		if (! Yii::$app->user->isGuest) {
+			return array('Already logged in');
+		}
+		
+		$model = new LoginForm ();
+		if ($model->load ( Yii::$app->request->post () ) && $model->login ()) {
+			return $model;
+		} else {
+			return $model;
+		}
 	}
 	
 	/**
@@ -95,8 +105,6 @@ class UserapiController extends \yii\rest\Controller {
 	 */
 	public function actionLogout() {
 		Yii::$app->user->logout ();
-		
-		return $this->goHome ();
 	}
 	
 	/**
