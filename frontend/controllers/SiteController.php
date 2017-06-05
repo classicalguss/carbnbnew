@@ -77,6 +77,8 @@ class SiteController extends Controller {
 	 * @return mixed
 	 */
 	public function actionAbout() {
+		$g = ['hello','hello2'];
+		Yii::error($g);
 		return $this->render ( 'about' );
 	}
 }
