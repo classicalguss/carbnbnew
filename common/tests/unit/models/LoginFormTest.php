@@ -30,7 +30,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginNoUser()
     {
         $model = new LoginForm([
-            'username' => 'not_existing_username',
+            'email' => 'not_existing_email',
             'password' => 'not_existing_password',
         ]);
 
@@ -41,7 +41,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginWrongPassword()
     {
         $model = new LoginForm([
-            'username' => 'bayer.hudson',
+            'email' => 'bayer.hudson',
             'password' => 'wrong_password',
         ]);
 
@@ -53,7 +53,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginCorrect()
     {
         $model = new LoginForm([
-            'username' => 'bayer.hudson',
+            'email' => 'bayer.hudson',
             'password' => 'password_0',
         ]);
 
