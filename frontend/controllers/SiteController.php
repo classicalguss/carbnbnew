@@ -13,6 +13,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use common\models\User;
 
 /**
  * Site controller
@@ -77,8 +78,6 @@ class SiteController extends Controller {
 	 * @return mixed
 	 */
 	public function actionAbout() {
-		$g = ['hello','hello2'];
-		Yii::error($g);
 		return $this->render ( 'about' );
 	}
 }

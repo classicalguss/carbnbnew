@@ -15,6 +15,7 @@ use common\models\LoginForm;
 use common\models\User;
 use yii\filters\ContentNegotiator;
 use yii\web\Response;
+use frontend\models\UpdateForm;
 
 /**
  * Site controller
@@ -37,7 +38,8 @@ class UserapiController extends \yii\rest\Controller {
 				'class' => AccessControl::className (),
 				'only' => [
 						'logout',
-						'signup'
+						'signup',
+						'update',
 				],
 				'rules' => [
 						[
@@ -51,7 +53,7 @@ class UserapiController extends \yii\rest\Controller {
 						],
 						[
 								'actions' => [
-										'logout'
+										'logout','update'
 								],
 								'allow' => true,
 								'roles' => [
@@ -108,6 +110,20 @@ class UserapiController extends \yii\rest\Controller {
 	}
 	
 	/**
+	 * Shows info of user.
+	 *
+	 * @return User
+	 */
+	public function actionView($id) {
+		$model = User::findIdentity($id);
+		Yii::warning($id);
+		Yii::warning($model);
+		if ($id == Yii::$app->user->id)
+			return $model;
+		else 
+			return ['first_name'=>$model->first_name,'last_name'=>$model->last_name,'phonenumber'=>$model->phonenumber,'gender'=>$model->gender,'User Type'=>$model->user_type];
+	}
+	/**
 	 * Signs user up.
 	 *
 	 * @return mixed
@@ -125,6 +141,24 @@ class UserapiController extends \yii\rest\Controller {
 		return $model;
 	}
 	
+	public function actionUpdate() {
+		$model = User::findIdentity(Yii::$app->user->id);
+		$model->setAttributes(Yii::$app->request->post());
+		$model->save();
+		return $model;
+	}
+	
+	public function actionMakerenter() {
+		$model = User::findIdentity(Yii::$app->user->id);
+		if (empty($model->phonenumber))
+		{
+			Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+			return ['field'=>'phone','message'=>'You need to have a phone number before becoming a car renter'];
+		}
+		$model->user_type = 2;
+		$model->save();
+		return ['Success'];
+	}
 	/**
 	 * Requests password reset.
 	 *
