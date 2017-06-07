@@ -15,7 +15,7 @@ use common\models\LoginForm;
 use common\models\User;
 use yii\filters\ContentNegotiator;
 use yii\web\Response;
-use frontend\models\UpdateForm;
+use linslin\yii2\curl\Curl;
 
 /**
  * Site controller
@@ -40,11 +40,12 @@ class UserapiController extends \yii\rest\Controller {
 						'logout',
 						'signup',
 						'update',
+						'facebooklogin'
 				],
 				'rules' => [
 						[
 								'actions' => [
-										'signup'
+										'signup','facebooklogin'
 								],
 								'allow' => true,
 								'roles' => [
@@ -146,6 +147,56 @@ class UserapiController extends \yii\rest\Controller {
 		$model->setAttributes(Yii::$app->request->post());
 		$model->save();
 		return $model;
+	}
+	
+	public function actionFacebooklogin() {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,'https://graph.facebook.com/me');
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, 'fields=id&access_token='.Yii::$app->request->post('facebook_token'));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //to suppress the curl output
+		$result = curl_exec($ch);
+		curl_close ($ch);
+		
+		$result = json_decode($result,true);
+		if (isset($result['error']))
+		{
+			Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+			return $result;
+		}
+		else if (!isset($result['id']))
+		{
+			Yii::$app->response->setStatusCode(422, 'Unknown error');
+			return $result;
+		}
+		
+		$user = User::findOne(['registration_token'=>$result['id']]);
+		if (empty($user))
+		{
+			$model = new User();
+			$model->setScenario('facebookLogin');
+			$model->setAttributes(Yii::$app->request->post());
+			$model->setPassword ('facebookPass');
+			$model->generateAuthKey ();
+			$model->email = $result['id'].'@facebook.com';
+			$model->registration_type = 1;
+			$model->registration_token = $result['id'];
+			$model->save();
+			if ($model->errors)
+			{
+				Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+				return $model->errors;
+			}
+			Yii::$app->getUser()->login ($model);
+			return ['status'=>'User Registered','user'=>$model];
+		}
+		else
+		{
+			Yii::$app->getUser()->login ($user);
+			return ['status'=>'User Logged in','user'=>$user];
+		}
 	}
 	
 	public function actionMakerenter() {
