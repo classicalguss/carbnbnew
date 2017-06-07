@@ -7,6 +7,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use Codeception\Scenario;
 
 /**
  * User model
@@ -26,11 +27,16 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property string $registration_token
+ * @property integer $registration_type
  */
 class User extends ActiveRecord implements IdentityInterface {
 	const STATUS_DELETED = 0;
 	const STATUS_ACTIVE = 10;
 	
+	const normal_user = 0;
+	const renter_user = 1;
+	const admin_user = 2;
 	/**
 	 * @inheritdoc
 	 */
@@ -47,11 +53,25 @@ class User extends ActiveRecord implements IdentityInterface {
 		];
 	}
 	
+	public function scenarios() {
+		return [
+				'facebookLogin'=>['registration_token','first_name','last_name','!auth_key','!status','!password_hash','!user_type','!email']
+		];
+	}
 	/**
 	 * @inheritdoc
 	 */
 	public function rules() {
         return [
+        		[
+        				['registration_token'],
+        				'required',
+        				'on'=>'facebookLogin'
+        		],
+        		[
+        				['email','first_name','last_name','!auth_key','!password_hash'],
+        				'required'
+        		],
         		[
         				['first_name','last_name','phonenumber'],
         				'trim',
@@ -63,7 +83,7 @@ class User extends ActiveRecord implements IdentityInterface {
         				'max' => 255
         		],
         		[
-        				['first_name','last_name','phonenumber','gender'],
+        				['phonenumber'],
         				'safe'
         		],
         		[
@@ -78,6 +98,7 @@ class User extends ActiveRecord implements IdentityInterface {
         				'min' => 1,
         				'max' => 1
         		],
+        	['user_type', 'default', 'value' => self::normal_user],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
