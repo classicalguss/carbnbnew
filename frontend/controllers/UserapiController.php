@@ -219,17 +219,15 @@ class UserapiController extends \yii\rest\Controller {
 		$model = new PasswordResetRequestForm ();
 		if ($model->load ( Yii::$app->request->post () ) && $model->validate ()) {
 			if ($model->sendEmail ()) {
-				Yii::$app->session->setFlash ( 'success', 'Check your email for further instructions.' );
-				
-				return $this->goHome ();
+				Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+				return ['status'=>'success', 'msg'=>'Check your email for further instructions.'];
 			} else {
-				Yii::$app->session->setFlash ( 'error', 'Sorry, we are unable to reset password for the provided email address.' );
+				return ['status'=>'error', 'msg'=>'Sorry, we are unable to reset password for the provided email address.'];
 			}
 		}
-		
-		return $this->render ( 'requestPasswordResetToken', [
-				'model' => $model
-		] );
+		Yii::warning('I get here instead of continuing');
+		Yii::warning($model);
+		return $model;
 	}
 	
 	/**
@@ -255,5 +253,15 @@ class UserapiController extends \yii\rest\Controller {
 		return $this->render ( 'resetPassword', [
 				'model' => $model
 		] );
+	}
+	
+	public function actionTestfirstname()
+	{
+		$form = new ContactForm();
+		Yii::$app->mailer->compose('contact/html', ['contactForm' => $form])
+		->setFrom('from@domain.com')
+		->setTo($form->email)
+		->setSubject($form->subject)
+		->send();
 	}
 }

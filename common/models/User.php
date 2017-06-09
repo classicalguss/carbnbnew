@@ -54,9 +54,11 @@ class User extends ActiveRecord implements IdentityInterface {
 	}
 	
 	public function scenarios() {
-		return [
-				'facebookLogin'=>['registration_token','first_name','last_name','!auth_key','!status','!password_hash','!user_type','!email']
-		];
+		$scenarios = parent::scenarios();
+		$scenarios = array_merge($scenarios,[
+				'facebookLogin'=>['registration_token','first_name','last_name','!auth_key','!status','!password_hash','!user_type','!email'],
+		]);
+		return $scenarios;
 	}
 	/**
 	 * @inheritdoc
