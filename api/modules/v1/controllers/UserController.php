@@ -45,7 +45,7 @@ class UserController extends ActiveController {
 	}
 	public function actionCreate() {
 		$model = new $this->modelClass ( [ 
-				'scenario' => 'update' 
+				'scenario' => 'signup' 
 		] );
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
 		if ($model->validate ()) {
