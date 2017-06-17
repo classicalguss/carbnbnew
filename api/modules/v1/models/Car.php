@@ -29,6 +29,17 @@ use Yii;
  * @property integer $number_of_seats
  * @property integer $gas
  * @property string $type
+ * @property string $color
+ * @property string $rule_1
+ * @property string $rule_2
+ * @property string $rule_3
+ * @property string $rule_4
+ * @property string $interior_photo
+ * @property string $back_photo
+ * @property string $front_photo
+ * @property string $side_photo
+ * @property string $optional_photo_1
+ * @property string $optional_photo2
  */
 class Car extends \yii\db\ActiveRecord
 {
@@ -46,13 +57,14 @@ class Car extends \yii\db\ActiveRecord
 	public function rules()
 	{
 		return [
-				[['cover_photo', 'price', 'address', 'description', 'milage_limitation', 'insurance_tip', 'owner_id', 'report', 'country', 'city', 'maker', 'model', 'type'], 'required'],
+				[['cover_photo', 'price', 'address', 'description', 'milage_limitation', 'insurance_tip', 'owner_id', 'report', 'country', 'city', 'maker', 'model', 'type', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo2'], 'required'],
 				[['price', 'rent_it_now', 'milage_limitation', 'owner_id', 'is_featured', 'number_of_doors', 'number_of_seats', 'gas'], 'integer'],
 				[['created_at', 'year_model'], 'safe'],
 				[['description', 'report'], 'string'],
 				[['cover_photo', 'address', 'insurance_tip', 'model'], 'string', 'max' => 255],
 				[['country', 'city', 'maker'], 'string', 'max' => 50],
-				[['gear_type', 'type'], 'string', 'max' => 30],
+				[['gear_type', 'type', 'color'], 'string', 'max' => 30],
+				[['rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo2'], 'string', 'max' => 100],
 		];
 	}
 	
@@ -84,6 +96,17 @@ class Car extends \yii\db\ActiveRecord
 				'number_of_seats' => 'Number Of Seats',
 				'gas' => 'Gas',
 				'type' => 'Type',
+				'color' => 'Color',
+				'rule_1' => 'Rule 1',
+				'rule_2' => 'Rule 2',
+				'rule_3' => 'Rule 3',
+				'rule_4' => 'Rule 4',
+				'interior_photo' => 'Interior Photo',
+				'back_photo' => 'Back Photo',
+				'front_photo' => 'Front Photo',
+				'side_photo' => 'Side Photo',
+				'optional_photo_1' => 'Optional Photo 1',
+				'optional_photo2' => 'Optional Photo2',
 		];
 	}
 }

@@ -19,7 +19,7 @@ class UserController extends ActiveController {
 	
 	public function actions() {
 		$actions = parent::actions ();
-		unset ( $actions ['delete'], $actions ['create'],$actions['update']);
+		unset ( $actions ['delete'], $actions ['create'], $actions['update']);
 		return $actions;
 	}
 	public function behaviors() {

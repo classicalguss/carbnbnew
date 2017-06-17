@@ -19,7 +19,7 @@ class CarSearch extends Car
 	{
 		return [
 				[['id', 'price', 'rent_it_now', 'milage_limitation', 'owner_id', 'is_featured', 'number_of_doors', 'number_of_seats', 'gas'], 'integer'],
-				[['cover_photo', 'created_at', 'address', 'description', 'insurance_tip', 'report', 'country', 'city', 'maker', 'model', 'year_model', 'gear_type', 'type'], 'safe'],
+				[['cover_photo', 'created_at', 'address', 'description', 'insurance_tip', 'report', 'country', 'city', 'maker', 'model', 'year_model', 'gear_type', 'type', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo2'], 'safe'],
 		];
 	}
 	
@@ -82,7 +82,18 @@ class CarSearch extends Car
 		->andFilterWhere(['like', 'maker', $this->maker])
 		->andFilterWhere(['like', 'model', $this->model])
 		->andFilterWhere(['like', 'gear_type', $this->gear_type])
-		->andFilterWhere(['like', 'type', $this->type]);
+		->andFilterWhere(['like', 'type', $this->type])
+		->andFilterWhere(['like', 'color', $this->color])
+		->andFilterWhere(['like', 'rule_1', $this->rule_1])
+		->andFilterWhere(['like', 'rule_2', $this->rule_2])
+		->andFilterWhere(['like', 'rule_3', $this->rule_3])
+		->andFilterWhere(['like', 'rule_4', $this->rule_4])
+		->andFilterWhere(['like', 'interior_photo', $this->interior_photo])
+		->andFilterWhere(['like', 'back_photo', $this->back_photo])
+		->andFilterWhere(['like', 'front_photo', $this->front_photo])
+		->andFilterWhere(['like', 'side_photo', $this->side_photo])
+		->andFilterWhere(['like', 'optional_photo_1', $this->optional_photo_1])
+		->andFilterWhere(['like', 'optional_photo2', $this->optional_photo2]);
 		
 		return $dataProvider;
 	}
