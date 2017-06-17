@@ -36,7 +36,7 @@ class Car extends ActiveRecord
     public function rules()
     {
         return [
-            [['cover_photo', 'price', 'address', 'description', 'milage_limitation', 'insurance_tip', '!owner_id', 'report'], 'required'],
+            [['cover_photo', 'price', 'address', 'description', 'milage_limitation', 'insurance_tip', '!owner_id', 'report','city','country','maker','model'], 'required'],
             [['price', 'rent_it_now', 'milage_limitation', 'owner_id'], 'integer'],
             [['created_at'], 'safe'],
             [['description', 'report'], 'string'],
