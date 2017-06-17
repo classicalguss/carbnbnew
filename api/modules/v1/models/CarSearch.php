@@ -22,7 +22,8 @@ class CarSearch extends Car {
 								'price',
 								'rent_it_now',
 								'milage_limitation',
-								'owner_id' 
+								'owner_id',
+								'is_featured',
 						],
 						'integer' 
 				],
@@ -33,7 +34,10 @@ class CarSearch extends Car {
 								'address',
 								'description',
 								'insurance_tip',
-								'report' 
+								'report',
+								'model',
+								'maker',
+								'city',
 						],
 						'safe' 
 				] 
@@ -78,7 +82,8 @@ class CarSearch extends Car {
 				'created_at' => $this->created_at,
 				'rent_it_now' => $this->rent_it_now,
 				'milage_limitation' => $this->milage_limitation,
-				'owner_id' => $this->owner_id 
+				'owner_id' => $this->owner_i,
+				'is_featured'=> $this->is_featured,
 		] );
 		Yii::warning('price '.$this->price);
 		$query->andFilterCompare('price', $this->price);
@@ -102,6 +107,14 @@ class CarSearch extends Car {
 				'like',
 				'report',
 				$this->report 
+		] )->andFilterWhere ( [
+				'like',
+				'city',
+				$this->report
+		] )->andFilterWhere ( [
+				'like',
+				'maker',
+				$this->report
 		] );
 		
 		return $dataProvider;
