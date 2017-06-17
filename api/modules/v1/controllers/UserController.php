@@ -6,12 +6,7 @@ use yii\rest\ActiveController;
 use Yii;
 use yii\helpers\Url;
 use yii\filters\auth\HttpBearerAuth;
-use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBasicAuth;
 use api\modules\v1\models\User;
-use Codeception\Codecept;
-use yii\filters\AccessControl;
-
 
 /**
  * Country Controller API
@@ -25,7 +20,6 @@ class UserController extends ActiveController {
 	public function actions() {
 		$actions = parent::actions ();
 		unset ( $actions ['delete'], $actions ['create'],$actions['update']);
-		Yii::warning($actions);
 		return $actions;
 	}
 	public function behaviors() {
@@ -38,7 +32,7 @@ class UserController extends ActiveController {
 	}
 	public function checkAccess($action, $model = null, $params = [])
 	{
-		if ($action === 'update' || $action === 'delete') {
+		if ($action === 'update') {
 			if ($model->author_id !== \Yii::$app->user->id)
 				throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action));
 		}

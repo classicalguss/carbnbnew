@@ -52,6 +52,13 @@ class User extends ActiveRecord implements IdentityInterface {
 		return $scenarios;
 	}
 	
+	public function getCars() {
+		return $this->hasMany(Car::className(), ['owner_id' => 'id']);
+	}
+	
+	public function extraFields() {
+		return ['cars'];
+	}
 	/**
 	 * Define rules for validation
 	 */
