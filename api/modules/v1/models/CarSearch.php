@@ -110,11 +110,11 @@ class CarSearch extends Car {
 		] )->andFilterWhere ( [
 				'like',
 				'city',
-				$this->report
+				$this->city
 		] )->andFilterWhere ( [
 				'like',
 				'maker',
-				$this->report
+				$this->maker
 		] );
 		
 		return $dataProvider;
