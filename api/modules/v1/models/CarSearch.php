@@ -85,8 +85,6 @@ class CarSearch extends Car {
 				'owner_id' => $this->owner_id,
 				'is_featured'=> $this->is_featured,
 		] );
-		Yii::warning('price '.$this->price);
-		$query->andFilterCompare('price', $this->price);
 		$query->andFilterWhere ( [ 
 				'like',
 				'cover_photo',
@@ -98,15 +96,15 @@ class CarSearch extends Car {
 		] )->andFilterWhere ( [ 
 				'like',
 				'description',
-				$this->description 
+				$this->description
 		] )->andFilterWhere ( [ 
 				'like',
 				'insurance_tip',
-				$this->insurance_tip 
+				$this->insurance_tip
 		] )->andFilterWhere ( [ 
 				'like',
 				'report',
-				$this->report 
+				$this->report
 		] )->andFilterWhere ( [
 				'like',
 				'city',
