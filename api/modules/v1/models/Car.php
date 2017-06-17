@@ -61,6 +61,7 @@ class Car extends ActiveRecord
             'insurance_tip' => 'Insurance Tip',
             'owner_id' => 'Owner ID',
             'report' => 'Report',
+        		'maker' => 'Maker',
         ];
     }
 }
