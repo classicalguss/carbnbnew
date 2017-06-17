@@ -82,7 +82,7 @@ class CarSearch extends Car {
 				'created_at' => $this->created_at,
 				'rent_it_now' => $this->rent_it_now,
 				'milage_limitation' => $this->milage_limitation,
-				'owner_id' => $this->owner_i,
+				'owner_id' => $this->owner_id,
 				'is_featured'=> $this->is_featured,
 		] );
 		Yii::warning('price '.$this->price);
