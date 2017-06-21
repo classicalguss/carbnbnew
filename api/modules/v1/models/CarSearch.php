@@ -1,12 +1,10 @@
 <?php
 
-namespace app\models;
+namespace api\modules\v1\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Car;
-
+use api\modules\v1\models\Car;
 /**
  * CarSearch represents the model behind the search form about `app\models\Car`.
  */

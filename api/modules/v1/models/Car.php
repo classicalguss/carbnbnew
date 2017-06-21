@@ -1,8 +1,9 @@
 <?php
 
-namespace app\models;
+namespace api\modules\v1\models;
 
 use Yii;
+use \yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "car".
