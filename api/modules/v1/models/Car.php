@@ -58,7 +58,7 @@ class Car extends \yii\db\ActiveRecord
 	public function rules()
 	{
 		return [
-				[['cover_photo', 'price', 'address', 'description', 'milage_limitation', 'insurance_tip', 'owner_id', 'report', 'country', 'city', 'maker', 'model', 'type', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo2'], 'required'],
+				[['cover_photo', 'price', 'address', 'description', 'milage_limitation', 'insurance_tip', 'owner_id', 'report', 'country', 'city', 'maker', 'model', 'type', 'color'], 'required'],
 				[['price', 'rent_it_now', 'milage_limitation', 'owner_id', 'is_featured', 'number_of_doors', 'number_of_seats', 'gas'], 'integer'],
 				[['created_at', 'year_model'], 'safe'],
 				[['description', 'report'], 'string'],

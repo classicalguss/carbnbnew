@@ -5,7 +5,6 @@ namespace api\modules\v1\models;
 use Yii;
 use \yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use yii\filters\auth\HttpBasicAuth;
 use yii\behaviors\TimestampBehavior;
 
 /**
