@@ -31,10 +31,10 @@ class Rating extends \yii\db\ActiveRecord
 	public function rules()
 	{
 		return [
-				[['user_id', 'car_id', 'rating', 'description'], 'required'],
+				[['user_id', 'car_id', 'rating'], 'required'],
 				[['user_id', 'car_id', 'rating'], 'integer'],
 				[['description'], 'string'],
-				[['created_at'], 'safe'],
+				[['created_at','description'], 'safe'],
 		];
 	}
 	
