@@ -58,54 +58,84 @@ class Car extends \yii\db\ActiveRecord {
 	public static function tableName() {
 		return 'car';
 	}
-	
 	public function getUser() {
-		return $this->hasOne(User::className(), ['id' => 'owner_id']);
+		return $this->hasOne ( User::className (), [ 
+				'id' => 'owner_id' 
+		] );
 	}
-	
 	public function getImages() {
-		return [
-				'coverPhoto'=>[
-						'fileName'=>$this->cover_photo,
-						'path'=>Yii::$app->params['imagesFolder'].$this->cover_photo,
+		return [ 
+				'coverPhoto' => [ 
+						'fileName' => $this->cover_photo,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->cover_photo 
 				],
-				'interiorPhoto'=>[
-						'fileName'=>$this->cover_photo,
-						'path'=>Yii::$app->params['imagesFolder'].$this->interior_photo,
+				'interiorPhoto' => [ 
+						'fileName' => $this->cover_photo,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->interior_photo 
 				],
-				'backPhoto'=>[
-						'fileName'=>$this->cover_photo,
-						'path'=>Yii::$app->params['imagesFolder'].$this->back_photo,
+				'backPhoto' => [ 
+						'fileName' => $this->cover_photo,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->back_photo 
 				],
-				'frontPhoto'=>[
-						'fileName'=>$this->cover_photo,
-						'path'=>Yii::$app->params['imagesFolder'].$this->front_photo,
+				'frontPhoto' => [ 
+						'fileName' => $this->cover_photo,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->front_photo 
 				],
-				'sidePhoto'=>[
-						'fileName'=>$this->cover_photo,
-						'path'=>Yii::$app->params['imagesFolder'].$this->side_photo,
+				'sidePhoto' => [ 
+						'fileName' => $this->cover_photo,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->side_photo 
 				],
-				'optionalPhoto1'=>[
-						'fileName'=>$this->cover_photo,
-						'path'=>Yii::$app->params['imagesFolder'].$this->optional_photo_1,
+				'optionalPhoto1' => [ 
+						'fileName' => $this->cover_photo,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->optional_photo_1 
 				],
-				'optionalPhoto2'=>[
-						'fileName'=>$this->cover_photo,
-						'path'=>Yii::$app->params['imagesFolder'].$this->optional_photo_2,
-				],
+				'optionalPhoto2' => [ 
+						'fileName' => $this->cover_photo,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->optional_photo_2 
+				] 
 		];
 	}
 	public function getRules() {
-		return [$this->rule_1,$this->rule_2,$this->rule_3,$this->rule_4];
+		return [ 
+				$this->rule_1,
+				$this->rule_2,
+				$this->rule_3,
+				$this->rule_4 
+		];
 	}
 	public function getFeatures() {
-		return ['gear_type'=>$this->gear_type,'number_of_doors'=>$this->number_of_doors,'number_of_seats'=>$this->number_of_seats,'gas'=>$this->gas];
+		return [ 
+				'gear_type' => $this->gear_type,
+				'number_of_doors' => $this->number_of_doors,
+				'number_of_seats' => $this->number_of_seats,
+				'gas' => $this->gas 
+		];
+	}
+	public function getRatings() {
+		return $this->hasMany ( Rating::className (), [
+				'car_id' => 'id'
+		] );
 	}
 	public function fields() {
-		return ['id','price','address','country','city','maker','model','color'];
+		return [ 
+				'id',
+				'price',
+				'address',
+				'country',
+				'city',
+				'maker',
+				'model',
+				'color' 
+		];
 	}
 	public function extraFields() {
-		return ['images','user','rules','features'];
+		return [ 
+				'images',
+				'user',
+				'rules',
+				'features',
+				'ratings'
+		];
 	}
 	
 	/**
@@ -127,7 +157,8 @@ class Car extends \yii\db\ActiveRecord {
 								'maker',
 								'model',
 								'type',
-								'color' 
+								'color',
+								'currency' 
 						],
 						'required' 
 				],
@@ -201,6 +232,13 @@ class Car extends \yii\db\ActiveRecord {
 						],
 						'string',
 						'max' => 100 
+				],
+				[ 
+						[ 
+								'currency' 
+						],
+						'string',
+						'max' => 3 
 				],
 				[ 
 						[ 
