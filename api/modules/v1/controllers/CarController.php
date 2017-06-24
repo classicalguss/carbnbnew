@@ -7,10 +7,10 @@ use Yii;
 use yii\helpers\Url;
 use yii\filters\auth\HttpBearerAuth;
 use api\modules\v1\models\User;
-use yii\data\ActiveDataProvider;
 use api\modules\v1\models\Car;
 use api\modules\v1\models\CarSearch;
-
+use yii\web\UploadedFile;
+use yii\web\ServerErrorHttpException;
 /**
  * Country Controller API
  *
@@ -47,8 +47,16 @@ class CarController extends ActiveController {
 		
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
 		$model->owner_id = Yii::$app->user->id;
+		$model->coverPhoto = UploadedFile::getInstanceByName('coverPhoto');
+		$model->sidePhoto = UploadedFile::getInstanceByName('sidePhoto');
+		$model->backPhoto = UploadedFile::getInstanceByName('backPhoto');
+		$model->frontPhoto = UploadedFile::getInstanceByName('frontPhoto');
+		$model->interiorPhoto = UploadedFile::getInstanceByName('interiorPhoto');
+		$model->optionalPhoto1 = UploadedFile::getInstanceByName('optionalPhoto1');
+		$model->optionalPhoto2 = UploadedFile::getInstanceByName('optionalPhoto2');
 		
 		if ($model->save()) {
+			$model->upload();
 			$response = Yii::$app->getResponse();
 			$response->setStatusCode(201);
 			$id = implode(',', array_values($model->getPrimaryKey(true)));

@@ -17,7 +17,7 @@ class CarSearch extends Car
 	{
 		return [
 				[['id', 'price', 'rent_it_now', 'milage_limitation', 'owner_id', 'is_featured', 'number_of_doors', 'number_of_seats', 'gas'], 'integer'],
-				[['cover_photo', 'created_at', 'address', 'description', 'insurance_tip', 'report', 'country', 'city', 'maker', 'model', 'year_model', 'gear_type', 'type', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo2'], 'safe'],
+				[['cover_photo', 'created_at', 'address', 'description', 'insurance_tip', 'report', 'country', 'city', 'maker', 'model', 'year_model', 'gear_type', 'type', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo_2'], 'safe'],
 		];
 	}
 	
@@ -91,7 +91,7 @@ class CarSearch extends Car
 		->andFilterWhere(['like', 'front_photo', $this->front_photo])
 		->andFilterWhere(['like', 'side_photo', $this->side_photo])
 		->andFilterWhere(['like', 'optional_photo_1', $this->optional_photo_1])
-		->andFilterWhere(['like', 'optional_photo2', $this->optional_photo2]);
+		->andFilterWhere(['like', 'optional_photo_2', $this->optional_photo_2]);
 		
 		return $dataProvider;
 	}
