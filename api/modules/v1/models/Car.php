@@ -318,12 +318,12 @@ class Car extends \yii\db\ActiveRecord {
 				],
 				[
 						[
-								'photo1',
-								'photo2',
-								'photo3',
-								'photo4',
-								'photo5',
-								'photo6' 
+								'photoFile1',
+								'photoFile2',
+								'photoFile3',
+								'photoFile4',
+								'photoFile5',
+								'photoFile6' 
 						],
 						'file',
 						'skipOnEmpty' => true,
