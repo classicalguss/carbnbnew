@@ -47,13 +47,15 @@ class CarController extends ActiveController {
 		
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
 		$model->owner_id = Yii::$app->user->id;
-		$model->coverPhoto = UploadedFile::getInstanceByName('coverPhoto');
-		$model->sidePhoto = UploadedFile::getInstanceByName('sidePhoto');
-		$model->backPhoto = UploadedFile::getInstanceByName('backPhoto');
-		$model->frontPhoto = UploadedFile::getInstanceByName('frontPhoto');
-		$model->interiorPhoto = UploadedFile::getInstanceByName('interiorPhoto');
-		$model->optionalPhoto1 = UploadedFile::getInstanceByName('optionalPhoto1');
-		$model->optionalPhoto2 = UploadedFile::getInstanceByName('optionalPhoto2');
+		$model->photoFile1 = UploadedFile::getInstanceByName('photoFile1');
+		$model->photoFile2 = UploadedFile::getInstanceByName('photoFile2');
+		$model->photoFile3 = UploadedFile::getInstanceByName('photoFile3');
+		$model->photoFile4 = UploadedFile::getInstanceByName('photoFile4');
+		$model->photoFile5 = UploadedFile::getInstanceByName('photoFile5');
+		$model->photoFile6 = UploadedFile::getInstanceByName('photoFile6');
+		
+		$featuresList = Yii::$app->request->post('featuresList',array());
+		$model->features = implode($featuresList,',');
 		
 		if ($model->save()) {
 			$model->upload();

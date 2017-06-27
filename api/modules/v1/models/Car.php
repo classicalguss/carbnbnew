@@ -4,53 +4,57 @@ namespace api\modules\v1\models;
 
 use Yii;
 use \yii\db\ActiveRecord;
-use yii\web\UploadedFile;
+use common\models\Location;
+use common\models\Carmodel;
 
 /**
  * This is the model class for table "car".
  *
  * @property string $id
- * @property string $cover_photo
  * @property integer $price
  * @property string $created_at
  * @property integer $rent_it_now
- * @property string $address
+ * @property string $area_id //Will be the area within the city
  * @property string $description
  * @property integer $milage_limitation
- * @property string $insurance_tip
+ * @property integer $insurance_tip //Boolean 0 or 1
  * @property integer $owner_id
  * @property string $report
- * @property string $country
- * @property string $city
- * @property string $maker
- * @property string $model
+ * @property string $country_iso
+ * @property string $city_id
+ * @property integer $make_id //0: Kia, 2: Ferrari
+ * @property integer $model_id //0: Cerrato, 1: C200
  * @property integer $is_featured
- * @property string $year_model
- * @property string $gear_type
- * @property integer $number_of_doors
- * @property integer $number_of_seats
- * @property integer $gas
- * @property string $type
- * @property string $color
+ * @property integer $year_model //2017
+ * @property integer $gear_type_id //or Transmission
+ * @property integer $number_of_doors //1,2,3,4,5 
+ * @property integer $number_of_seats //1,2,3,4,5
+ * @property integer $gas_type_id //0: Diesel, 1: Gas, 2: Electric, 3: Hybrid
+ * @property integer $type_id 0: Sedan, 1: Suv etc...
+ * @property integer $color_id 0: Green, 1: Blue, etc... 
  * @property string $rule_1
  * @property string $rule_2
  * @property string $rule_3
  * @property string $rule_4
- * @property string $interior_photo
- * @property string $back_photo
- * @property string $front_photo
- * @property string $side_photo
- * @property string $optional_photo_1
- * @property string $optional_photo_2
+ * @property string $photo1
+ * @property string $photo2
+ * @property string $photo3
+ * @property string $photo4
+ * @property string $photo5
+ * @property string $photo6
+ * @property string $license_plate
+ * @property string $currency
+ * @property integer $notice_period
+ * @property string $features
+ * @properties integer $odometer
  */
 class Car extends \yii\db\ActiveRecord {
-	public $coverPhoto; // The file instance of the model
-	public $interiorPhoto; // The file instance of the model
-	public $frontPhoto; // The file instance of the model
-	public $sidePhoto; // The file instance of the model
-	public $backPhoto; // The file instance of the model
-	public $optionalPhoto1; // The file instance of the model
-	public $optionalPhoto2; // The file instance of the model
+	public $photoFile1; // The file instance of the model
+	public $photoFile2; // The file instance of the model
+	public $photoFile3; // The file instance of the model
+	public $photoFile4; // The file instance of the model
+	public $photoFile5; // The file instance of the model
+	public $photoFile6; // The file instance of the model
 	
 	/**
 	 * @inheritdoc
@@ -63,35 +67,88 @@ class Car extends \yii\db\ActiveRecord {
 				'id' => 'owner_id' 
 		] );
 	}
+	public static function featuresArray() {
+		return [
+				0=>'4G LTE',
+				1=>'Audio Input',
+				2=>'Booster Seat',
+				3=>'Air Bag',
+				4=>'Sunroof',
+				5=>'Heated Seats',
+				6=>'Bluetooth',
+				7=>'Part Assist',
+				8=>'GPS',
+				9=>'Power Steering',
+				10=>'USB',
+				11=>'ABS'
+				
+		];
+	}
+	public static function gearArray() {
+		return [
+				0=>'Automatic',
+				1=>'Manual'
+		];
+	}
+	public static function typeArray() {
+		return [
+				0=>'Sedan',
+				1=>'Coupe',
+				2=>'SUVS',
+				3=>'Pickup',
+				4=>'Vans',
+				5=>'Jeep'
+		];
+	}
+	public static function gasArray() {
+		return [
+				0=>'Diesel',
+				1=>'Hybrid',
+				2=>'Electric',
+				3=>'Gas',
+		];
+	}
+	public static function odometerArray() {
+		return [
+				0=>'0k-80 Kilometers',
+				1=>'80k-160 Kilometers',
+				2=>'160k-200 Kilometers',
+				3=>'200k+ Kilometers',
+		];
+	}
+	public static function colorArray() {
+		return [
+				0=>'Red',
+				1=>'White',
+				2=>'Blue',
+				3=>'Silver',
+		];
+	}
 	public function getImages() {
-		return [ 
-				'coverPhoto' => [ 
-						'fileName' => $this->cover_photo,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->cover_photo 
+		return [
+				'photoFile1' => [ 
+						'fileName' => $this->photo1,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->photo1 
 				],
-				'interiorPhoto' => [ 
-						'fileName' => $this->cover_photo,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->interior_photo 
+				'photoFile2' => [ 
+						'fileName' => $this->photo2,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->photo2
 				],
-				'backPhoto' => [ 
-						'fileName' => $this->cover_photo,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->back_photo 
+				'photoFile3' => [ 
+						'fileName' => $this->photo3,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->photo3
 				],
-				'frontPhoto' => [ 
-						'fileName' => $this->cover_photo,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->front_photo 
+				'photoFile4' => [ 
+						'fileName' => $this->photo4,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->photo4
 				],
-				'sidePhoto' => [ 
-						'fileName' => $this->cover_photo,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->side_photo 
+				'photoFile5' => [ 
+						'fileName' => $this->photo5,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->photo5
 				],
-				'optionalPhoto1' => [ 
-						'fileName' => $this->cover_photo,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->optional_photo_1 
-				],
-				'optionalPhoto2' => [ 
-						'fileName' => $this->cover_photo,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->optional_photo_2 
+				'photoFile6' => [ 
+						'fileName' => $this->photo6,
+						'path' => Yii::$app->params ['imagesFolder'] . $this->photo6
 				] 
 		];
 	}
@@ -103,12 +160,13 @@ class Car extends \yii\db\ActiveRecord {
 				$this->rule_4 
 		];
 	}
-	public function getFeatures() {
+	public function getProperties() {
 		return [ 
-				'gear_type' => $this->gear_type,
+				'gear_type_id' => self::gearArray()[$this->gear_type_id],
 				'number_of_doors' => $this->number_of_doors,
 				'number_of_seats' => $this->number_of_seats,
-				'gas' => $this->gas 
+				'gas_type_id' => self::gasArray()[$this->gas_type_id],
+				'type_id' => self::typeArray()[$this->type_id]
 		];
 	}
 	public function getRatings() {
@@ -116,16 +174,40 @@ class Car extends \yii\db\ActiveRecord {
 				'car_id' => 'id'
 		] );
 	}
+	public function getCarModel() {
+		return $this->hasOne ( Carmodel::className(), [
+				'make' => 'make_id',
+				'model'=>'model_id'
+		] );
+	}
+	public function getLocation() {
+		return $this->hasOne (Location::className(),[
+				'iso'=>'country_iso',
+				'city_id'=>'city_id',
+				'area_id'=>'area_id'
+		]);
+	}
+	public function getFeaturesArray() {
+		$returnArray = [];
+		$featuresArray = explode(',',$this->features);
+		foreach ($featuresArray as $feature)
+		{
+			if (isset(self::featuresArray()[$feature]))
+				$returnArray[] = self::featuresArray()[$feature];
+		}
+		return $returnArray;
+	}
 	public function fields() {
 		return [ 
 				'id',
 				'price',
-				'address',
-				'country',
-				'city',
-				'maker',
-				'model',
-				'color' 
+				'area_id',
+				'country_iso',
+				'city_id',
+				'make_id',
+				'model_id',
+				'color',
+				'odometer'
 		];
 	}
 	public function extraFields() {
@@ -133,8 +215,10 @@ class Car extends \yii\db\ActiveRecord {
 				'images',
 				'user',
 				'rules',
-				'features',
-				'ratings'
+				'featuresArray',
+				'ratings',
+				'properties',
+				'carModel'
 		];
 	}
 	
@@ -143,22 +227,25 @@ class Car extends \yii\db\ActiveRecord {
 	 */
 	public function rules() {
 		return [ 
-				[ 
+				[
 						[ 
 								'price',
-								'address',
+								'area_id',
 								'description',
 								'milage_limitation',
 								'insurance_tip',
 								'owner_id',
-								'report',
-								'country',
-								'city',
-								'maker',
-								'model',
-								'type',
+								'country_iso',
+								'city_id',
+								'make_id',
+								'model_id',
+								'type_id',
 								'color',
-								'currency' 
+								'currency',
+								'year_model',
+								'gear_type_id',
+								'gas_type_id',
+								'odometer'
 						],
 						'required' 
 				],
@@ -171,16 +258,18 @@ class Car extends \yii\db\ActiveRecord {
 								'is_featured',
 								'number_of_doors',
 								'number_of_seats',
-								'gas' 
+								'gas_type_id',
+								'area_id',
+								'insurance_tip',
+								'city_id',
+								'make_id',
+								'model_id',
+								'year_model',
+								'gear_type_id',
+								'type_id',
+								'odometer'
 						],
 						'integer' 
-				],
-				[ 
-						[ 
-								'created_at',
-								'year_model' 
-						],
-						'safe' 
 				],
 				[ 
 						[ 
@@ -189,29 +278,22 @@ class Car extends \yii\db\ActiveRecord {
 						],
 						'string' 
 				],
-				[ 
-						[ 
-								'cover_photo',
-								'address',
-								'insurance_tip',
-								'model' 
+				[
+						[
+								'report'
 						],
 						'string',
-						'max' => 255 
+						'max'=>255
 				],
-				[ 
-						[ 
-								'country',
-								'city',
-								'maker' 
+				[
+						[
+								'country_iso'
 						],
 						'string',
-						'max' => 50 
+						'max'=> 2
 				],
 				[ 
-						[ 
-								'gear_type',
-								'type',
+						[
 								'color' 
 						],
 						'string',
@@ -223,12 +305,6 @@ class Car extends \yii\db\ActiveRecord {
 								'rule_2',
 								'rule_3',
 								'rule_4',
-								'interior_photo',
-								'back_photo',
-								'front_photo',
-								'side_photo',
-								'optional_photo_1',
-								'optional_photo_2' 
 						],
 						'string',
 						'max' => 100 
@@ -238,22 +314,27 @@ class Car extends \yii\db\ActiveRecord {
 								'currency' 
 						],
 						'string',
-						'max' => 3 
+						'max' => 3
 				],
-				[ 
-						[ 
-								'coverPhoto',
-								'interiorPhoto',
-								'backPhoto',
-								'frontPhoto',
-								'sidePhoto',
-								'optionalPhoto1',
-								'optionalPhoto2' 
+				[
+						[
+								'photo1',
+								'photo2',
+								'photo3',
+								'photo4',
+								'photo5',
+								'photo6' 
 						],
 						'file',
 						'skipOnEmpty' => true,
 						'extensions' => 'png,jpg,jpeg' 
-				] 
+				],
+				[
+						[
+								'report'
+						],
+						'safe'
+				]
 		];
 	}
 	
@@ -263,38 +344,37 @@ class Car extends \yii\db\ActiveRecord {
 	public function attributeLabels() {
 		return [ 
 				'id' => 'ID',
-				'cover_photo' => 'Cover Photo',
 				'price' => 'Price',
 				'created_at' => 'Created At',
 				'rent_it_now' => 'Rent It Now',
-				'address' => 'Address',
+				'area' => 'Area',
 				'description' => 'Description',
 				'milage_limitation' => 'Milage Limitation',
 				'insurance_tip' => 'Insurance Tip',
 				'owner_id' => 'Owner ID',
 				'report' => 'Report',
-				'country' => 'Country',
-				'city' => 'City',
-				'maker' => 'Maker',
-				'model' => 'Model',
+				'country_iso' => 'Country Iso',
+				'city_id' => 'City',
+				'make_id' => 'Maker',
+				'model_id' => 'Model',
 				'is_featured' => 'Is Featured',
 				'year_model' => 'Year Model',
-				'gear_type' => 'Gear Type',
+				'gear_type_id' => 'Gear Type',
 				'number_of_doors' => 'Number Of Doors',
 				'number_of_seats' => 'Number Of Seats',
-				'gas' => 'Gas',
-				'type' => 'Type',
+				'gas_type_id' => 'Gas',
+				'type_id' => 'Type',
 				'color' => 'Color',
 				'rule_1' => 'Rule 1',
 				'rule_2' => 'Rule 2',
 				'rule_3' => 'Rule 3',
 				'rule_4' => 'Rule 4',
-				'interior_photo' => 'Interior Photo',
-				'back_photo' => 'Back Photo',
-				'front_photo' => 'Front Photo',
-				'side_photo' => 'Side Photo',
-				'optional_photo_1' => 'Optional Photo 1',
-				'optional_photo_2' => 'Optional Photo 2' 
+				'photo1' => 'photo1 Photo',
+				'photo2' => 'photo2 Photo',
+				'photo3' => 'photo3 Photo',
+				'photo4' => 'photo4 Photo',
+				'photo5' => 'photo5 Photo',
+				'photo6' => 'photo6 Photo' 
 		];
 	}
 	public function beforeSave($insert) {
@@ -302,55 +382,55 @@ class Car extends \yii\db\ActiveRecord {
 			return false;
 		}
 		
-		if ($this->coverPhoto !== null)
-			$this->cover_photo = time () . '_' . $this->coverPhoto->name;
+		if ($this->photoFile1 !== null)
+			$this->photo1 = time () . '_' . $this->photoFile1->name;
 		
-		if ($this->backPhoto !== null)
-			$this->back_photo = time () . '_' . $this->backPhoto->name;
+		if ($this->photoFile2!== null)
+			$this->photo2 = time () . '_' . $this->photoFile2->name;
 		
-		if ($this->interiorPhoto !== null)
-			$this->interior_photo = time () . '_' . $this->interiorPhoto->name;
+		if ($this->photoFile3!== null)
+			$this->photo3 = time () . '_' . $this->photoFile3->name;
 		
-		if ($this->frontPhoto !== null)
-			$this->front_photo = time () . '_' . $this->frontPhoto->name;
+		if ($this->photoFile4= null)
+			$this->photo4 = time () . '_' . $this->photoFile4->name;
 		
-		if ($this->sidePhoto !== null)
-			$this->side_photo = time () . '_' . $this->sidePhoto->name;
+		if ($this->photoFile5!== null)
+			$this->photo5 = time () . '_' . $this->photoFile5->name;
 		
-		if ($this->optionalPhoto1 !== null)
-			$this->optional_photo_1 = time () . '_' . $this->optionalPhoto1->name;
-		
-		if ($this->optionalPhoto2 !== null)
-			$this->optional_photo_2 = time () . '_' . $this->optionalPhoto2->name;
+		if ($this->photoFile6!== null)
+			$this->photo6 = time () . '_' . $this->photoFile6->name;
 		
 		return true;
 	}
 	public function upload() {
 		if ($this->validate ()) {
-			if ($this->coverPhoto)
-				$this->coverPhoto->saveAs ( '../../uploads/' . $this->cover_photo );
 			
-			if ($this->backPhoto)
-				$this->backPhoto->saveAs ( '../../uploads/' . $this->back_photo );
+			if ($this->photoFile1)
+				$this->photoFile1->saveAs ( '../../uploads/' . $this->photo1 );
 			
-			if ($this->interiorPhoto)
-				$this->interiorPhoto->saveAs ( '../../uploads/' . $this->interior_photo );
+			if ($this->photoFile2)
+				$this->photoFile2->saveAs ( '../../uploads/' . $this->photo2 );
 			
-			if ($this->frontPhoto)
-				$this->frontPhoto->saveAs ( '../../uploads/' . $this->front_photo );
+			if ($this->photoFile3)
+				$this->photoFile3->saveAs ( '../../uploads/' . $this->photo3);
 			
-			if ($this->sidePhoto)
-				$this->sidePhoto->saveAs ( '../../uploads/' . $this->side_photo );
+			if ($this->photoFile4)
+				$this->photoFile4->saveAs ( '../../uploads/' . $this->photo4);
 			
-			if ($this->optionalPhoto1)
-				$this->optionalPhoto1->saveAs ( '../../uploads/' . $this->optional_photo_1 );
+			if ($this->photoFile5)
+				$this->photoFile5->saveAs ( '../../uploads/' . $this->photo5);
 			
-			if ($this->optionalPhoto2)
-				$this->optionalPhoto2->saveAs ( '../../uploads/' . $this->optional_photo_2 );
+			if ($this->photoFile6)
+				$this->photoFile6->saveAs ( '../../uploads/' . $this->photo6);
 			
 			return true;
 		} else {
 			return false;
 		}
+	}
+	public function afterFind() {
+		$this->odometer = self::odometerArray()[$this->odometer];
+		$this->color = self::colorArray()[$this->color];
+		return parent::afterFind();
 	}
 }
