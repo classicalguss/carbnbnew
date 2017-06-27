@@ -162,11 +162,11 @@ class Car extends \yii\db\ActiveRecord {
 	}
 	public function getProperties() {
 		return [ 
-				'gear_type_id' => self::gearArray()[$this->gear_type_id],
+				'gear_type_id' => (isset(self::gearArray()[$this->gas_type_id]) ? self::gearArray()[$this->gear_type_id] : "Other"),
 				'number_of_doors' => $this->number_of_doors,
 				'number_of_seats' => $this->number_of_seats,
-				'gas_type_id' => self::gasArray()[$this->gas_type_id],
-				'type_id' => self::typeArray()[$this->type_id]
+				'gas_type_id' => (isset(self::gasArray()[$this->gas_type_id]) ? self::gasArray()[$this->gas_type_id] : "Other"),
+				'type_id' => (isset(self::typeArray()[$this->type_id]) ? self::typeArray()[$this->type_id] : "Other")
 		];
 	}
 	public function getRatings() {
