@@ -7,7 +7,6 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use Codeception\Scenario;
 
 /**
  * User model
@@ -29,17 +28,20 @@ use Codeception\Scenario;
  * @property string $password write-only password
  * @property string $registration_token
  * @property integer $registration_type
+ * @property integer $role
  */
 class User extends ActiveRecord implements IdentityInterface {
 	const STATUS_DELETED = 0;
 	const STATUS_ACTIVE = 10;
 	
-	const normal_user = 0;
-	const renter_user = 1;
-	const admin_user = 2;
+	const ROLE_USER = 10;
+	const ROLE_MODERATOR = 20;
+	const ROLE_ADMIN = 30;
+	
 	/**
 	 * @inheritdoc
 	 */
+	
 	public static function tableName() {
 		return '{{%user}}';
 	}
@@ -60,6 +62,7 @@ class User extends ActiveRecord implements IdentityInterface {
 		]);
 		return $scenarios;
 	}
+	
 	/**
 	 * @inheritdoc
 	 */
@@ -100,10 +103,15 @@ class User extends ActiveRecord implements IdentityInterface {
         				'min' => 1,
         				'max' => 1
         		],
-        	['user_type', 'default', 'value' => self::normal_user],
+        	['role','default','value'=>self::ROLE_USER],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
+	}
+	
+	public function extraFields()
+	{
+		return ['car'];
 	}
 	
 	/**
@@ -217,6 +225,7 @@ class User extends ActiveRecord implements IdentityInterface {
 	 */
 	public function generateAuthKey() {
 		$this->auth_key = Yii::$app->security->generateRandomString ();
+		$this->access_key = $this->auth_key;
 	}
 	
 	/**

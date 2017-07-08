@@ -8,9 +8,26 @@ use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * Country Model
+ * User model
  *
- * @author Budi Irawan <deerawan@gmail.com>
+ * @property integer $id
+ * @property string $password_hash
+ * @property string $password_reset_token
+ * @property string $email
+ * @property integer $user_type
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $birthdate
+ * @property string $gender
+ * @property string $phonenumber
+ * @property string $auth_key
+ * @property integer $status
+ * @property integer $created_at
+ * @property integer $updated_at
+ * @property string $password write-only password
+ * @property string $registration_token
+ * @property integer $registration_type
+ * @property integer $role
  */
 class User extends ActiveRecord implements IdentityInterface {
 	const STATUS_DELETED = 0;
