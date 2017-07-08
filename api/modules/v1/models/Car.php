@@ -6,6 +6,8 @@ use Yii;
 use \yii\db\ActiveRecord;
 use common\models\Location;
 use common\models\Carmodel;
+use common\models\Area;
+use common\models\City;
 
 /**
  * This is the model class for table "car".
@@ -181,11 +183,13 @@ class Car extends \yii\db\ActiveRecord {
 		] );
 	}
 	public function getLocation() {
-		return $this->hasOne (Location::className(),[
-				'iso'=>'country_iso',
-				'city_id'=>'city_id',
-				'area_id'=>'area_id'
+		$city = City::findOne([
+				'id'=>$this->city_id
 		]);
+		$area = Area::findOne([
+				'id'=>$this->area_id
+		]);
+		return 'UAE - '.$city->value.' - '.$area->value;
 	}
 	public function getFeaturesArray() {
 		$returnArray = [];
@@ -218,7 +222,8 @@ class Car extends \yii\db\ActiveRecord {
 				'featuresArray',
 				'ratings',
 				'properties',
-				'carModel'
+				'carModel',
+				'location'
 		];
 	}
 	

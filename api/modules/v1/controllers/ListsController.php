@@ -10,8 +10,8 @@ class ListsController extends Controller {
 	public function actionGears () {
 		return Car::gearArray();
 	}
-	public function actiontypes () {
-		return Car::gearArray();
+	public function actionTypes () {
+		return Car::typeArray();
 	}
 	public function actiongas () {
 		return Car::gearArray();
