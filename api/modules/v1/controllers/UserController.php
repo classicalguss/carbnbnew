@@ -187,6 +187,10 @@ class UserController extends ActiveController {
 		$model->save ();
 		return $model;
 	}
+	public function actionTest2() {
+		$makes = Carmake::find();
+		Yii::warning($makes);
+	}
 	public function actionTest () {
 		$myList = "Al Qusais First
 Al Qusais Industrial Fifth

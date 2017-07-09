@@ -9,6 +9,7 @@ use common\models\Carmodel;
 use common\models\Area;
 use common\models\City;
 use common\models\Util;
+use common\models\Carmake;
 
 /**
  * This is the model class for table "car".
@@ -178,10 +179,14 @@ class Car extends \yii\db\ActiveRecord {
 		] );
 	}
 	public function getCarModel() {
-		return $this->hasOne ( Carmodel::className(), [
-				'make' => 'make_id',
-				'model'=>'model_id'
-		] );
+		return [
+				'make'=>Carmake::findOne([
+						'id'=>$this->make_id
+				]),
+				'model'=>Carmodel::findOne([
+						'id'=>$this->model_id
+				])
+		];
 	}
 	public function getLocation() {
 		$city = City::findOne([

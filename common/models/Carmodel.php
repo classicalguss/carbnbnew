@@ -8,9 +8,8 @@ use Yii;
  * This is the model class for table "carmodel".
  *
  * @property string $id
- * @property integer $make
- * @property integer $model
- * @property string $value
+ * @property integer $make_id
+ * @property integer $value
  */
 class Carmodel extends \yii\db\ActiveRecord
 {
@@ -21,20 +20,17 @@ class Carmodel extends \yii\db\ActiveRecord
     {
         return 'carmodel';
     }
-	public function fields()
-	{
-		return ['value'];
-	}
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['make', 'model', 'value'], 'required'],
-            [['make', 'model'], 'integer'],
-            [['value'], 'string', 'max' => 255],
-            [['make', 'model'], 'unique', 'targetAttribute' => ['make', 'model'], 'message' => 'The combination of Make and Model has already been taken.'],
+            [['make_id', 'value'], 'required'],
+            [['make_id'], 'integer'],
+        	[['value'],'string','min'=>2,'max'=>255],
+        	[['value'],'safe']
         ];
     }
 
@@ -45,8 +41,7 @@ class Carmodel extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'make' => 'Make',
-            'model' => 'Model',
+            'make_id' => 'Make ID',
             'value' => 'Value',
         ];
     }
