@@ -8,6 +8,7 @@ use common\models\Location;
 use common\models\Carmodel;
 use common\models\Area;
 use common\models\City;
+use common\models\Util;
 
 /**
  * This is the model class for table "car".
@@ -388,22 +389,22 @@ class Car extends \yii\db\ActiveRecord {
 		}
 		
 		if ($this->photoFile1 !== null)
-			$this->photo1 = time () . '_' . $this->photoFile1->name;
+			$this->photo1 = Util::generateRandomString() . '_' . $this->photoFile1->name;
 		
 		if ($this->photoFile2!== null)
-			$this->photo2 = time () . '_' . $this->photoFile2->name;
+			$this->photo2 = Util::generateRandomString(). '_' . $this->photoFile2->name;
 		
 		if ($this->photoFile3!== null)
-			$this->photo3 = time () . '_' . $this->photoFile3->name;
+			$this->photo3 = Util::generateRandomString(). '_' . $this->photoFile3->name;
 		
 		if ($this->photoFile4= null)
-			$this->photo4 = time () . '_' . $this->photoFile4->name;
+			$this->photo4 = Util::generateRandomString(). '_' . $this->photoFile4->name;
 		
 		if ($this->photoFile5!== null)
-			$this->photo5 = time () . '_' . $this->photoFile5->name;
+			$this->photo5 = Util::generateRandomString(). '_' . $this->photoFile5->name;
 		
 		if ($this->photoFile6!== null)
-			$this->photo6 = time () . '_' . $this->photoFile6->name;
+			$this->photo6 = Util::generateRandomString(). '_' . $this->photoFile6->name;
 		
 		return true;
 	}

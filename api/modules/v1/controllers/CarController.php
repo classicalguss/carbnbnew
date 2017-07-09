@@ -58,7 +58,6 @@ class CarController extends ActiveController {
 		$model->photoFile5 = UploadedFile::getInstanceByName ( 'photoFile5' );
 		$model->photoFile6 = UploadedFile::getInstanceByName ( 'photoFile6' );
 		
-		Yii::warning ( $model->photoFile1 );
 		$featuresList = Yii::$app->request->post ( 'featuresList', array () );
 		$model->features = implode ( $featuresList, ',' );
 		

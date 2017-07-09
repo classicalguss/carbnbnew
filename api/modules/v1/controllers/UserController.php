@@ -10,6 +10,7 @@ use api\modules\v1\models\User;
 use common\models\Carmake;
 use common\models\City;
 use common\models\Area;
+use yii\web\UploadedFile;
 
 /**
  * Country Controller API
@@ -45,12 +46,15 @@ class UserController extends ActiveController {
 				'scenario' => 'signup' 
 		] );
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
+		$model->photoFile = UploadedFile::getInstanceByName ('photoFile');
+		
 		if ($model->validate ()) {
 			$model->setPassword ( $model->password );
 			$model->generateAuthKey ();
 			$model->user_type = 1;
 			
 			if ($model->save ()) {
+				$model->upload();
 				$response = Yii::$app->getResponse ();
 				$response->setStatusCode ( 201 );
 				$id = implode ( ',', array_values ( $model->getPrimaryKey ( true ) ) );
@@ -65,7 +69,8 @@ class UserController extends ActiveController {
 						'last_name'=>$model->last_name,
 						'email'=>$model->email,
 						'user_type'=>$model->user_type,
-						'access_key'=>$model->access_key
+						'access_key'=>$model->access_key,
+						'photo'=>Yii::$app->params ['imagesFolder'].$model->photo
 				];
 			} elseif (! $model->hasErrors ()) {
 				throw new ServerErrorHttpException ( 'Failed to create the object for unknown reason.' );

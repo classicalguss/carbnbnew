@@ -6,6 +6,7 @@ use Yii;
 use \yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
+use common\models\Util;
 
 /**
  * User model
@@ -39,6 +40,7 @@ class User extends ActiveRecord implements IdentityInterface {
 	
 	public $test;
 	public $password;
+	public $photoFile;
 	/**
 	 * @inheritdoc
 	 */
@@ -56,14 +58,14 @@ class User extends ActiveRecord implements IdentityInterface {
 	}
 	public function fields()
 	{
-		return ['id','first_name','last_name','user_type'];
+		return ['id','first_name','last_name','user_type','photoFile'];
 	}
 	
 	public function scenarios() {
 		$scenarios = parent::scenarios();
 		$scenarios = array_merge($scenarios,[
-				'facebookLogin'=>['registration_token','first_name','last_name','!auth_key','!status','!password_hash','!user_type','!email'],
-				'signup'=>['first_name','last_name','email','password','phonenumber'],
+				'facebookLogin'=>['registration_token','first_name','last_name','!auth_key','!status','!password_hash','!user_type','!email','photoFile'],
+				'signup'=>['first_name','last_name','email','password','phonenumber','photoFile'],
 		]);
 		return $scenarios;
 	}
@@ -117,7 +119,8 @@ class User extends ActiveRecord implements IdentityInterface {
 				],
 				[ 
 						[ 
-								'phonenumber' 
+								'phonenumber',
+								'photoFile'
 						],
 						'safe' 
 				],
@@ -178,7 +181,15 @@ class User extends ActiveRecord implements IdentityInterface {
 						'password',
 						'string',
 						'min' => 6
-				]
+				],
+				[
+						[
+								'photoFile'
+						],
+						'file',
+						'skipOnEmpty' => true,
+						'extensions' => 'png,jpg,jpeg'
+				],
 		];
 	}
 	
@@ -262,5 +273,34 @@ class User extends ActiveRecord implements IdentityInterface {
 	 */
 	public function removePasswordResetToken() {
 		$this->password_reset_token = null;
+	}
+	public function beforeSave($insert) {
+		if (! parent::beforeSave ( $insert )) {
+			return false;
+		}
+		
+		if ($this->photoFile !== null)
+		{
+			$this->photo = Util::generateRandomString(). '_' . $this->photoFile->name;
+		}
+								
+		return true;
+	}
+	public function upload() {
+		if ($this->validate ()) {
+			
+			if ($this->photoFile)
+			{
+				$this->photoFile->saveAs ( '../../uploads/' . $this->photo );
+			}
+									
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public function afterFind() {
+		$this->photoFile = Yii::$app->params['imagesFolder'].$this->photo;
+		return parent::afterFind();
 	}
 }
