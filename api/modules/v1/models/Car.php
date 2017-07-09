@@ -195,7 +195,14 @@ class Car extends \yii\db\ActiveRecord {
 		$area = Area::findOne([
 				'id'=>$this->area_id
 		]);
-		return 'UAE - '.$city->value.' - '.$area->value;
+		if ($city !== null && $area !== null)
+		{
+			return 'UAE - '.$city->value.' - '.$area->value;
+		}
+		else
+		{
+			return "";
+		}
 	}
 	public function getFeaturesArray() {
 		$returnArray = [];
