@@ -50,7 +50,8 @@ use common\models\Carmake;
  * @property string $currency
  * @property integer $notice_period
  * @property string $features
- * @properties integer $odometer
+ * @property integer $odometer
+ * @property integer $is_published
  */
 class Car extends \yii\db\ActiveRecord {
 	public $photoFile1; // The file instance of the model
@@ -59,6 +60,8 @@ class Car extends \yii\db\ActiveRecord {
 	public $photoFile4; // The file instance of the model
 	public $photoFile5; // The file instance of the model
 	public $photoFile6; // The file instance of the model
+	public $colorText;
+	public $odometerText;
 	
 	/**
 	 * @inheritdoc
@@ -223,8 +226,9 @@ class Car extends \yii\db\ActiveRecord {
 				'city_id',
 				'make_id',
 				'model_id',
-				'color',
-				'odometer'
+				'colorText',
+				'odometerText',
+				'is_published'
 		];
 	}
 	public function extraFields() {
@@ -285,7 +289,9 @@ class Car extends \yii\db\ActiveRecord {
 								'year_model',
 								'gear_type_id',
 								'type_id',
-								'odometer'
+								'odometer',
+								'color',
+								'is_published'
 						],
 						'integer' 
 				],
@@ -447,8 +453,8 @@ class Car extends \yii\db\ActiveRecord {
 		}
 	}
 	public function afterFind() {
-		$this->odometer = self::odometerArray()[$this->odometer];
-		$this->color = self::colorArray()[$this->color];
+		$this->odometerText = self::odometerArray()[$this->odometer];
+		$this->colorText = self::colorArray()[$this->color];
 		return parent::afterFind();
 	}
 }

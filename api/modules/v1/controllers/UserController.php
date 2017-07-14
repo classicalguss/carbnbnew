@@ -52,7 +52,7 @@ class UserController extends ActiveController {
 			$model->setPassword ( $model->password );
 			$model->generateAuthKey ();
 			$model->user_type = 1;
-			
+			$this->photo = Util::generateRandomString(). '_' . $this->photoFile->name;
 			if ($model->save ()) {
 				$model->upload();
 				$response = Yii::$app->getResponse ();
@@ -189,7 +189,6 @@ class UserController extends ActiveController {
 	}
 	public function actionTest2() {
 		$makes = Carmake::find();
-		Yii::warning($makes);
 	}
 	public function actionTest () {
 		$myList = "Al Qusais First

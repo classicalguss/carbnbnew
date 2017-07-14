@@ -74,7 +74,8 @@ class CarSearch extends Car
 				'make_id'=>$this->make_id,
 				'model_id'=>$this->model_id,
 				'gear_type_id'=>$this->gear_type_id,
-				'type_id'=>$this->type_id
+				'type_id'=>$this->type_id,
+				'is_published'=>1
 		]);
 		
 		$query->andFilterWhere(['like', 'description', $this->description])

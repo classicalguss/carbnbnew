@@ -13,6 +13,11 @@ use Yii;
  */
 class Area extends \yii\db\ActiveRecord
 {
+	public function getCity() {
+		return $this->hasOne( City::className(),[
+			'id'=>'city_id'	
+		]);
+	}
     /**
      * @inheritdoc
      */

@@ -64,7 +64,15 @@ return [
 								[
 										'class' => 'yii\rest\UrlRule',
 										'controller' => ['v1/rating','v1/car','v1/carmake','v1/city','v1/area','v1/carmodel'],
-										
+										'patterns'=>[
+												'POST {id}' => 'update',
+												'DELETE {id}' => 'delete',
+												'GET,HEAD {id}' => 'view',
+												'POST' => 'create',
+												'GET,HEAD' => 'index',
+												'{id}' => 'options',
+												'' => 'options',
+										]
 								],
 								[ 
 										'class' => 'yii\rest\UrlRule',

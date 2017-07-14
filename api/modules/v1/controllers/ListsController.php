@@ -21,13 +21,11 @@ class ListsController extends Controller {
 	}
 	public function actionTest() {
 		$makes = Carmake::find()->all();
-		Yii::warning($makes);
 		foreach ($makes as $make) {
 			$model = new Carmodel();
 			$model->value = $make->value. ' model';
 			$model->make_id = $make->id;
 			$model->save();
-			Yii::warning($model->errors);
 		}
 		
 	}

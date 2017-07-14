@@ -278,12 +278,7 @@ class User extends ActiveRecord implements IdentityInterface {
 		if (! parent::beforeSave ( $insert )) {
 			return false;
 		}
-		
-		if ($this->photoFile !== null)
-		{
-			$this->photo = Util::generateRandomString(). '_' . $this->photoFile->name;
-		}
-								
+					
 		return true;
 	}
 	public function upload() {

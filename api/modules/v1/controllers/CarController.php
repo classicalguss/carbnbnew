@@ -43,12 +43,21 @@ class CarController extends ActiveController {
 	public function checkAccess($action, $model = null, $params = []) {
 		if ($action === 'update' || $action === 'delete') {
 			if ($model->owner_id !== \Yii::$app->user->id)
-				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s articles that you\'ve created.', $action ) );
+				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s cars that you\'ve created.', $action ) );
 		}
+	}
+	protected function verbs()
+	{
+		return [
+				'index' => ['GET', 'HEAD'],
+				'view' => ['GET', 'HEAD'],
+				'create' => ['POST'],
+				'update' => ['POST'],
+				'delete' => ['DELETE'],
+		];
 	}
 	public function actionCreate() {
 		$model = new $this->modelClass ( [ ] );
-		
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
 		$model->owner_id = Yii::$app->user->id;
 		$model->photoFile1 = UploadedFile::getInstanceByName ( 'photoFile1' );
