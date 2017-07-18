@@ -230,7 +230,8 @@ class Car extends \yii\db\ActiveRecord {
 				'colorText',
 				'odometerText',
 				'is_published',
-				'photoFile1Array'
+				'photoFile1Array',
+				'description'
 		];
 	}
 	public function extraFields() {
