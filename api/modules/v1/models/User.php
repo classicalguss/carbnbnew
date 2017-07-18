@@ -313,9 +313,13 @@ class User extends ActiveRecord implements IdentityInterface {
 	public function afterFind() {
 		if (!empty($this->photo))
 			$this->photoFile = Yii::$app->params['imagesFolder'].$this->photo;
+		else
+			$this->photoFile = '';
 		
 		if (!empty($this->license_image_file))
 			$this->licenseImage = Yii::$app->params['imagesFolder'].$this->license_image_file;
+		else 
+			$this->licenseImage = '';
 		
 		return parent::afterFind();
 	}
