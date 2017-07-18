@@ -22,7 +22,7 @@ class CarmakeController extends ActiveController {
 		$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 		]);
-		
+		$dataProvider->pagination->pageSizeLimit=[1,200];
 		$query->andFilterWhere([
 				'is_featured' => Yii::$app->request->getQueryParam('is_featured',null),
 		]);

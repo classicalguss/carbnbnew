@@ -75,6 +75,7 @@ return [
 										'class' => 'yii\rest\UrlRule',
 										'controller' => 'v1/user',
 										'extraPatterns' => [
+												'POST {id}' => 'update',
 												'POST facebooklogin' => 'facebooklogin',
 												'POST login' => 'login',
 												'POST logout' => 'logout',

@@ -24,6 +24,16 @@ class UserController extends ActiveController {
 	public $modelClass = 'api\modules\v1\models\User';
 	public $show_credentials = false;
 	
+	protected function verbs()
+	{
+		return [
+				'index' => ['GET', 'HEAD'],
+				'view' => ['GET', 'HEAD'],
+				'create' => ['POST'],
+				'update' => ['POST'],
+		];
+	}
+	
 	public function actions() {
 		$actions = parent::actions ();
 		unset ( $actions ['delete'], $actions ['create'], $actions['update']);
@@ -43,6 +53,24 @@ class UserController extends ActiveController {
 			if ($model->author_id !== \Yii::$app->user->id)
 				throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action));
 		}
+	}
+	public function actionUpdate($id) {
+		$model = User::findIdentity($id);
+		if ($model->id !== Yii::$app->user->id)
+			throw new \yii\web\ForbiddenHttpException('You can only update your own user');
+		
+		$model->setAttributes(Yii::$app->request->post());
+		$model->photoFile = UploadedFile::getInstanceByName ('photoFile');
+		$model->licenseImage = UploadedFile::getInstanceByName ('licenseImage');
+		if (!empty($model->photoFile))
+			$model->photo = Util::generateRandomString(). '_' . $model->photoFile->name;
+		if (!empty($model->licenseImage))
+			$model->license_image_file = Util::generateRandomString(). '_' . $model->licenseImage->name;
+		
+		$model->save ();
+		$model->upload();
+		
+		return $model;
 	}
 	public function actionCreate() {
 		$model = new $this->modelClass ( [ 
@@ -188,14 +216,6 @@ class UserController extends ActiveController {
 				'id'=>$model->id,
 				'access_key'=>$model->access_key
 		];
-	}
-	public function actionUpdate($id) {
-		$model = User::findIdentity($id);
-		if ($model->id !== Yii::$app->user->id)
-			throw new \yii\web\ForbiddenHttpException('You can only update your own user');
-		$model->setAttributes(Yii::$app->request->post());
-		$model->save ();
-		return $model;
 	}
 	/**
 	 * Requests password reset.
