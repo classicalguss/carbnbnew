@@ -75,7 +75,8 @@ class User extends ActiveRecord implements IdentityInterface {
 	}
 	
 	public function getCars() {
-		return $this->hasMany(Car::className(), ['owner_id' => 'id']);
+		$cars = Car::find()->where('owner_id=:id',[':id'=>$this->id])->with('make')->all();
+		return $cars;
 	}
 	
 	public function extraFields() {

@@ -231,8 +231,16 @@ class Car extends \yii\db\ActiveRecord {
 				'odometerText',
 				'is_published',
 				'photoFile1Array',
-				'description'
+				'description',
+				'year_model',
+				'ratings',
+				'make'
 		];
+	}
+	public function getMake() {
+		return $this->hasOne ( Carmake::className (), [
+				'id' => 'make_id'
+		] );
 	}
 	public function extraFields() {
 		return [ 
