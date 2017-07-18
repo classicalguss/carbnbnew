@@ -11,6 +11,9 @@ use common\models\Carmake;
 use common\models\City;
 use common\models\Area;
 use yii\web\UploadedFile;
+use api\modules\v1\models\PasswordResetRequestForm;
+use api\modules\v1\models\ResetPasswordForm;
+use common\models\Util;
 
 /**
  * Country Controller API
@@ -47,12 +50,16 @@ class UserController extends ActiveController {
 		] );
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
 		$model->photoFile = UploadedFile::getInstanceByName ('photoFile');
-		
+		$model->licenseImage = UploadedFile::getInstanceByName ('licenseImage');
 		if ($model->validate ()) {
 			$model->setPassword ( $model->password );
 			$model->generateAuthKey ();
 			$model->user_type = 1;
-			$this->photo = Util::generateRandomString(). '_' . $this->photoFile->name;
+			if (!empty($model->photoFile))
+				$model->photo = Util::generateRandomString(). '_' . $model->photoFile->name;
+			if (!empty($model->licenseImage))
+				$model->license_image_file = Util::generateRandomString(). '_' . $model->licenseImage->name;
+			
 			if ($model->save ()) {
 				$model->upload();
 				$response = Yii::$app->getResponse ();
@@ -70,7 +77,10 @@ class UserController extends ActiveController {
 						'email'=>$model->email,
 						'user_type'=>$model->user_type,
 						'access_key'=>$model->access_key,
-						'photo'=>Yii::$app->params ['imagesFolder'].$model->photo
+						'photo'=>Yii::$app->params ['imagesFolder'].$model->photo,
+						'license_image_file'=>Yii::$app->params ['imagesFolder'].$model->license_image_file,
+						'location'=>$model->location,
+						'about_me'=>$model->about_me
 				];
 			} elseif (! $model->hasErrors ()) {
 				throw new ServerErrorHttpException ( 'Failed to create the object for unknown reason.' );
@@ -187,290 +197,74 @@ class UserController extends ActiveController {
 		$model->save ();
 		return $model;
 	}
-	public function actionTest2() {
-		$makes = Carmake::find();
+	/**
+	 * Requests password reset.
+	 *
+	 * @return mixed
+	 */
+	public function actionRequestpasswordreset() {
+		$model = new PasswordResetRequestForm();
+		
+		if ($model->load ( Yii::$app->request->post (),'' ) && $model->validate ()) {
+			if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+				$ip=$_SERVER['HTTP_CLIENT_IP'];
+			}
+			elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+				$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+			}
+			else{
+				$ip=$_SERVER['REMOTE_ADDR'];
+			}
+			if ($model->sendEmail ($ip)) {
+				return [
+						'msg'=>'Reset Password number code has been sent to email '.$model->email
+				];
+			} else {
+				Yii::$app->session->setFlash ( 'error', 'Sorry, we are unable to reset password for the provided email address.' );
+				return null;
+			}
+		}
+		else
+		{
+			Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+			return $model->errors;
+		}
 	}
-	public function actionTest () {
-		$myList = "Al Qusais First
-Al Qusais Industrial Fifth
-Al Qusais Industrial First
-Al Qusais Industrial Fourth
-Al Qusais Industrial Second
-Al Qusais Industrial Third
-Al Qusais Second
-Al Qusais Third
-Al Raffa
-Al Ras
-Al Rashidiya
-Al Rigga
-Al Safa First
-Al Safa Second
-Al Safouh First
-Al Safouh Second
-Al Satwa
-Al Shindagha
-Al Souq Al Kabeer
-Al Twar First
-Al Twar Second
-Al Twar Third
-Al Warqa'a Fifth
-Al Warqa'a First
-Al Warqa'a Fourth
-Al Warqa'a Second
-Al Warqa'a Third
-Al Wasl
-Al Waheda
-Ayal Nasir
-Aleyas
-Bu Kadra
-Dubai Investment park First
-Dubai Investment Park Second
-Emirates Hill First
-Emirates Hill Second
-Emirates Hill Third
-Hatta
-Hor Al Anz
-Hor Al Anz East
-Jebel Ali 1
-Jebel Ali 2
-Jebel Ali Industrial
-Jebel Ali Palm
-Jumeira First
-Palm Jumeira
-Jumeira Second
-Jumeira Third
-Al Mankhool
-Marsa Dubai
-Mirdif
-Muhaisanah Fourth
-Muhaisanah Second
-Muhaisanah Third
-Muhaisnah First
-Al Mushrif
-Nad Al Hammar
-Nadd Al Shiba Fourth
-Nadd Al Shiba Second
-Nadd Al Shiba Third
-Nad Shamma
-Naif
-Al Muteena First
-Al Muteena Second
-Al Nasr, Dubai
-Port Saeed
-Arabian Ranches
-Ras Al Khor
-Ras Al Khor Industrial First
-Ras Al Khor Industrial Second
-Ras Al Khor Industrial Third
-Rigga Al Buteen
-Trade Centre 1
-Trade Centre 2
-Umm Al Sheif
-Umm Hurair First
-Umm Hurair Second
-Umm Ramool
-Umm Suqeim First
-Umm Suqeim Second
-Umm Suqeim Third
-Wadi Alamardi
-Warsan First
-Warsan Second
-Za'abeel First
-Za'abeel Second";
-		
-		$myArray = explode("\n",$myList);
-		foreach ($myArray as $element) {
-			$element = trim($element);
-			$carMakeElement = new Area();
-			$carMakeElement->city_id = 2;
-			$carMakeElement->value = $element;
-			$carMakeElement->save();
-		}
-
-		$myList = "Al Bateen
-Al Khubeirah
-Tourist Club
-Al Markaziyah
-Al Karamah
-Al Rowdah
-Madinat Zayed
-Al Nahyan, Hadabat, Al Zaafaran, Al Zahra
-Al Mushrif
-Khalidiyah
-Raha Beach
-Kalifa City
-Al Reef Gardens
-Al Reem Island
-Between the Bridges
-Breakwater
-Sas Al Nakheel (Umm al Naar)";
-		
-		$myArray = explode("\n",$myList);
-		foreach ($myArray as $element) {
-			$element = trim($element);
-			$carMakeElement = new Area();
-			$carMakeElement->city_id = 1;
-			$carMakeElement->value = $element;
-			$carMakeElement->save();
+	
+	/**
+	 * Resets password.
+	 *
+	 * @param string $token
+	 * @return mixed
+	 * @throws BadRequestHttpException
+	 */
+	public function actionResetpassword() {
+		try {
+			if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+				$ip=$_SERVER['HTTP_CLIENT_IP'];
+			}
+			elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+				$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+			}
+			else{
+				$ip=$_SERVER['REMOTE_ADDR'];
+			}
+			$model = new ResetPasswordForm( Yii::$app->request->post ('numberCode',''),$ip,Yii::$app->request->post('email','') );
+		} catch ( InvalidParamException $e ) {
+			throw new BadRequestHttpException ( $e->getMessage () );
 		}
 		
-		$myList = "Abu Shagara
-Al Mahatta
-Al Majaz
-Al Nad
-Al Nahda
-Al Layyeh
-Al Taawun
-Al Yarmook
-Al Qasba
-Al Rolla
-Musallah
-Al Qulayya
-Al Mujarrah
-Muwailah
-Buteena
-Halwan
-Al Suyoh";
-		
-		$myArray = explode("\n",$myList);
-		foreach ($myArray as $element) {
-			$element = trim($element);
-			$carMakeElement = new Area();
-			$carMakeElement->city_id = 3;
-			$carMakeElement->value = $element;
-			$carMakeElement->save();
+		if ($model == null)
+		{
+			Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+		}
+		if ($model->load ( Yii::$app->request->post (),'' ) && $model->validate () && $model->resetPassword ()) {
+			return [
+					'msg'=>'Reset Password number code has been sent to email '.$model->email
+			];
 		}
 		
-		$myList = "Ajman City Center
-Ajman Corniche
-Ajman Free Zone
-Ajman Khor
-Ajman Marina
-Ajman Pearl
-Ajman Port
-Ajman Uptown
-Al Ameera Village
-Al Bustan
-Al Butain
-Al Dhran
-Al Jurf
-Al Hamidiya
-Al Hamriya?
-Al Helio
-Al Muntazi
-Al Mushairef
-Al Muwayhat
-Al Naemiyah
-Al Nakhil
-Al Naseem
-Al Owan
-Al Rashidiya
-Al Rifaah
-Al Rowdha?
-Al Rumailah
-Al Sawan
-Al Zahra
-Al Zora
-Awali City
-Emirates City
-Emirates City Extension
-Escape
-Garden City
-Green City
-Hatta
-Ittihad Village
-Manama
-Marmooka City
-Masfout
-Mazeria
-Meadows Ajman
-Meidan Al Tallah
-Mushairef
-Mushairef Commercial
-New Industrial Area
-Old Industrial Area
-Safia Island
-Subaikah";
-		
-		$myArray = explode("\n",$myList);
-		foreach ($myArray as $element) {
-			$element = trim($element);
-			$carMakeElement = new Area();
-			$carMakeElement->city_id = 4;
-			$carMakeElement->value = $element;
-			$carMakeElement->save();
-		}
-		$myList = "Al Bateen
-Al Foah
-Al Hili - see Hili
-Al Jimi
-Al Khabisi, Al Khabaisi
-Al Khrair
-Al Maqam
-Al Masoudi
-Al Mazam
-Al Mutawaa
-Al Muwaiji
-Al Niyadat
-Al Qattara
-Al Saniya
-Al Surooj
-Al Tawiyah
-Central District
-Falaj Hazza
-Hili
-Magar Al Dhabi
-Munaseer, Muniseer, Munasir
-Saniya
-Tawam
-Zakhir";
-		
-		$myArray = explode("\n",$myList);
-		foreach ($myArray as $element) {
-			$element = trim($element);
-			$carMakeElement = new Area();
-			$carMakeElement->city_id = 5;
-			$carMakeElement->value = $element;
-			$carMakeElement->save();
-		}
-
-		$myList = "Al Darbijaniyah
-Al Dhait
-Al Hamra, Al Hamrah, AlHamra
-Al Hamra Village
-Al Hudaihbah
-Al Jazeera
-Al Juwais
-Al Kharan?
-Al Nakheel
-Al Saih
-Al Seer
-Al Soor
-Al Uraibi
-Al Zahra
-Al Zaith?
-Dafan Al Khor
-Dafan Al Nakheel
-Dahan
-Jazeera Al Hamra
-Julan
-Julfar
-Khuzam, Khouzam
-Maareed?
-Mamourah
-Nakheel
-Old Town RAK
-Seih Al Burairat
-Seih Al Hudaibah
-Seih Al Uraibi";
-		
-		$myArray = explode("\n",$myList);
-		foreach ($myArray as $element) {
-			$element = trim($element);
-			$carMakeElement = new Area();
-			$carMakeElement->city_id = 6;
-			$carMakeElement->value = $element;
-			$carMakeElement->save();
-		}
+		Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+		return $model->errors;
 	}
 }

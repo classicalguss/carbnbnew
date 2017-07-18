@@ -60,6 +60,7 @@ class Car extends \yii\db\ActiveRecord {
 	public $photoFile4; // The file instance of the model
 	public $photoFile5; // The file instance of the model
 	public $photoFile6; // The file instance of the model
+	public $photoFile1Array;
 	public $colorText;
 	public $odometerText;
 	
@@ -228,7 +229,8 @@ class Car extends \yii\db\ActiveRecord {
 				'model_id',
 				'colorText',
 				'odometerText',
-				'is_published'
+				'is_published',
+				'photoFile1Array'
 		];
 	}
 	public function extraFields() {
@@ -455,6 +457,10 @@ class Car extends \yii\db\ActiveRecord {
 	public function afterFind() {
 		$this->odometerText = self::odometerArray()[$this->odometer];
 		$this->colorText = self::colorArray()[$this->color];
+		$this->photoFile1Array = [
+				'fileName' => $this->photo1,
+				'path' => Yii::$app->params ['imagesFolder'] . $this->photo1
+		];
 		return parent::afterFind();
 	}
 }

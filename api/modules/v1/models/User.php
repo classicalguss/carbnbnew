@@ -29,6 +29,9 @@ use common\models\Util;
  * @property string $registration_token
  * @property integer $registration_type
  * @property integer $role
+ * @property string $password_reset_number_code
+ * @property string $reset_password_ip_call
+ * @property string $license_image_file
  */
 class User extends ActiveRecord implements IdentityInterface {
 	const STATUS_DELETED = 0;
@@ -41,6 +44,7 @@ class User extends ActiveRecord implements IdentityInterface {
 	public $test;
 	public $password;
 	public $photoFile;
+	public $licenseImage;
 	/**
 	 * @inheritdoc
 	 */
@@ -58,14 +62,14 @@ class User extends ActiveRecord implements IdentityInterface {
 	}
 	public function fields()
 	{
-		return ['id','first_name','last_name','user_type','photoFile'];
+		return ['id','first_name','last_name','user_type','photoFile','licenseImage','about_me','location'];
 	}
 	
 	public function scenarios() {
 		$scenarios = parent::scenarios();
 		$scenarios = array_merge($scenarios,[
 				'facebookLogin'=>['registration_token','first_name','last_name','!auth_key','!status','!password_hash','!user_type','!email','photoFile'],
-				'signup'=>['first_name','last_name','email','password','phonenumber','photoFile'],
+				'signup'=>['first_name','last_name','email','password','phonenumber','photoFile','licenseImage','about_me','location'],
 		]);
 		return $scenarios;
 	}
@@ -111,7 +115,8 @@ class User extends ActiveRecord implements IdentityInterface {
 				[ 
 						[ 
 								'first_name',
-								'last_name' 
+								'last_name',
+								'location'
 						],
 						'string',
 						'min' => 2,
@@ -120,7 +125,8 @@ class User extends ActiveRecord implements IdentityInterface {
 				[ 
 						[ 
 								'phonenumber',
-								'photoFile'
+								'photoFile',
+								'licenseImage'
 						],
 						'safe' 
 				],
@@ -183,8 +189,13 @@ class User extends ActiveRecord implements IdentityInterface {
 						'min' => 6
 				],
 				[
+						'about_me',
+						'string'
+				],
+				[
 						[
-								'photoFile'
+								'photoFile',
+								'licenseImage'
 						],
 						'file',
 						'skipOnEmpty' => true,
@@ -264,15 +275,16 @@ class User extends ActiveRecord implements IdentityInterface {
 	/**
 	 * Generates new password reset token
 	 */
-	public function generatePasswordResetToken() {
-		$this->password_reset_token = Yii::$app->security->generateRandomString () . '_' . time ();
+	public function generatePasswordNumber() {
+		$this->password_reset_number_code = Util::generateRandomNumberedString(6). '_' . time ();
 	}
 	
 	/**
 	 * Removes password reset token
 	 */
-	public function removePasswordResetToken() {
+	public function removePasswordNumber() {
 		$this->password_reset_token = null;
+		$this->reset_password_ip_call = null;
 	}
 	public function beforeSave($insert) {
 		if (! parent::beforeSave ( $insert )) {
@@ -288,14 +300,60 @@ class User extends ActiveRecord implements IdentityInterface {
 			{
 				$this->photoFile->saveAs ( '../../uploads/' . $this->photo );
 			}
-									
+			
+			if ($this->licenseImage)
+			{
+				$this->licenseImage->saveAs ( '../../uploads/' . $this->license_image_file );
+			}
 			return true;
 		} else {
 			return false;
 		}
 	}
 	public function afterFind() {
-		$this->photoFile = Yii::$app->params['imagesFolder'].$this->photo;
+		if (!empty($this->photo))
+			$this->photoFile = Yii::$app->params['imagesFolder'].$this->photo;
+		
+		if (!empty($this->license_image_file))
+			$this->licenseImage = Yii::$app->params['imagesFolder'].$this->license_image_file;
+		
 		return parent::afterFind();
+	}
+	/**
+	 * Finds out if password reset token is valid
+	 *
+	 * @param string $token
+	 *        	password reset token
+	 * @return bool
+	 */
+	public static function isPasswordResetTokenValid($token) {
+		if (empty ( $token )) {
+			return false;
+		}
+		
+		$timestamp = ( int ) substr ( $token, strrpos ( $token, '_' ) + 1 );
+		$expire = Yii::$app->params ['user.passwordResetTokenExpire'];
+		return $timestamp + $expire >= time ();
+	}
+	
+	/**
+	 * Finds user by password reset token
+	 *
+	 * @param string $token
+	 *        	password reset token
+	 * @return static|null
+	 */
+	public static function findByPasswordNumberCode($number,$ip,$email) {
+		if (! static::isPasswordResetTokenValid ( $number )) {
+			Yii::warning('returning null here');
+			return null;
+		}
+		
+		return static::findOne ( [
+				'password_reset_number_code' => $number,
+				'reset_password_ip_call'=>$ip,
+				'email'=>$email,
+				'status' => self::STATUS_ACTIVE
+		] );
 	}
 }

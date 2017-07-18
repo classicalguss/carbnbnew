@@ -24,7 +24,16 @@ class Rating extends \yii\db\ActiveRecord
 	{
 		return 'rating';
 	}
-	
+	public function getUser() {
+		return $this->hasOne ( User::className (), [
+				'id' => 'user_id'
+		] );
+	}
+	public function getCar() {
+		return $this->hasOne ( Car::className (), [
+				'id' => 'car_id'
+		] );
+	}
 	/**
 	 * @inheritdoc
 	 */
@@ -37,7 +46,12 @@ class Rating extends \yii\db\ActiveRecord
 				[['created_at','description'], 'safe'],
 		];
 	}
-	
+	public function extraFields() {
+		return [
+				'user',
+				'car',
+		];
+	}
 	/**
 	 * @inheritdoc
 	 */

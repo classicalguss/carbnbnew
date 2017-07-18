@@ -16,9 +16,6 @@ return [
 				],
 		],
 		'components' => [
-				'mailer' => [
-					'class' => 'yii\swiftmailer\Mailer',
-				],
 				'user' => [
 						'identityClass' => 'api\modules\v1\models\User',
 						'enableAutoLogin' => false,
@@ -81,6 +78,8 @@ return [
 												'POST facebooklogin' => 'facebooklogin',
 												'POST login' => 'login',
 												'POST logout' => 'logout',
+												'POST requestpasswordreset' => 'requestpasswordreset',
+												'POST resetpassword' => 'resetpassword',
 												'GET test' => 'test',
 										],
 								],
