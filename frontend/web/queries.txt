@@ -1,0 +1,78 @@
+ALTER TABLE `car` DROP `cover_photo`;
+
+ALTER TABLE `car` CHANGE `gear_type` `gear_type_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `gear_type_id` `gear_type_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `address` `area_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `type` `type_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `model` `model_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `country` `country_iso` VARCHAR(2) NOT NULL;
+
+ALTER TABLE `car` CHANGE `city` `city_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `maker` `make_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `gas` `gas_type_id` INT NOT NULL;
+
+ALTER TABLE `car` CHANGE `interior_photo` `photo1` VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `car` CHANGE `back_photo` `photo2` VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `car` CHANGE `front_photo` `photo3` VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `car` CHANGE `side_photo` `photo4` VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `car` CHANGE `optional_photo_1` `photo5` VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `car` CHANGE `optional_photo_2` `photo6` VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `car` ADD `features` VARCHAR(100) NULL DEFAULT NULL AFTER `currency`;
+
+CREATE TABLE `carbnbnew`.`location` ( `id` INT NOT NULL , `iso` VARCHAR(2) NOT NULL , `city_id` INT NOT NULL , `area_id` INT NOT NULL , `value` VARCHAR(255) NOT NULL ) ENGINE = MyISAM;
+
+ALTER TABLE `location` ADD PRIMARY KEY(`id`);
+
+ALTER TABLE `location` ADD INDEX(`iso`);
+
+ALTER TABLE `location` ADD INDEX(`city_id`);
+
+ALTER TABLE `location` ADD INDEX(`area_id`);
+
+ALTER TABLE `location` ADD UNIQUE( `iso`, `city_id`, `area_id`);
+
+ALTER TABLE `location` CHANGE `id` `id` SERIAL NOT NULL;
+
+INSERT INTO `location`(`iso`, `city_id`, `area_id`, `value`) VALUES ('ae','0',0,'UAE - Abu Dhabi - Zero Area');
+
+INSERT INTO `location`(`iso`, `city_id`, `area_id`, `value`) VALUES ('ae','0',1,'UAE - Abu Dhabi - Second Area');
+
+INSERT INTO `location`(`iso`, `city_id`, `area_id`, `value`) VALUES ('ae','0',2,'UAE - Abu Dhabi - Third Area');
+
+INSERT INTO `location`(`iso`, `city_id`, `area_id`, `value`) VALUES ('ae',1,0,'UAE - Dubai - Jumeria Khalifah');
+
+INSERT INTO `location`(`iso`, `city_id`, `area_id`, `value`) VALUES ('ae',1,1,'UAE - Dubai - Burj Khalifah');
+
+ALTER TABLE `car` ADD `odometer` INT NOT NULL AFTER `features`;
+
+CREATE TABLE `carbnbnew`.`carmodel` ( `id` SERIAL NOT NULL , `make` INT NOT NULL , `model` INT NOT NULL , PRIMARY KEY (`id`), INDEX (`make`, `model`)) ENGINE = MyISAM;
+
+ALTER TABLE `carmodel` ADD `value` VARCHAR(255) NOT NULL AFTER `model`;
+
+ALTER TABLE `carmodel` ADD UNIQUE( `make`, `model`);
+
+INSERT INTO `carmodel`(`make`, `model`, `value`) VALUES (0,0,'Kia Forte');
+
+INSERT INTO `carmodel`(`make`, `model`, `value`) VALUES (0,1,'Kia Cerrato');
+
+INSERT INTO `carmodel`(`make`, `model`, `value`) VALUES (1,0,'Mercedes C200');
+
+INSERT INTO `carmodel`(`make`, `model`, `value`) VALUES (1,1,'Mercedes C300');
+
+INSERT INTO `carmodel`(`make`, `model`, `value`) VALUES (2,0,'Ferrari old');
+
+INSERT INTO `carmodel`(`make`, `model`, `value`) VALUES (2,1,'Ferrari new');
+

@@ -1,0 +1,77 @@
+.logo {
+	width: 90px;
+	height: 20px;
+	margin-left: 100px;
+	margin-top: 100px;
+}
+.Rectangle-5 {
+	width: 1440px;
+	height: 750px; linear-gradient (to left, rgba(0, 0, 0, 0), rgba(0, 0,
+	0, 0.6));
+	background-color: black;
+	margin: auto;
+	background-image: url(/background.jpg);
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+.main-header {
+	padding-top: 57px;
+	padding-left: 100px;
+}
+
+.main-header p {
+	font-family: Lato;
+	font-size: 48px;
+	font-weight: 300;
+	line-height: 1.21;
+	letter-spacing: -3.1px;
+	text-align: left;
+	color: #ffffff;
+}
+
+.site-description {
+	margin-top: 27px;
+	padding-left: 100px;
+	width: 540px;
+	height: 68px;
+	font-family: Lato;
+	font-size: 24px;
+	font-weight: 300;
+	line-height: 1.42;
+	text-align: left;
+	color: #ffffff;
+	
+}
+
+.registration {
+	margin-left: 100px;
+	width: 429px;
+	height: 50px;
+	border-radius: 3px;
+	background-color: rgba(255, 255, 255, 0.3);
+}
+.registration-form {
+	position: relative;
+	top: 4.3em;
+	margin-left: 120px;
+}
+.registration-input {
+	background: transparent;
+	outline: none;
+	border: 0;
+	color: #ffffff;
+	font-size: 16px;
+	width: 276px;
+}
+.registration-input::placeholder {
+	
+	color: #ffffff;
+}
+.registration-submit {
+	background: #ffffff;
+	border: none;
+	height: 50px;
+	outline:none;
+	width: 170px;
+}
