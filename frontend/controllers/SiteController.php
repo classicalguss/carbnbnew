@@ -47,6 +47,7 @@ class SiteController extends Controller {
 	 * @return mixed
 	 */
 	public function actionIndex() {
+		$this->layout = 'landing';
 		return $this->render ( 'index' );
 	}
 	

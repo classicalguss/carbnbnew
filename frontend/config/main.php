@@ -18,7 +18,9 @@ return [
 						'identityCookie' => [ 
 								'name' => '_identity-frontend',
 								'httpOnly' => true 
-						] 
+						],
+						'loginUrl'=>['user/login'],
+						
 				],
 				'session' => [ 
 						// this is the name of the session cookie used for login on the frontend
@@ -49,12 +51,6 @@ return [
 				'urlManager' => [ 
 						'enablePrettyUrl' => true,
 						'showScriptName' => false,
-						'rules' => [ 
-								[ 
-										'class' => 'yii\rest\UrlRule',
-										'controller' => 'userapi' 
-								] 
-						] 
 				],
 				'request' => [ 
 						'parsers' => [ 
