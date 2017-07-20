@@ -75,3 +75,19 @@
 	outline:none;
 	width: 170px;
 }
+.copyright-text {
+	color: #ececec;
+	font-size: 14px;
+	margin-top: 203px;
+	margin-left: 100px;
+}
+.loading-icon {
+	width: 71px;
+}
+.green {
+	color:green;
+}
+.instructions {
+	margin:auto;
+	width: 1440px;
+}

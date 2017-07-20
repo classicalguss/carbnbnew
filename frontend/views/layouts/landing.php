@@ -6,14 +6,17 @@ use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 use frontend\assets\LandingAsset;
 use frontend\assets\AppAsset;
-
-// LandingAsset::register ( $this );
-AppAsset::register ( $this );
+LandingAsset::register ( $this );
+//AppAsset::register ( $this );
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
+<meta charset="<?= Yii::$app->charset ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
 	<?php $this->head() ?>
 </head>
 <body>
@@ -29,12 +32,24 @@ AppAsset::register ( $this );
 		</div>
 		<form class="registration-form">
 			<input class="registration-input" placeholder="Your Email" type="text" />
-			<button class="registration-submit" type="submit">Keep me Updated!</button>
+			
+			<button onclick="submitForm(this);return false;" class="registration-submit" type="submit">
+				<span>Keep me Updated</span>
+				<img class="hide loading-icon" src="https://www.createwebsite.net/wp-content/uploads/2015/09/GD.gif" />
+			</button>
 		</form>
 		<div class="registration">
 			<p></p>
 		</div>
-
+		<div class="copyright-text">
+			<p>Copyright © 2017 UChaise. All rights Reserved</p>
+		</div>
+	</div>
+	<div class="instructions" >
+		<img src="../instructions2" />
+	</div>
+	<div class="instructions" >
+		<img src="../instructions1" />
 	</div>
 <?php $this->endBody() ?>
 </body>

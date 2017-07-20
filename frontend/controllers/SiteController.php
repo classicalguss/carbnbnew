@@ -14,6 +14,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use common\models\User;
+use frontend\models\SubscribeForm;
 
 /**
  * Site controller
@@ -47,8 +48,13 @@ class SiteController extends Controller {
 	 * @return mixed
 	 */
 	public function actionIndex() {
+		if (Yii::$app->request->isAjax)
+		{
+			return 1;
+		}
+		$model = new SubscribeForm();
 		$this->layout = 'landing';
-		return $this->render ( 'index' );
+		return $this->render ('index');
 	}
 	
 	/**
