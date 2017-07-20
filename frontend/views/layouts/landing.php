@@ -46,10 +46,10 @@ LandingAsset::register ( $this );
 		</div>
 	</div>
 	<div class="instructions" >
-		<img src="../instructions2" />
+		<img src="instructions2.png" />
 	</div>
 	<div class="instructions" >
-		<img src="../instructions1" />
+		<img src="instructions1.png" />
 	</div>
 <?php $this->endBody() ?>
 </body>
