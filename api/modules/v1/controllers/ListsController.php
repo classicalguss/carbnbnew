@@ -7,6 +7,7 @@ use api\modules\v1\models\Car;
 use yii\rest\Controller;
 use common\models\Carmake;
 use common\models\Carmodel;
+use yii\sphinx\Query;
 
 class ListsController extends Controller {
 	
@@ -28,6 +29,20 @@ class ListsController extends Controller {
 			$model->save();
 		}
 		
+	}
+	public function actionAreaautocomplete() {
+		$keyWord = Yii::$app->request->getQueryParam('q',null);
+		if ($keyWord === null)
+			return '';
+		else 
+		{
+			$query = new Query();
+			$rows = $query->select(['city_id','area_id','city_name','area_name'])
+			->from('sphinx_areas')->match($keyWord.'*')
+			->all();
+			
+			return $rows;
+		}
 	}
 }
 ?>

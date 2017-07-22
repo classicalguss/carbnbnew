@@ -42,7 +42,7 @@ class PasswordResetRequestForm extends Model
             'status' => User::STATUS_ACTIVE,
             'email' => $this->email,
         ]);
-
+		
         if (!$user) {
             return false;
         }
@@ -54,6 +54,7 @@ class PasswordResetRequestForm extends Model
                 return false;
             }
         }
+        
         $numberCode = substr ( $user->password_reset_number_code, 0,strrpos ( $user->password_reset_number_code, '_' ));
         return Yii::$app
             ->mailer

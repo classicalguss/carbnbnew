@@ -60,7 +60,7 @@ return [
 						'rules' => [
 								[
 										'class' => 'yii\rest\UrlRule',
-										'controller' => ['v1/rating','v1/car','v1/carmake','v1/city','v1/area','v1/carmodel'],
+										'controller' => ['v1/rating','v1/car','v1/carmake','v1/city','v1/area','v1/carmodel','v1/test'],
 										'patterns'=>[
 												'POST {id}' => 'update',
 												'DELETE {id}' => 'delete',

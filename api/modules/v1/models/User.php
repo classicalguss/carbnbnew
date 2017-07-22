@@ -7,6 +7,7 @@ use \yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\behaviors\TimestampBehavior;
 use common\models\Util;
+use phpDocumentor\Reflection\Types\Array_;
 
 /**
  * User model

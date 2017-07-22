@@ -234,13 +234,20 @@ class Car extends \yii\db\ActiveRecord {
 				'description',
 				'year_model',
 				'ratings',
-				'make'
+				'type_id'
+				
 		];
+	}
+	public function getRate() {
+		return Rating::find()->where('car_id=:id',[':id'=>$this->id])->average('rating');
 	}
 	public function getMake() {
 		return $this->hasOne ( Carmake::className (), [
 				'id' => 'make_id'
 		] );
+	}
+	public function getSimilar() {
+		return Car::find()->where('type_id=:type_id AND id!=:id',[':type_id'=>$this->type_id,':id'=>$this->id])->limit(5)->all();
 	}
 	public function extraFields() {
 		return [ 
@@ -251,7 +258,10 @@ class Car extends \yii\db\ActiveRecord {
 				'ratings',
 				'properties',
 				'carModel',
-				'location'
+				'location',
+				'similar',
+				'rate',
+				'make'
 		];
 	}
 	
