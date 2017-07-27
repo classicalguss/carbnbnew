@@ -234,7 +234,10 @@ class Car extends \yii\db\ActiveRecord {
 				'description',
 				'year_model',
 				'ratings',
-				'type_id'
+				'type_id',
+				'owner_id',
+				'carModel',
+				'rate'
 				
 		];
 	}
@@ -247,7 +250,7 @@ class Car extends \yii\db\ActiveRecord {
 		] );
 	}
 	public function getSimilar() {
-		return Car::find()->where('type_id=:type_id AND id!=:id',[':type_id'=>$this->type_id,':id'=>$this->id])->limit(5)->all();
+		return Car::find()->where('type_id=:area_id AND id!=:id',[':area_id'=>$this->area_id,':id'=>$this->id])->limit(5)->all();
 	}
 	public function extraFields() {
 		return [ 
@@ -257,10 +260,8 @@ class Car extends \yii\db\ActiveRecord {
 				'featuresArray',
 				'ratings',
 				'properties',
-				'carModel',
 				'location',
 				'similar',
-				'rate',
 				'make'
 		];
 	}
@@ -277,7 +278,7 @@ class Car extends \yii\db\ActiveRecord {
 								'description',
 								'milage_limitation',
 								'insurance_tip',
-								'owner_id',
+								'!owner_id',
 								'country_iso',
 								'city_id',
 								'make_id',
@@ -288,7 +289,8 @@ class Car extends \yii\db\ActiveRecord {
 								'year_model',
 								'gear_type_id',
 								'gas_type_id',
-								'odometer'
+								'odometer',
+								'photoFile1'
 						],
 						'required' 
 				],
@@ -376,7 +378,8 @@ class Car extends \yii\db\ActiveRecord {
 				],
 				[
 						[
-								'report'
+								'report',
+								'book_instantly'
 						],
 						'safe'
 				]

@@ -19,7 +19,10 @@ class Carmake extends \yii\db\ActiveRecord
     {
         return 'carmake';
     }
-
+    public function getCar()
+    {
+    	return $this->hasMany(\api\modules\v1\models\Car::className(), ['make_id' => 'id']);
+    }
     /**
      * @inheritdoc
      */

@@ -45,6 +45,11 @@ return [
 					'format'=>'yii\web\Response::FORMAT_JSON',
 					'on beforeSend' => function ($event) {
 						$response = $event->sender;
+						Yii::warning($response->data);
+						array_walk_recursive($response->data, function(&$value,$key) {
+							if (is_null($value))
+								$value = '';
+						});
 							$response->data = [
 									'status'=>$response->statusCode,
 									'message'=>$response->statusText,
@@ -60,7 +65,7 @@ return [
 						'rules' => [
 								[
 										'class' => 'yii\rest\UrlRule',
-										'controller' => ['v1/rating','v1/car','v1/carmake','v1/city','v1/area','v1/carmodel','v1/test'],
+										'controller' => ['v1/rating','v1/car','v1/carmake','v1/city','v1/area','v1/carmodel','v1/test','v1/booking'],
 										'patterns'=>[
 												'POST {id}' => 'update',
 												'DELETE {id}' => 'delete',

@@ -33,6 +33,10 @@ class City extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+    	return parent::fields();
+    }
     /**
      * @inheritdoc
      */
