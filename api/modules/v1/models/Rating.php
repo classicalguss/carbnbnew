@@ -46,9 +46,13 @@ class Rating extends \yii\db\ActiveRecord
 				[['created_at','description'], 'safe'],
 		];
 	}
+	public function fields() {
+		$fields = parent::fields();
+		$fields[] = 'user';
+		return $fields;
+	}
 	public function extraFields() {
 		return [
-				'user',
 				'car',
 		];
 	}

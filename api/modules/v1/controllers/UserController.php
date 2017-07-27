@@ -69,6 +69,8 @@ class UserController extends ActiveController {
 		
 		$model->save ();
 		$model->upload();
+		if (empty($model->errors))
+			$model = $model->findIdentity($id);
 		
 		return $model;
 	}
