@@ -351,7 +351,6 @@ class User extends ActiveRecord implements IdentityInterface {
 	 */
 	public static function findByPasswordNumberCode($number,$ip,$email) {
 		if (! static::isPasswordResetTokenValid ( $number )) {
-			Yii::warning('returning null here');
 			return null;
 		}
 		

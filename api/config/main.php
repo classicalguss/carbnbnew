@@ -45,7 +45,6 @@ return [
 					'format'=>'yii\web\Response::FORMAT_JSON',
 					'on beforeSend' => function ($event) {
 						$response = $event->sender;
-						Yii::warning($response->data);
 						array_walk_recursive($response->data, function(&$value,$key) {
 							if (is_null($value))
 								$value = '';

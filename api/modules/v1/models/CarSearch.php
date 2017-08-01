@@ -10,14 +10,19 @@ use api\modules\v1\models\Car;
  */
 class CarSearch extends Car
 {
+	public $min_price;
+	public $max_price;
+	public $min_milage_limitation;
+	public $max_milage_limitation;
+	
 	/**
 	 * @inheritdoc
 	 */
 	public function rules()
 	{
 		return [
-				[['id', 'year_model','price', 'rent_it_now', 'insurance_tip','gear_type_id','type_id','model_id','make_id','city_id','milage_limitation', 'owner_id', 'is_featured', 'number_of_doors', 'number_of_seats', 'gas_type_id', 'type_id','area_id'], 'integer'],
-				[['created_at', 'description', 'report', 'country', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo_2'], 'safe'],
+				[['min_milage_limitation','max_milage_limitation','min_price','max_price','id', 'year_model','price', 'rent_it_now', 'insurance_tip','gear_type_id','type_id','model_id','make_id','city_id','milage_limitation', 'owner_id', 'is_featured', 'number_of_doors', 'number_of_seats', 'gas_type_id', 'type_id','area_id'], 'integer'],
+				[['min_price','max_price','created_at', 'description', 'report', 'country', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo_2'], 'safe'],
 		];
 	}
 	
@@ -46,7 +51,6 @@ class CarSearch extends Car
 		$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 		]);
-		
 		$this->load($params,'');
 		
 		if (!$this->validate()) {
@@ -77,6 +81,8 @@ class CarSearch extends Car
 				'type_id'=>$this->type_id,
 				'is_published'=>1
 		]);
+		$query->andFilterWhere(['between','price',$this->min_price,$this->max_price]);
+		$query->andFilterWhere(['between','milage_limitation',$this->min_milage_limitation,$this->max_milage_limitation]);
 		
 		$query->andFilterWhere(['like', 'description', $this->description])
 		->andFilterWhere(['like', 'report', $this->report])

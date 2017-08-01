@@ -237,7 +237,8 @@ class Car extends \yii\db\ActiveRecord {
 				'type_id',
 				'owner_id',
 				'carModel',
-				'rate'
+				'rate',
+				'milage_limitation'
 				
 		];
 	}
