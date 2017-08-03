@@ -11,6 +11,7 @@ use api\modules\v1\models\Car;
 use api\modules\v1\models\CarSearch;
 use yii\web\UploadedFile;
 use yii\web\ServerErrorHttpException;
+use common\models\Util;
 
 /**
  * Country Controller API
@@ -21,7 +22,7 @@ class CarController extends ActiveController {
 	public $modelClass = 'api\modules\v1\models\Car';
 	public function actions() {
 		$actions = parent::actions ();
-		unset ( $actions ['create'] );
+		unset ( $actions ['create'],$actions['update'] );
 		$actions ['index'] ['prepareDataProvider'] = [ 
 				$this,
 				'prepareDataProvider' 
@@ -46,6 +47,7 @@ class CarController extends ActiveController {
 				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s cars that you\'ve created.', $action ) );
 		}
 	}
+
 	protected function verbs()
 	{
 		return [
@@ -69,7 +71,7 @@ class CarController extends ActiveController {
 		
 		$featuresList = Yii::$app->request->post ( 'featuresList', array () );
 		$model->features = implode ( $featuresList, ',' );
-		
+		$model->scenario = 'create';
 		if ($model->save ()) {
 			$model->upload ();
 			$response = Yii::$app->getResponse ();
@@ -83,6 +85,25 @@ class CarController extends ActiveController {
 			throw new ServerErrorHttpException ( 'Failed to create the object for unknown reason.' );
 		}
 		
+		return $model;
+	}
+	public function actionUpdate($id) {
+		$model = Car::findOne($id);
+		if ($model->owner_id !== Yii::$app->user->id)
+			throw new \yii\web\ForbiddenHttpException('You can only update your own car');
+			
+		$model->setAttributes(Yii::$app->request->post());
+		$model->photoFile1 = UploadedFile::getInstanceByName ('photoFile1');
+		
+		if (!empty($model->photoFile1))
+			$model->photo1 =Util::generateRandomString(). '_' . $model->photoFile1->name;
+		
+		$model->save ();
+		$model->upload();
+		
+		if (empty($model->errors))
+			$model = $model->findOne($id);
+						
 		return $model;
 	}
 	public function prepareDataProvider() {

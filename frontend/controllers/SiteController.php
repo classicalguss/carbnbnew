@@ -52,8 +52,6 @@ class SiteController extends Controller {
 		{
 			return 1;
 		}
-		$model = new SubscribeForm();
-		$this->layout = 'landing';
 		return $this->render ('index');
 	}
 	

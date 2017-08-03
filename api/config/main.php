@@ -49,12 +49,12 @@ return [
 							if (is_null($value))
 								$value = '';
 						});
-							$response->data = [
-									'status'=>$response->statusCode,
-									'message'=>$response->statusText,
-									'success' => $response->isSuccessful,
-									'data' => $response->data,
-							];
+						$response->data = [
+								'status'=>$response->statusCode,
+								'message'=>$response->statusText,
+								'success' => $response->isSuccessful,
+								'data' => $response->data,
+						];
 					},
 				],
 				'urlManager' => [ 

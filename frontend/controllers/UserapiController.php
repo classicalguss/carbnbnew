@@ -117,8 +117,6 @@ class UserapiController extends \yii\rest\Controller {
 	 */
 	public function actionView($id) {
 		$model = User::findIdentity($id);
-		Yii::warning($id);
-		Yii::warning($model);
 		if ($id == Yii::$app->user->id)
 			return $model;
 		else 
@@ -225,8 +223,6 @@ class UserapiController extends \yii\rest\Controller {
 				return ['status'=>'error', 'msg'=>'Sorry, we are unable to reset password for the provided email address.'];
 			}
 		}
-		Yii::warning('I get here instead of continuing');
-		Yii::warning($model);
 		return $model;
 	}
 	

@@ -20,7 +20,9 @@ LandingAsset::register ( $this );
 	<?php $this->head() ?>
 </head>
 <body>
-<?php $this->beginBody() ?>
+<?php $this->beginBody() 
+
+?>
 	<div class="Rectangle-5">
 		<img class="logo" width=90px height="20px" src="logo.png" />
 		<div class="main-header">

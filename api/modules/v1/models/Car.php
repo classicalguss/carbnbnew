@@ -52,6 +52,7 @@ use common\models\Carmake;
  * @property string $features
  * @property integer $odometer
  * @property integer $is_published
+ * @property integer $book_instantly
  */
 class Car extends \yii\db\ActiveRecord {
 	public $photoFile1; // The file instance of the model
@@ -291,9 +292,20 @@ class Car extends \yii\db\ActiveRecord {
 								'gear_type_id',
 								'gas_type_id',
 								'odometer',
-								'photoFile1'
 						],
 						'required' 
+				],
+				[
+						'photoFile1',
+						'required',
+						'on'=>['create']
+				],
+				[
+						'photoFile1',
+						'file',
+						'skipOnEmpty' => false,
+						'extensions' => 'png,jpg,jpeg',
+						'on'=>['create']
 				],
 				[ 
 						[ 
@@ -366,7 +378,6 @@ class Car extends \yii\db\ActiveRecord {
 				],
 				[
 						[
-								'photoFile1',
 								'photoFile2',
 								'photoFile3',
 								'photoFile4',

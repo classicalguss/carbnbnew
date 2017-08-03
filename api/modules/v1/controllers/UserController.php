@@ -14,6 +14,7 @@ use yii\web\UploadedFile;
 use api\modules\v1\models\PasswordResetRequestForm;
 use api\modules\v1\models\ResetPasswordForm;
 use common\models\Util;
+use api\modules\v1\models\Car;
 
 /**
  * Country Controller API

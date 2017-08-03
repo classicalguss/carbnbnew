@@ -5,6 +5,10 @@ namespace api\modules\v1\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use api\modules\v1\models\Car;
+use common\models\Booking;
+use Yii;
+use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
 /**
  * CarSearch represents the model behind the search form about `app\models\Car`.
  */
@@ -14,6 +18,8 @@ class CarSearch extends Car
 	public $max_price;
 	public $min_milage_limitation;
 	public $max_milage_limitation;
+	public $date_start;
+	public $date_end;
 	
 	/**
 	 * @inheritdoc
@@ -22,7 +28,7 @@ class CarSearch extends Car
 	{
 		return [
 				[['min_milage_limitation','max_milage_limitation','min_price','max_price','id', 'year_model','price', 'rent_it_now', 'insurance_tip','gear_type_id','type_id','model_id','make_id','city_id','milage_limitation', 'owner_id', 'is_featured', 'number_of_doors', 'number_of_seats', 'gas_type_id', 'type_id','area_id'], 'integer'],
-				[['min_price','max_price','created_at', 'description', 'report', 'country', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo_2'], 'safe'],
+				[['date_start','date_end','min_price','max_price','created_at', 'description', 'report', 'country', 'color', 'rule_1', 'rule_2', 'rule_3', 'rule_4', 'interior_photo', 'back_photo', 'front_photo', 'side_photo', 'optional_photo_1', 'optional_photo_2'], 'safe'],
 		];
 	}
 	
@@ -91,6 +97,26 @@ class CarSearch extends Car
 		->andFilterWhere(['like', 'rule_2', $this->rule_2])
 		->andFilterWhere(['like', 'rule_3', $this->rule_3])
 		->andFilterWhere(['like', 'rule_4', $this->rule_4]);
+		
+		if (!empty($this->date_end) && !empty($this->date_start))
+		{
+			$bookedCars= Booking::find()->distinct('car_id')->select('car_id')->where('(
+				date_start BETWEEN :date_start AND :date_end
+				OR date_end BETWEEN :date_start AND :date_end
+				OR (date_start < :date_start AND date_end > :date_end))',[':date_start'=>$this->date_start,':date_end'=>$this->date_end])
+				->andFilterWhere(['status'=>1])->asArray()->all();
+			
+			
+			if (count($bookedCars) > 0)
+			{
+				$bookedCarIds = [];
+				foreach ($bookedCars as $car)
+					$bookedCarIds[] = $car['car_id'];
+				
+				Yii::warning(array_values($bookedCarIds));
+				$query->andFilterWhere(['not in','id',array_values($bookedCarIds)]);
+			}
+		}
 		
 		return $dataProvider;
 	}
