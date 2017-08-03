@@ -25,14 +25,17 @@ class BookingController extends ActiveController {
 		$behaviors ['authenticator'] = [
 				'class' => HttpBearerAuth::className (),
 				'only' => [
-						'create'
+						'create',
+						'delete'
 				]
 		];
 		return $behaviors;
 	}
 	public function checkAccess($action, $model = null, $params = []) {
 		if ($action === 'delete') {
-			if ($model->owner_id !== \Yii::$app->user->id)
+			Yii::warning($model->renter_id);
+			Yii::warning(Yii::$app->user->id);
+			if ($model->renter_id !== \Yii::$app->user->id)
 				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s bookings that belong to you.', $action ) );
 		}
 	}

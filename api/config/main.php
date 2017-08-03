@@ -45,10 +45,13 @@ return [
 					'format'=>'yii\web\Response::FORMAT_JSON',
 					'on beforeSend' => function ($event) {
 						$response = $event->sender;
-						array_walk_recursive($response->data, function(&$value,$key) {
-							if (is_null($value))
-								$value = '';
-						});
+						if (is_array($response->data))
+						{
+							array_walk_recursive($response->data, function(&$value,$key) {
+								if (is_null($value))
+									$value = '';
+							});
+						}
 						$response->data = [
 								'status'=>$response->statusCode,
 								'message'=>$response->statusText,
