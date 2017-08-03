@@ -32,7 +32,7 @@ class Booking extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['car_id', 'owner_id', '!renter_id', 'date_start', 'date_end', '!status'], 'required'],
+            [['car_id', '!owner_id', '!renter_id', 'date_start', 'date_end', '!status'], 'required'],
             [['car_id', 'owner_id', 'renter_id', 'status'], 'integer'],
             [['date_start', 'date_end'], 'safe'],
         	[['car_id'], 'validateIsPublished'],

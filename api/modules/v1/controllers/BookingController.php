@@ -44,6 +44,7 @@ class BookingController extends ActiveController {
 		$response = Yii::$app->getResponse();
 
 		$carModel = Car::findOne($model->car_id);
+		$model->owner_id = $carModel->owner_id;
 		if($carModel->book_instantly)
 			$model->status = 1;
 		else
