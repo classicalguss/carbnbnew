@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -21,7 +21,7 @@ class Rating extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-    	
+
         return 'rating';
     }
 

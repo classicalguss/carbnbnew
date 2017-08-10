@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use frontend\models\Car;
+use common\models\Carmodel;
 
 /**
  * This is the model class for table "carmake".
@@ -21,7 +23,11 @@ class Carmake extends \yii\db\ActiveRecord
     }
     public function getCar()
     {
-    	return $this->hasMany(\api\modules\v1\models\Car::className(), ['make_id' => 'id']);
+    	return $this->hasMany(Car::className(), ['make_id' => 'id']);
+    }
+    public function getModel()
+    {
+    	return $this->hasMany(Carmodel::className(), ['id' => 'make_id']);
     }
     /**
      * @inheritdoc
@@ -44,4 +50,15 @@ class Carmake extends \yii\db\ActiveRecord
             'value' => 'Value',
         ];
     }
+
+	public static function getFeaturedCarMakesIds($limit=10)
+	{
+		$res = [];
+		$featuredMakes = self::find()->select('id')->where('is_featured = 1')->limit($limit)->all();
+		foreach ($featuredMakes as $make)
+		{
+			$res[] = $make->id;
+		}
+		return $res;
+	}
 }

@@ -2,52 +2,65 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Carbnb';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+	<div class="jumbotron">
+		<h1>
+			You Chaise.
+			<br/>
+			You Choose.
+		</h1>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+		<div class="lead">Browse our huge car market place to find the car you want to book, Find a car you fancy?</div>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
+		<form action="">
+			<p>
+				<input type="text" name="carLocation" class="input-lg" placeholder="Choose destination">
+				<input type="text" name="bookDate"  class="input-lg" placeholder="Pick date">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</p>
+		</form>
 
-    <div class="body-content">
+	</div>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+	<div class="body-content">
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+		<div class="row">
+			<div class="">
+				<h2>Featured Cars (<?=count($featuredCars)?>)</h2>
+				<?php foreach ($featuredCars as $car):?>
+					<div>
+						<a><img alt="<?=$car->description?>" src="<?=$car->photo1?>"><?=$car->make->value?> <?=$car->model->value?> - <?=$car->price?> <?=$car->currency?></a>
+						Rating <?php (!empty($carRatings[$car->id]) ? print $carRatings[$car->id] : print '')?>
+					</div>
+				<?php endforeach;?>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+			</div>
+				<div class="">
+				<h2>Recently Listed (<?=count($recentlyListed)?>)</h2>
+				<?php foreach ($recentlyListed as $car):?>
+					<div>
+						<a><img alt="<?=$car->description?>" src="<?=$car->photo1?>"><?=$car->make->value?> <?=$car->model->value?> - <?=$car->price?> <?=$car->currency?></a>
+						<?php (!empty($carRatings[$car->id]) ? print 'Rating '.$carRatings[$car->id] : print '')?>
+					</div>
+				<?php endforeach;?>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
+			</div>
+			<?php if (!empty($featuredCarMakes)):?>
+				<div>
+					<?php foreach ($featuredCarMakes as $makeName=>$cars):?>
+						<h3><?=$makeName?></h3>
+						<?php foreach ($cars as $car):?>
+							<div>
+								<a><img alt="<?=$car->description?>" src="<?=$car->photo1?>"><?=$car->make->value?> <?=$car->model->value?> - <?=$car->price?> <?=$car->currency?></a>
+								<?php (!empty($carRatings[$car->id]) ? print 'Rating '.$carRatings[$car->id] : print '')?>
+							</div>
+						<?php endforeach;?>
+					<?php endforeach;?>
+				</div>
+			<?php endif;?>
+		</div>
+	</div>
 </div>

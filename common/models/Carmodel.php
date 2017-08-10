@@ -45,4 +45,13 @@ class Carmodel extends \yii\db\ActiveRecord
             'value' => 'Value',
         ];
     }
+
+    public function getCar()
+    {
+    	return $this->hasMany(\frontend\models\Car::className(), ['model_id' => 'id']);
+    }
+    public function getMake()
+    {
+    	return $this->hasOne(Carmake::className(), ['make_id' => 'id']);
+    }
 }
