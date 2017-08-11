@@ -3,8 +3,6 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
@@ -15,87 +13,90 @@ AppAsset::register ( $this );
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
-<meta charset="<?= Yii::$app->charset ?>">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
+	<meta charset="<?= Yii::$app->charset ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?= Html::csrfMetaTags() ?>
+	<title><?= Html::encode($this->title) ?></title>
+	<!-- Load External font file -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,900,900i" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<?php $this->head() ?>
 </head>
 <body>
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-    <?php
-				NavBar::begin ( [ 
-						'brandLabel' => 'My Company',
-						'brandUrl' => Yii::$app->homeUrl,
-						'options' => [ 
-								'class' => 'navbar-inverse navbar-fixed-top' 
-						] 
-				] );
-				$menuItems = [ 
-						[ 
-								'label' => 'Home',
-								'url' => [ 
-										'/site/index' 
-								] 
-						],
-						[ 
-								'label' => 'About',
-								'url' => [ 
-										'/site/about' 
-								] 
-						],
-						[ 
-								'label' => 'Contact',
-								'url' => [ 
-										'/site/contact' 
-								] 
-						] 
-				];
-				if (Yii::$app->user->isGuest) {
-					$menuItems [] = [ 
-							'label' => 'Signup',
-							'url' => [ 
-									'/user/signup' 
-							] 
-					];
-					$menuItems [] = [ 
-							'label' => 'Login',
-							'url' => [ 
-									'/user/login' 
-							] 
-					];
-				} else {
-					$menuItems [] = '<li>' . Html::beginForm ( [ 
-							'/user/logout' 
-					], 'post' ) . Html::submitButton ( 'Logout (' . Yii::$app->user->identity->first_name . ')', [ 
-							'class' => 'btn btn-link logout' 
-					] ) . Html::endForm () . '</li>';
-				}
-				echo Nav::widget ( [ 
-						'options' => [ 
-								'class' => 'navbar-nav navbar-right' 
-						],
-						'items' => $menuItems 
-				] );
-				NavBar::end ();
-				?>
-
-    <div class="container">
-        <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
+	<div class="main-nav">
+		<div class="container wide">
+			<div class="row">
+				<div class="col-md-4">
+					<a href="#" title="Home page">
+						<img width="88" height="20" src="<?=Yii::$app->params ['imagesFolder']?>/images/logo.svg" alt="Uchaise" />
+					</a>
+				</div>
+				<div class="col-md-8 text-right">
+					<ul class="list-inline list-links">
+						<li><a href="#">List Your Car</a></li>
+						<li><a href="#">My Drives</a></li>
+						<li><a href="#">Messages</a></li>
+						<li><a href="#">Sign In</a></li>
+						<li><a href="#" class="btn btn-primary">Sign Up</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<footer class="footer">
-		<div class="container">
-			<p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+	<?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?>
+	<?= Alert::widget() ?>
+	<?= $content ?>
+</div>
 
-			<p class="pull-right"><?= Yii::powered() ?></p>
+<div class="container">
+	<footer class="main-footer">
+		<div class="row">
+			<div class="col-sm-6">
+				<h4>About Uchaise</h4>
+				<p>Put your car to work with just a few clicks. upload your registration along with quality photos and your car is ready to go!</p>
+				<ul class="list-inline social-media-links">
+					<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+					<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+				</ul>
+				<p class="copy-right">Copyright © 2017 UChaise. All rights Reserved</p>
+			</div>
+
+			<div class="col-sm-3">
+				<h4>Learn more</h4>
+				<ul class="list-unstyled">
+					<li><a href="#">How Uchaise works Policies</a></li>
+					<li><a href="#">Trust &amp; safety</a></li>
+					<li><a href="#">About Us</a></li>
+					<li><a href="#">Contact Us</a></li>
+					<li><a href="#">Careers</a></li>
+					<li><a href="#">Press Corner</a></li>
+				</ul>
+			</div>
+
+			<div class="col-sm-3">
+				<h4>Get Started</h4>
+				<ul class="list-unstyled">
+					<li><a href="#">Rent a car</a></li>
+					<li><a href="#">Make money with your car</a></li>
+					<li class="download-app"><a href="#"><img src="<?=Yii::$app->params ['imagesFolder']?>images/download-app-store.png" alt="Download on the app store"></a></li>
+					<li><a href="#"><img src="<?=Yii::$app->params ['imagesFolder']?>images/google-play.png" alt="Get it on google play"></a></li>
+				</ul>
+			</div>
 		</div>
 	</footer>
+</div>
 
 <?php $this->endBody() ?>
 </body>

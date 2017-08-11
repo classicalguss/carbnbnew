@@ -51,9 +51,9 @@ class SiteController extends Controller {
 	 */
 	public function actionIndex()
 	{
-		$featuredCars     = Car::getFeaturedCars(20);
-		$recentlyListed   = Car::getRecentlyListed(20);
-		$featuredCarMakes = Car::getFeaturedCarMakes(2,20);
+		$featuredCars     = Car::getFeaturedCars(10);
+		$recentlyListed   = Car::getRecentlyListed(10);
+		$featuredCarMakes = Car::getFeaturedCarMakes(2,10);
 
 		$featuredCarMakesIds = $featuredCarMakes['carIds'];
 		$featuredCarMakes    = $featuredCarMakes['cars'];
@@ -66,13 +66,44 @@ class SiteController extends Controller {
 		if (!empty($featuredCarMakesIds))
 			$allCarIds = array_merge($allCarIds, $featuredCarMakesIds);
 
-		$carRatings = Car::getAllRatings($allCarIds);
+		$carsRating= Car::getAllRatings($allCarIds);
 
+		$imagesPath = Yii::$app->params['imagesFolder'];
+
+		$featuredCarsHTML = $this->renderPartial('listOfCars',
+		[
+				'title'      => 'Featured Cars',
+				'columns'    => 4,
+				'listOfCars' => $featuredCars,
+				'imagesPath' => $imagesPath,
+				'carsRating' => $carsRating,
+		]);
+		$recentlyListedHTML = $this->renderPartial('listOfCars',
+		[
+				'title'      => 'Recently Listed Cars',
+				'columns'    => 3,
+				'listOfCars' => $recentlyListed,
+				'imagesPath' => $imagesPath,
+				'carsRating' => $carsRating,
+		]);
+
+		$featuredCarMakesHTML='';
+		foreach ($featuredCarMakes as $makeName=>$cars)
+		{
+			$featuredCarMakesHTML.= $this->renderPartial('listOfCars',
+			[
+					'title'      => $makeName,
+					'columns'    => 4,
+					'listOfCars' => $cars,
+					'imagesPath' => $imagesPath,
+					'carsRating' => $carsRating,
+			]);
+		}
 		return $this->render ('index', [
-				'featuredCars'      => $featuredCars,
-				'recentlyListed'    => $recentlyListed,
-				'featuredCarMakes'  => $featuredCarMakes,
-				'carRatings'        => $carRatings,
+				'imagesPath' => $imagesPath,
+				'featuredCarsHTML'     => $featuredCarsHTML,
+				'recentlyListedHTML'   => $recentlyListedHTML,
+				'featuredCarMakesHTML' => $featuredCarMakesHTML,
 		]);
 	}
 
