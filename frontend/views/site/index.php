@@ -97,14 +97,14 @@ $this->title = 'Carbnb';
 			<div class="row">
 				<div class="col-md-6">
 					<a href="#">
-						<img class="carved" src="<?= $imagesPath ?>images/temp/share.jpg" alt="">
+						<img class="carved" src="<?= $siteImagesPath ?>/share.jpg" alt="">
 					</a>
 				</div>
 				<div class="col-md-6">
 					<ul class="list-unstyled list-tips">
 						<li class="row">
 							<div class="col-sm-3 text-center">
-								<img src="<?= $imagesPath ?>images/1.svg" alt="">
+								<img src="<?= $siteImagesPath?>/1.svg" alt="">
 							</div>
 							<div class="col-sm-9">
 								<h3>Share with a friend</h3>
@@ -114,7 +114,7 @@ $this->title = 'Carbnb';
 
 						<li class="row">
 							<div class="col-sm-3 text-center">
-								<img src="<?= $imagesPath ?>images/2.svg" alt="">
+								<img src="<?= $siteImagesPath?>/2.svg" alt="">
 							</div>
 							<div class="col-sm-9">
 								<h3>Share with a friend</h3>
@@ -124,7 +124,7 @@ $this->title = 'Carbnb';
 
 						<li class="row">
 							<div class="col-sm-3 text-center">
-								<img src="<?= $imagesPath ?>images/3.svg" alt="">
+								<img src="<?= $siteImagesPath?>/3.svg" alt="">
 							</div>
 							<div class="col-sm-9">
 								<h3>Share with a friend</h3>

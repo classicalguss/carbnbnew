@@ -18,7 +18,7 @@
 					</a>
 				</div>
 				<div class="clearfix">
-					<h3 class="pull-left"><a href="<?=frontend\controllers\CarController::getCarViewUrl($car->id)?>"><?=$car->make->value?> <?=$car->model->value?></a></h3>
+					<h3 class="pull-left"><a href="<?=frontend\controllers\CarController::getCarViewUrl($car->id)?>"><?=substr($car->make->value.' '.$car->model->value, 0, 15).'...'?></a></h3>
 					<span class="price pull-right"><?=$car->price?> <small><?=$car->currency?></small></span>
 				</div>
 				<div>

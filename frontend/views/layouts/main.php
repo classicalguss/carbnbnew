@@ -38,7 +38,7 @@ AppAsset::register ( $this );
 			<div class="row">
 				<div class="col-md-4">
 					<a href="#" title="Home page">
-						<img width="88" height="20" src="<?=Yii::$app->params ['imagesFolder']?>/images/logo.svg" alt="Uchaise" />
+						<img width="88" height="20" src="<?=Yii::$app->params ['siteImagesPath']?>/logo.svg" alt="Uchaise" />
 					</a>
 				</div>
 				<div class="col-md-8 text-right">
@@ -70,7 +70,7 @@ AppAsset::register ( $this );
 					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
 					<li><a href="#"><i class="fa fa-instagram"></i></a></li>
 				</ul>
-				<p class="copy-right">Copyright © 2017 UChaise. All rights Reserved</p>
+				<p class="copy-right">Copyright &copy; 2017 UChaise. All rights Reserved</p>
 			</div>
 
 			<div class="col-sm-3">
@@ -90,8 +90,8 @@ AppAsset::register ( $this );
 				<ul class="list-unstyled">
 					<li><a href="#">Rent a car</a></li>
 					<li><a href="#">Make money with your car</a></li>
-					<li class="download-app"><a href="#"><img src="<?=Yii::$app->params ['imagesFolder']?>images/download-app-store.png" alt="Download on the app store"></a></li>
-					<li><a href="#"><img src="<?=Yii::$app->params ['imagesFolder']?>images/google-play.png" alt="Get it on google play"></a></li>
+					<li class="download-app"><a href="#"><img src="<?=Yii::$app->params ['siteImagesPath']?>/download-app-store.png" alt="Download on the app store"></a></li>
+					<li><a href="#"><img src="<?=Yii::$app->params ['siteImagesPath']?>/google-play.png" alt="Get it on google play"></a></li>
 				</ul>
 			</div>
 		</div>

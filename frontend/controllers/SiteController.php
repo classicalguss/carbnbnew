@@ -68,7 +68,8 @@ class SiteController extends Controller {
 
 		$carsRating= Car::getAllRatings($allCarIds);
 
-		$imagesPath = Yii::$app->params['imagesFolder'];
+		$imagesPath     = Yii::$app->params['imagesFolder'];
+		$siteImagesPath = Yii::$app->params['siteImagesPath'];
 
 		$featuredCarsHTML = $this->renderPartial('listOfCars',
 		[
@@ -100,7 +101,7 @@ class SiteController extends Controller {
 			]);
 		}
 		return $this->render ('index', [
-				'imagesPath' => $imagesPath,
+				'siteImagesPath'       => $siteImagesPath,
 				'featuredCarsHTML'     => $featuredCarsHTML,
 				'recentlyListedHTML'   => $recentlyListedHTML,
 				'featuredCarMakesHTML' => $featuredCarMakesHTML,
