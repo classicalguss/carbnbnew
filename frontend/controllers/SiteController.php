@@ -137,17 +137,6 @@ class SiteController extends Controller {
 	 */
 	public function actionAbout()
 	{
-		$allCars   = Car::find()->all();
-		$carsCount = count($allCars);
-
-		for ($i=1; $i <= 10 ; $i++)
-		{
-			$randomCar = rand(0,$carsCount-1);
-			$car = $allCars[$randomCar];
-
-			$car->is_featured = 1;
-			$car->save();
-		}
 		return $this->render ('about');
 	}
 }
