@@ -16,6 +16,8 @@ use Yii;
  */
 class Rating extends \yii\db\ActiveRecord
 {
+	public $sum=0;
+	public $count=0;
     /**
      * @inheritdoc
      */

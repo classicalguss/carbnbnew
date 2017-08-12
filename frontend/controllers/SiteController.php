@@ -135,13 +135,25 @@ class SiteController extends Controller {
 	 *
 	 * @return mixed
 	 */
-	public function actionAbout() {
-		$obj = new Rating();
-		$obj->car_id = 5;
-		$obj->user_id = 6;
-		$obj->description = 'Rating is good';
-		$obj->rating = 3;
-// 		$obj->save();
-		return $this->render ( 'about' );
+	public function actionAbout()
+	{
+		$allCars = Car::find()->all();
+		$allUsers = User::find()->all();
+		foreach ($allCars as $car)
+		{
+			$ratingCount = rand(15,25);
+			for ($i=0; $i <= $ratingCount ; $i++)
+			{
+				$userIdIdx = rand(0,count($allUsers)-1);
+				$userId = $allUsers[$userIdIdx];
+				$obj = new Rating();
+				$obj->car_id = $car->id;
+				$obj->user_id = $userId->id;
+				$obj->description = 'This car is awesome';
+				$obj->rating = rand(1,5);
+				$obj->save();
+			}
+		}
+		return $this->render ('about');
 	}
 }

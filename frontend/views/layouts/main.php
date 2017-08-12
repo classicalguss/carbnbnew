@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use yii\helpers\Url;
 
 AppAsset::register ( $this );
 ?>
@@ -43,20 +44,32 @@ AppAsset::register ( $this );
 				</div>
 				<div class="col-md-8 text-right">
 					<ul class="list-inline list-links">
-						<li><a href="#">List Your Car</a></li>
-						<li><a href="#">My Drives</a></li>
-						<li><a href="#">Messages</a></li>
-						<li><a href="#">Sign In</a></li>
-						<li><a href="#" class="btn btn-primary">Sign Up</a></li>
+						<li><a href="<?=Url::to(['car/list'])?>">List Your Car</a></li>
+						<li><a href="<?=Url::to([''])?>">My Drives</a></li>
+						<li><a href="<?=Url::to([''])?>">Messages</a></li>
+						<?php if (Yii::$app->user->isGuest):?>
+							<li><a href="<?=Url::to(['user/login'])?>">Sign In</a></li>
+							<li><a href="<?=Url::to(['user/signup'])?>" class="btn btn-primary">Sign Up</a></li>
+						<?php else :?>
+							<li>
+								<?=Html::beginForm ([
+										'/user/logout'
+								], 'post' ) . Html::submitButton ( '<img src="'.frontend\controllers\UserController::getUserPhoto().'" class="img-circle" alt="'.Yii::$app->user->identity->first_name.'" width="45" height="45">', [
+										'class' => 'btn btn-link logout'
+								] ).Html::endForm ()?>
+							</li>
+						<?php endif;?>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?>
-	<?= Alert::widget() ?>
-	<?= $content ?>
+	<div class="">
+		<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
+		<?= Alert::widget() ?>
+		<?= $content ?>
+	</div>
 </div>
 
 <div class="container">

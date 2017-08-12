@@ -24,9 +24,9 @@
 				<div>
 					<?php if (!empty($carsRating[$car->id])):?>
 						<span class="rating-stars">
-							<span class="rated" style="width:<?= $carsRating[$car->id] * 20 ?>%"></span>
+							<span class="rated" style="width:<?= ($carsRating[$car->id][0]/$carsRating[$car->id][1]) * 20 ?>%"></span>
 						</span>
-						<span class="total-reviews">736 Reviews</span>
+						<span class="total-reviews"><?=$carsRating[$car->id][1]?> Reviews</span>
 					<?php endif;?>
 				</div>
 			</div>

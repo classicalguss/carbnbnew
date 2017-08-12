@@ -60,7 +60,7 @@ class UserController extends Controller {
 				]
 		];
 	}
-	
+
 	/**
 	 * @inheritdoc
 	 */
@@ -71,7 +71,7 @@ class UserController extends Controller {
 				]
 		];
 	}
-	
+
 	/**
 	 * Logs in a user.
 	 *
@@ -81,7 +81,7 @@ class UserController extends Controller {
 		if (! Yii::$app->user->isGuest) {
 			return $this->goHome ();
 		}
-		
+
 		$model = new LoginForm ();
 		if ($model->load ( Yii::$app->request->post () ) && $model->login ()) {
 			return $this->goBack ();
@@ -91,7 +91,7 @@ class UserController extends Controller {
 			] );
 		}
 	}
-	
+
 	/**
 	 * Logs out the current user.
 	 *
@@ -99,10 +99,10 @@ class UserController extends Controller {
 	 */
 	public function actionLogout() {
 		Yii::$app->user->logout ();
-		
+
 		return $this->goHome ();
 	}
-	
+
 	/**
 	 * Signs user up.
 	 *
@@ -117,12 +117,12 @@ class UserController extends Controller {
 				}
 			}
 		}
-		
+
 		return $this->render ( 'signup', [
 				'model' => $model
 		] );
 	}
-	
+
 	/**
 	 * Requests password reset.
 	 *
@@ -133,18 +133,18 @@ class UserController extends Controller {
 		if ($model->load ( Yii::$app->request->post () ) && $model->validate ()) {
 			if ($model->sendEmail ()) {
 				Yii::$app->session->setFlash ( 'success', 'Check your email for further instructions.' );
-				
+
 				return $this->goHome ();
 			} else {
 				Yii::$app->session->setFlash ( 'error', 'Sorry, we are unable to reset password for the provided email address.' );
 			}
 		}
-		
+
 		return $this->render ( 'requestPasswordResetToken', [
 				'model' => $model
 		] );
 	}
-	
+
 	/**
 	 * Resets password.
 	 *
@@ -158,15 +158,27 @@ class UserController extends Controller {
 		} catch ( InvalidParamException $e ) {
 			throw new BadRequestHttpException ( $e->getMessage () );
 		}
-		
+
 		if ($model->load ( Yii::$app->request->post () ) && $model->validate () && $model->resetPassword ()) {
 			Yii::$app->session->setFlash ( 'success', 'New password saved.' );
-			
+
 			return $this->goHome ();
 		}
-		
+
 		return $this->render ( 'resetPassword', [
 				'model' => $model
 		] );
+	}
+
+	public static function getUserPhoto()
+	{
+		if (Yii::$app->user->isGuest)
+			return '';
+
+		$userPhoto  = Yii::$app->user->identity->photo;
+		if (!empty($userPhoto))
+			return Yii::$app->params['imagesFolder'].$userPhoto;
+		else
+			return Yii::$app->params['siteImagesPath'].'/user-no-photo.png';
 	}
 }

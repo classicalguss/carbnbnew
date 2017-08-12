@@ -259,9 +259,9 @@ class Car extends \yii\db\ActiveRecord {
 			return [];
 		settype($carIds, 'array');
 		$return=[];
-		$ratings = Rating::find()->select(['car_id', 'avg(rating) as rating'])->where(['car_id'=>$carIds])->groupBy('car_id')->all();
+		$ratings = Rating::find()->select(['car_id', 'sum(rating) as sum, count(rating) as count'])->where(['car_id'=>$carIds])->groupBy('car_id')->all();
 		foreach ($ratings as $row)
-			$return[$row->car_id] = $row->rating;
+			$return[$row->car_id] = [$row->sum, $row->count];
 		return $return;
 	}
 	public static function getRecentlyListed($limit=20)
