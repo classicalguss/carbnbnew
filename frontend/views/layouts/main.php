@@ -38,7 +38,7 @@ AppAsset::register ( $this );
 		<div class="container wide">
 			<div class="row">
 				<div class="col-md-4">
-					<a href="#" title="Home page">
+					<a href="<?=Url::to(['site/index'])?>" title="Home page">
 						<img width="88" height="20" src="<?=Yii::$app->params ['siteImagesPath']?>/logo.svg" alt="Uchaise" />
 					</a>
 				</div>
@@ -65,7 +65,7 @@ AppAsset::register ( $this );
 		</div>
 	</div>
 
-	<div class="">
+	<div class="<?php if (!in_array(Yii::$app->requestedRoute, ['site/index'])):?>container <?php endif;?>">
 		<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
 		<?= Alert::widget() ?>
 		<?= $content ?>
