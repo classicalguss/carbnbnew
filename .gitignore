@@ -35,4 +35,7 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 
+# Frontend Assets
+frontend/web/dist/
+node_modules/
 
