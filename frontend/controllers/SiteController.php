@@ -71,7 +71,7 @@ class SiteController extends Controller {
 		$imagesPath     = Yii::$app->params['imagesFolder'];
 		$siteImagesPath = Yii::$app->params['siteImagesPath'];
 
-		$featuredCarsHTML = $this->renderPartial('listOfCars',
+		$featuredCarsHTML = $this->renderPartial('@frontend/views/listOfCars',
 		[
 				'title'      => 'Featured Cars',
 				'columns'    => 4,
@@ -79,7 +79,7 @@ class SiteController extends Controller {
 				'imagesPath' => $imagesPath,
 				'carsRating' => $carsRating,
 		]);
-		$recentlyListedHTML = $this->renderPartial('listOfCars',
+		$recentlyListedHTML = $this->renderPartial('@frontend/views/listOfCars',
 		[
 				'title'      => 'Recently Listed Cars',
 				'columns'    => 3,
@@ -91,7 +91,7 @@ class SiteController extends Controller {
 		$featuredCarMakesHTML='';
 		foreach ($featuredCarMakes as $makeName=>$cars)
 		{
-			$featuredCarMakesHTML.= $this->renderPartial('listOfCars',
+			$featuredCarMakesHTML.= $this->renderPartial('@frontend/views/listOfCars',
 			[
 					'title'      => $makeName,
 					'columns'    => 4,

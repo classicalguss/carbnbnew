@@ -38,7 +38,7 @@ AppAsset::register ( $this );
 		<div class="container wide">
 			<div class="row">
 				<div class="col-md-4">
-					<a href="<?=Url::to(['site/index'])?>" title="Home page">
+					<a href="<?=Url::to(['site/index'])?>" title="Uchaise">
 						<img width="88" height="20" src="<?=Yii::$app->params ['siteImagesPath']?>/logo.svg" alt="Uchaise" />
 					</a>
 				</div>

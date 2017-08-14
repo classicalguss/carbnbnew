@@ -10,6 +10,7 @@ use common\models\Area;
 use common\models\City;
 use common\models\Util;
 use common\models\Carmake;
+use common\models\User;
 
 /**
  * This is the model class for table "car".
@@ -301,6 +302,9 @@ class Car extends \yii\db\ActiveRecord {
 	}
 	public function getRate() {
 		return Rating::find()->where('car_id=:id',[':id'=>$this->id])->average('rating');
+	}
+	public function getCarRatings() {
+		return Rating::find()->where('car_id=:id',[':id'=>$this->id])->all();
 	}
 	public function getMake() {
 		return $this->hasOne ( Carmake::className (), [

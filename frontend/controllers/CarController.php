@@ -3,106 +3,222 @@
 namespace frontend\controllers;
 
 use Yii;
-use yii\helpers\Url;
-use yii\web\Controller;
-use yii\filters\auth\HttpBearerAuth;
-// use api\modules\v1\models\User;
+use yii\filters\AccessControl;
 use frontend\models\Car;
 use frontend\models\CarSearch;
-use yii\web\UploadedFile;
-use yii\web\ServerErrorHttpException;
-use common\models\Util;
+use frontend\models\Rating;
+use common\models\User;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\helpers\Url;
+use yii\base\Model;
 
 /**
- * Country Controller API
- *
- * @author Budi Irawan <deerawan@gmail.com>
+ * CarController implements the CRUD actions for Car model.
  */
-class CarController extends Controller {
-	public $modelClass = 'frontend\models\Car';
-	public function actions() {
-		$actions = parent::actions ();
-		unset ( $actions ['list'],$actions['update'] );
-		$actions ['index'] ['prepareDataProvider'] = [
-				$this,
-				'prepareDataProvider'
+class CarController extends Controller
+{
+	public $model;
+
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'only' => ['update', 'delete'],
+				'rules' => [
+					[
+						'allow' => true,
+						'actions' => ['update', 'delete'],
+						'roles' => ['@'],
+					],
+				],
+			],
+			'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'delete' => ['POST'],
+				],
+			],
 		];
-		return $actions;
 	}
-	public function behaviors() {
-		$behaviors = parent::behaviors ();
-		$behaviors ['authenticator'] = [
-				'class' => HttpBearerAuth::className (),
-				'only' => [
-						'update',
-						'delete',
-						'create'
-				]
-		];
-		return $behaviors;
+
+	/**
+	 * @param Model $model
+	 * @throws \yii\web\ForbiddenHttpException
+	 */
+	public function checkAccess($model = null)
+	{
+		$action = $this->action->id;
+		if ($model->owner_id !== \Yii::$app->user->id && !Yii::$app->user->identity->isAdmin())
+			throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s cars that you\'ve created.', $action ) );
 	}
-	public function checkAccess($action, $model = null, $params = []) {
-		if ($action === 'update' || $action === 'delete') {
-			if ($model->owner_id !== \Yii::$app->user->id)
-				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s cars that you\'ve created.', $action ) );
+
+	/**
+	 * Lists all Car models.
+	 * @return mixed
+	 */
+	public function actionSearch()
+	{
+		$searchModel = new CarSearch();
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+		return $this->render('search', [
+			'searchModel' => $searchModel,
+			'dataProvider' => $dataProvider,
+		]);
+	}
+
+	/**
+	 * Displays a single Car model.
+	 * @param string $id
+	 * @return mixed
+	 */
+	public function actionView($id)
+	{
+		$this->layout   = 'main-nav-search';
+		$imagesPath     = Yii::$app->params['imagesFolder'];
+		$siteImagesPath = Yii::$app->params['siteImagesPath'];
+
+		$carModel = Car::find()
+						->joinWith('make',true,'INNER JOIN')
+						->joinWith('model',true,'INNER JOIN')
+						->joinWith('ratings')
+						->joinWith('user')
+						->where('carmake.id = carmodel.make_id')
+						->andWhere(['car.id'=>$id])
+						->one();
+
+		$ownerInfo   = $carModel->user;
+		$carRatings  = $carModel->ratings;
+		$makeName    = $carModel->make->value;
+		$modelName   = $carModel->model->value;
+		$carInfo     = $carModel->attributes;
+
+		$carInfo['images']       = $carModel->getImages();
+		$carInfo['location']     = $carModel->getLocation();
+		$carInfo['makeName']     = $makeName;
+		$carInfo['modelName']    = $modelName;
+		$carInfo['features']     = $carModel->getFeaturesArray();
+		$carInfo['colorText']    = $carModel->colorText;
+		$carInfo['properties']   = $carModel->getProperties();
+		$carInfo['odometerText'] = $carModel->odometerText;
+
+		$ratersInfo  = [];
+
+		if (!empty($carRatings))
+		{
+			$rateTmp=[];
+			$ratersIds=[];
+			foreach ($carRatings as $rating)
+			{
+				$rateTmp[] = $rating->attributes;
+				$ratersIds[] = $rating->user_id; // to get info about the user who rated this car.
+			}
+			$carRatings = $rateTmp;
+
+			$ratersInfo = User::find()->where(['id'=>$ratersIds])->all();
+			$ratersInfo = \common\models\Util::getModelAttributes($ratersInfo);
+		}
+
+		$recentlyListed   = Car::getRecentlyListed(3);
+		foreach ($recentlyListed as $car)
+			$recentlyListedCarIds[] = $car->id;
+		$recentlyListedCarsRatings = Car::getAllRatings($recentlyListedCarIds);
+		$recentlyListedHTML = $this->renderPartial('@frontend/views/listOfCars',
+		[
+			'title'      => 'Recently Listed Cars',
+			'columns'    => 3,
+			'listOfCars' => $recentlyListed,
+			'imagesPath' => $imagesPath,
+			'carsRating' => $recentlyListedCarsRatings,
+		]);
+		return $this->render('view', [
+			'imagesPath'     => $imagesPath,
+			'siteImagesPath' => $siteImagesPath,
+			'carInfo'        => $carInfo,
+			'ownerInfo'      => $ownerInfo,
+			'carRatings'     => $carRatings,
+			'ratersInfo'     => $ratersInfo,
+			'recentlyListedHTML' => $recentlyListedHTML,
+				'p'=>$carInfo,
+		]);
+	}
+
+	/**
+	 * Creates a new Car model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * @return mixed
+	 */
+	public function actionCreate()
+	{
+		$model = new Car();
+
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			return $this->redirect(['view', 'id' => $model->id]);
+		} else {
+			return $this->render('create', [
+				'model' => $model,
+			]);
 		}
 	}
 
-	public function actionList() {
-		$model = new $this->modelClass ( [ ] );
-		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
-		$model->owner_id = Yii::$app->user->id;
-		$model->photoFile1 = UploadedFile::getInstanceByName ( 'photoFile1' );
-		$model->photoFile2 = UploadedFile::getInstanceByName ( 'photoFile2' );
-		$model->photoFile3 = UploadedFile::getInstanceByName ( 'photoFile3' );
-		$model->photoFile4 = UploadedFile::getInstanceByName ( 'photoFile4' );
-		$model->photoFile5 = UploadedFile::getInstanceByName ( 'photoFile5' );
-		$model->photoFile6 = UploadedFile::getInstanceByName ( 'photoFile6' );
+	/**
+	 * Updates an existing Car model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param string $id
+	 * @return mixed
+	 */
+	public function actionUpdate($id)
+	{
+		$model = $this->findModel($id);
+		$this->checkAccess($model);
 
-		$featuresList = Yii::$app->request->post ( 'featuresList', array () );
-		$model->features = implode ( $featuresList, ',' );
-		$model->scenario = 'create';
-		if ($model->save ()) {
-			$model->upload ();
-			$response = Yii::$app->getResponse ();
-			$response->setStatusCode ( 201 );
-			$id = implode ( ',', array_values ( $model->getPrimaryKey ( true ) ) );
-			$response->getHeaders ()->set ( 'Location', Url::toRoute ( [
-					'view',
-					'id' => $id
-			], true ) );
-		} elseif (! $model->hasErrors ()) {
-			throw new ServerErrorHttpException ( 'Failed to create the object for unknown reason.' );
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			return $this->redirect(['view', 'id' => $model->id]);
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+			]);
 		}
-
-		return $model;
 	}
-	public function actionUpdate($id) {
-		$model = Car::findOne($id);
-		if ($model->owner_id !== Yii::$app->user->id)
-			throw new \yii\web\ForbiddenHttpException('You can only update your own car');
 
-		$model->setAttributes(Yii::$app->request->post());
-		$model->photoFile1 = UploadedFile::getInstanceByName ('photoFile1');
+	/**
+	 * Deletes an existing Car model.
+	 * If deletion is successful, the browser will be redirected to the 'search' page.
+	 * @param string $id
+	 * @return mixed
+	 */
+	public function actionDelete($id)
+	{
+		$this->findModel($id)->delete();
+		$this->checkAccess($model);
 
-		if (!empty($model->photoFile1))
-			$model->photo1 =Util::generateRandomString(). '_' . $model->photoFile1->name;
-
-		$model->save ();
-		$model->upload();
-
-		if (empty($model->errors))
-			$model = $model->findOne($id);
-
-		return $model;
+		return $this->redirect(['search']);
 	}
-	public function prepareDataProvider() {
-		$searchModel = new CarSearch ();
-		return $searchModel->search ( Yii::$app->request->queryParams );
+
+	/**
+	 * Finds the Car model based on its primary key value.
+	 * If the model is not found, a 404 HTTP exception will be thrown.
+	 * @param string $id
+	 * @return Car the loaded model
+	 * @throws NotFoundHttpException if the model cannot be found
+	 */
+	protected function findModel($id)
+	{
+		if (($model = Car::findOne($id)) !== null) {
+			return $model;
+		} else {
+			throw new NotFoundHttpException('The requested page does not exist.');
+		}
 	}
 
 	public static function getCarViewUrl($id)
 	{
-		return Url::to(['car/view/'.$id.'/']);
+		return Url::to(['car/view/','id'=>$id]);
 	}
 }
