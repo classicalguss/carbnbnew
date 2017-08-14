@@ -1,0 +1,90 @@
+@import "global-variables";
+@import "grid-carousel";
+@import "../../node_modules/bootstrap-daterangepicker/daterangepicker.scss";
+@import "_main_search_bar";
+
+.block-welcome{
+  h1{
+    font-size: 58px;
+    font-weight: 900;
+    color: $gray-darker;
+  }
+  p {
+    font-size: 24px;
+    color: $gray;
+    vertical-align: bottom;
+    height: 126px;
+    display: table-cell;
+    margin: 0;
+  }
+}
+.border-right{
+  border-right: 1px solid #ddd;
+}
+
+.block-list-car{
+  max-width: 740px;
+  margin: 80px auto;
+  h2{
+    font-size: 44px;
+    font-weight: 900;
+  }
+  p{
+    margin: 30px 0;
+    font-size: 22px;
+    color: $gray-light
+  }
+  .btn-lg{
+    font-size: 16px;
+    padding: 15px 30px;
+  }
+}
+
+.block-uchaise-numbers{
+  margin: 130px 0;
+  
+  h2{
+    font-size: 44px;
+    font-weight: 900;
+    margin-bottom: 60px;
+    text-align: center;
+  }  
+  .box{
+    strong{
+      color: $bright-sky-blue;
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+      font-weight: normal
+    }
+    > span{
+      text-transform: lowercase;
+      color: $gray-light;
+      font-size: 22px;
+    }
+  }
+}
+
+.block-share-uchaise{
+  
+  h2{
+    font-size: 44px;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .list-tips{
+    li{
+      margin-bottom: 30px;
+      
+      h3{
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+      p{
+        color: $gray-light;
+      }
+    }
+  }
+}

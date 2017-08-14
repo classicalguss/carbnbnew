@@ -1,0 +1,43 @@
+$default-footer-base: #88939e;
+.main-footer {
+  margin-top: 100px;
+  padding-top: 40px;
+  border-top: 2px solid #ededed;
+  margin-bottom: 100px;
+  h4{
+    margin-bottom: 20px;
+  }
+  p {
+    color: $default-footer-base;
+  }
+  a {
+    color: $default-footer-base;
+    transition: color 0.2s ease;
+    font-weight: lighter;
+    margin: 0 0 6px;
+    display: inline-block;
+    &:hover {
+        color: $default-footer-base - 30%;
+        text-decoration: none;
+    }
+  }
+  .copy-right{
+    color: #999999;
+    font-size: 14px;
+    font-weight: lighter;
+  }
+  .download-app {
+    margin-top: 20px;
+  }
+  .social-media-links {
+    margin: 33px 0;
+    li {
+      padding: 0;
+      margin-right: 25px;
+    }
+    a {
+      margin: 0;
+      font-size: 24px;
+    }
+  }
+}
