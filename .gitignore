@@ -36,6 +36,5 @@ phpunit.phar
 /.vagrant
 
 # Frontend Assets
-frontend/web/dist/
 node_modules/
 
