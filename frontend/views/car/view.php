@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use frontend\assets\CarViewAsset;
-CarViewAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
@@ -81,7 +79,7 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 						The new TT Quattro, an architectural rhapsody of circles and arches in which the promise of its
 						artistic form is paid off in full, both outside and inside the car, is a three-door, two-plus-two
 						sports coupe that is the ultimate gadget.Underpinning it is a new full, both outside and inside the car,
-						is a three-door, two-plus-two sports coupe that is the ultimate gadget.Under… <a href="#">See all</a>
+						is a three-door, two-plus-two sports coupe that is the ultimate gadget.Underï¿½ <a href="#">See all</a>
 					</p>
 				</section>
 
