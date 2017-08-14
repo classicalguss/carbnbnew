@@ -1,8 +1,9 @@
-@import "global-variables";
-@import "_nav_two";
-@import "grid-carousel";
 @import "../../node_modules/@fancyapps/fancybox/dist/jquery.fancybox";
 @import "../../node_modules/bootstrap-daterangepicker/daterangepicker.scss";
+@import "global-variables";
+@import "component/nav_two";
+@import "component/grid-carousel";
+@import "component/car-listing";
 
 .car-details-slider {
   max-height: 400px;

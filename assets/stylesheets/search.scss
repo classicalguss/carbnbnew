@@ -1,9 +1,9 @@
-@import "global-variables";
 @import "../../node_modules/omni-slider/src/omni-slider.scss";
 @import "../../node_modules/bootstrap-daterangepicker/daterangepicker.scss";
-@import "_main_search_bar";
-@import "_search_filters";
-@import "_single_item";
+@import "global-variables";
+@import "component/main_search_bar";
+@import "component/search_filters";
+@import "component/single_item";
 
 .search-header{
   padding-bottom: 15px;

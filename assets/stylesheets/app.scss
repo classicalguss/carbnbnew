@@ -1,7 +1,7 @@
 @import "global-variables";
 @import "bootstrap-imports";
-@import "_nav_main";
-@import "_footer_main";
+@import "component/nav_main";
+@import "component/footer_main";
 
 body {
   overflow-x: hidden;

@@ -1,7 +1,7 @@
-@import "global-variables";
-@import "grid-carousel";
 @import "../../node_modules/bootstrap-daterangepicker/daterangepicker.scss";
-@import "_main_search_bar";
+@import "global-variables";
+@import "component/grid-carousel";
+@import "component/main_search_bar";
 
 .block-welcome{
   h1{
