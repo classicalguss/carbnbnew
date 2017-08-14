@@ -15,7 +15,9 @@ class HomePageAsset extends AssetBundle
         'css/home-page.css',
     ];
     public $js = [
-    ];
+  		'js/app.js',
+  		'js/vendors.js',
+  	];
 
     public $depends = [
         'yii\web\YiiAsset',

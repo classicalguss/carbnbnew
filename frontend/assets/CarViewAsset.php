@@ -15,7 +15,9 @@ class CarViewAsset extends AssetBundle
         'css/car-view.css',
     ];
     public $js = [
-    ];
+  		'js/app.js',
+  		'js/vendors.js',
+  	];
 
     public $depends = [
         'yii\web\YiiAsset',
