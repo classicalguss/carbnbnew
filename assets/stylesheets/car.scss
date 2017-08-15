@@ -4,8 +4,9 @@
 @import "component/nav_two";
 @import "component/grid-carousel";
 @import "component/car-listing";
+@import "component/car-details";
 
-.car-details-slider {
+.car-view-slider {
   max-height: 400px;
   overflow: hidden;
   margin-bottom: 40px;
@@ -29,7 +30,7 @@
     }
   }
 }
-.car-details {
+.car-view {
   padding-bottom: 20px;
   border-bottom: solid 1px #ededed;
   h1 {
@@ -64,6 +65,22 @@
     }
   }
 }
+.list-options {
+  margin-bottom: 0;
+  li {
+    margin: 0 15px 15px 0;
+    text-align: center;
+    h5 {
+      margin-top: 15px;
+      font-size: 13px;
+    }
+    color: #999;
+    i {
+      font-size: 32px;
+     }
+    }
+  }
+  
 .car-content {
   section {
     padding: 30px 0;
@@ -74,21 +91,7 @@
       color: #333333;
       margin-bottom: 20px;
     }
-  .list-options {
-    margin-bottom: 0;
-    li {
-      margin: 0 20px 20px 0;
-      text-align: center;
-      h5 {
-        margin-top: 15px;
-        font-size: 13px;
-      }
-      color: #999;
-      i {
-        font-size: 32px;
-       }
-      }
-    }
+
     .user-comments {
       margin: 20px 0;
       .user-img {

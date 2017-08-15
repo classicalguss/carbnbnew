@@ -47,6 +47,14 @@ h4{
   padding: 15px 30px;
   font-size: 18px;
 }
+.btn-outline{
+  &.btn-primary{
+    background-color: transparent;
+    border: 1px solid $brand-primary;
+    color: $brand-primary;
+    padding: 8px 26px;
+  }
+}
 .row-small-gutter{
   margin-left: -7.5px;
   margin-right: -7.5px;
@@ -155,24 +163,32 @@ h4{
 }
 .nav-uchaise{
   border:0 none;
+  margin-bottom: 30px;
+  
   li{
     margin-left: -2px;
 
-    a, a:hover, a:active{
+    a, a:hover, a:active, a:focus{
       border: 0 none;
-      border-bottom: 4px solid $gray-lighter;
+      border-bottom: 2px solid $gray-lighter;
       padding: 10px 45px;
-      font-weight: bold;
+      // font-weight: bold;
       color: $gray-base;
+      background: none;
+    }
+    a:active, a:focus{
+      border-bottom: 2px solid $brand-primary;
     }
     &.active{
       a{
         border:0 none;
-        border-bottom: 4px solid $brand-primary;
+        border-bottom: 2px solid $brand-primary;
+        font-weight: bold;
 
         &:hover, &:active, &:focus{
           border:0 none;
-          border-bottom: 4px solid $brand-primary;
+          border-bottom: 2px solid $brand-primary;
+          background: none;
         }
       }
     }
