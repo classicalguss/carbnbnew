@@ -67,7 +67,7 @@ return [
 						'rules' => [
 								[
 										'class' => 'yii\rest\UrlRule',
-										'controller' => ['v1/rating','v1/car','v1/carmake','v1/city','v1/area','v1/carmodel','v1/test','v1/booking'],
+										'controller' => ['v1/rating','v1/car','v1/carmake','v1/city','v1/area','v1/carmodel','v1/test'],
 										'patterns'=>[
 												'POST {id}' => 'update',
 												'DELETE {id}' => 'delete',
@@ -77,6 +77,20 @@ return [
 												'{id}' => 'options',
 												'' => 'options',
 										]
+								],
+								[
+										'class' => 'yii\rest\UrlRule',
+										'controller' => 'v1/booking',
+										'extraPatterns' => [
+												'DELETE {id}' => 'delete',
+												'GET,HEAD {id}' => 'view',
+												'POST' => 'create',
+												'POST approve/{id}' => 'approve',
+												'POST disapprove/{id}' => 'disapprove',
+												'GET,HEAD' => 'index',
+												'{id}' => 'options',
+												'' => 'options',
+										],
 								],
 								[ 
 										'class' => 'yii\rest\UrlRule',

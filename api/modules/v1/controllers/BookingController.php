@@ -26,18 +26,77 @@ class BookingController extends ActiveController {
 				'class' => HttpBearerAuth::className (),
 				'only' => [
 						'create',
-						'delete'
+						'delete',
+						'index',
+						'view',
+						'approve'
 				]
 		];
 		return $behaviors;
 	}
 	public function checkAccess($action, $model = null, $params = []) {
 		if ($action === 'delete') {
-			Yii::warning($model->renter_id);
-			Yii::warning(Yii::$app->user->id);
 			if ($model->renter_id !== \Yii::$app->user->id)
 				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s bookings that belong to you.', $action ) );
 		}
+		else if ($action === 'index')
+		{
+			$renterId = Yii::$app->request->get('renter_id',null);
+			$ownerId = Yii::$app->request->get('owner_id',null);
+			Yii::warning($ownerId);
+			Yii::warning(\Yii::$app->user->id);
+			if ($renterId === null && $ownerId === null)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+			else if ($renterId !== null && $renterId != \Yii::$app->user->id)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+			else if ($ownerId !== null && $ownerId != \Yii::$app->user->id)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+		}
+		else if ($action === 'view')
+		{
+			if ($model->renter_id != \Yii::$app->user->id && $model->owner_id != \Yii::$app->user->id)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+		}
+		else if ($action === 'approve' || $action === 'disapprove')
+			if ($model->owner_id !== \Yii::$app->user->id)
+				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You cannot change the status of this booking.', $action ) );
+	}
+	public function actionApprove($id) {
+		$model = \common\models\Booking::findOne($id);
+		if ($model->status == 0)
+		{
+			$model->status = 1;
+			$model->save();
+		}
+		else
+		{
+			Yii::$app->response->setStatusCode(422,'You have already set the status of this booking.');
+			return $model;
+		}
+		
+		return $model;
+	}
+	public function actionDisapprove($id) {
+		$model = \common\models\Booking::findOne($id);
+		if ($model->status == 0)
+		{
+			$model->status = 2;
+			$model->save();
+		}
+		else
+		{
+			Yii::$app->response->setStatusCode(422,'You have already set the status of this booking.');
+			return $model;
+		}
+		return $model;
 	}
 	public function actionCreate() {		
 		$model = new $this->modelClass([]);
@@ -53,6 +112,11 @@ class BookingController extends ActiveController {
 		else
 			$model->status = 0;
 		
+		if ($model->renter_id == $model->owner_id)
+		{
+			$response->setStatusCode(422,'You cannot book your own car.');
+			return $model;
+		}
 		if ($model->validate()) {
 			
 			
