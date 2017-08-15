@@ -24,7 +24,7 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 <!-- Slider -->
 <div class="container wide">
 	<div class="full-width-slider">
-		<div id="carousel-full-width" class="carousel slide car-details-slider" data-ride="carousel">
+		<div id="carousel-full-width" class="carousel slide car-view-slider" data-ride="carousel">
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
 				<li data-target="#carousel-full-width" data-slide-to="0" class="active"></li>
@@ -57,7 +57,7 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 	<div class="row">
 		<div class="col-md-8">
 			<!-- Car details -->
-			<div class="car-details clearfix">
+			<div class="car-view clearfix">
 				<div class="pull-left">
 					<h1>Audi R8 GT650 2017</h1>
 					<h5>Coupe</h5>
