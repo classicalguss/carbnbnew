@@ -29,7 +29,8 @@ class BookingController extends ActiveController {
 						'delete',
 						'index',
 						'view',
-						'approve'
+						'approve',
+						'disapprove'
 				]
 		];
 		return $behaviors;
@@ -66,8 +67,10 @@ class BookingController extends ActiveController {
 			}
 		}
 		else if ($action === 'approve' || $action === 'disapprove')
+		{
 			if ($model->owner_id !== \Yii::$app->user->id)
 				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You cannot change the status of this booking.', $action ) );
+		}
 	}
 	public function actionApprove($id) {
 		$model = \common\models\Booking::findOne($id);
