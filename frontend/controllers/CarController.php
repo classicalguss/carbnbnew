@@ -13,6 +13,10 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\base\Model;
+use frontend\models\CarDetailsForm;
+use frontend\models\CarFeaturesForm;
+use frontend\models\CarPhotosForm;
+use frontend\models\CarPublishForm;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -93,21 +97,22 @@ class CarController extends Controller
 						->andWhere(['car.id'=>$id])
 						->one();
 
-		$ownerInfo   = $carModel->user;
+		$ownerInfo   = $carModel->user->attributes;
 		$carRatings  = $carModel->ratings;
 		$makeName    = $carModel->make->value;
 		$modelName   = $carModel->model->value;
 		$carInfo     = $carModel->attributes;
 
-		$carInfo['images']       = $carModel->getImages();
+		$carInfo['images']       = $carModel->getPhotos();
 		$carInfo['location']     = $carModel->getLocation();
 		$carInfo['makeName']     = $makeName;
 		$carInfo['modelName']    = $modelName;
-		$carInfo['features']     = $carModel->getFeaturesArray();
+		$carInfo['features']     = $carModel->getAssociateFeatures();
 		$carInfo['colorText']    = $carModel->colorText;
 		$carInfo['properties']   = $carModel->getProperties();
 		$carInfo['odometerText'] = $carModel->odometerText;
 
+		$ratingsSum  = 0;
 		$ratersInfo  = [];
 
 		if (!empty($carRatings))
@@ -116,13 +121,20 @@ class CarController extends Controller
 			$ratersIds=[];
 			foreach ($carRatings as $rating)
 			{
-				$rateTmp[] = $rating->attributes;
+				$ratingsSum += $rating->rating;
+				$rateTmp[]   = $rating->attributes;
 				$ratersIds[] = $rating->user_id; // to get info about the user who rated this car.
 			}
 			$carRatings = $rateTmp;
 
 			$ratersInfo = User::find()->where(['id'=>$ratersIds])->all();
 			$ratersInfo = \common\models\Util::getModelAttributes($ratersInfo);
+			$ratersTmp = array();
+			foreach ($ratersInfo as $rater)
+			{
+				$ratersTmp[$rater['id']] = $rater;
+			}
+			$ratersInfo = $ratersTmp;
 		}
 
 		$recentlyListed   = Car::getRecentlyListed(3);
@@ -143,6 +155,7 @@ class CarController extends Controller
 			'carInfo'        => $carInfo,
 			'ownerInfo'      => $ownerInfo,
 			'carRatings'     => $carRatings,
+			'ratingsSum'     => $ratingsSum,
 			'ratersInfo'     => $ratersInfo,
 			'recentlyListedHTML' => $recentlyListedHTML,
 				'p'=>$carInfo,
@@ -154,15 +167,24 @@ class CarController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
-	public function actionCreate()
+	public function actionListACar()
 	{
 		$model = new Car();
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		if ($model->load(Yii::$app->request->post()) && $model->save())
+		{
 			return $this->redirect(['view', 'id' => $model->id]);
-		} else {
+		}
+		else
+		{
+			$models = [
+					'carDetailsModel'  => new CarDetailsForm(),
+					'carFeaturesModel' => new CarFeaturesForm(),
+					'carPhotosModel'   => new CarPhotosForm(),
+					'carPublishModel'  => new CarPublishForm(),
+			];
 			return $this->render('create', [
-				'model' => $model,
+				'models' => $models,
 			]);
 		}
 	}

@@ -162,6 +162,16 @@ class Car extends \yii\db\ActiveRecord {
 				]
 		];
 	}
+	public function getPhotos()
+	{
+		$res=[];
+		foreach ([$this->photo1,$this->photo2,$this->photo3,$this->photo4,$this->photo5,$this->photo6] as $photo)
+		{
+			if (!empty($photo))
+				$res[$photo]=Yii::$app->params ['imagesFolder'] .$photo;
+		}
+		return $res;
+	}
 	public function getRules() {
 		return [
 				$this->rule_1,
@@ -219,6 +229,16 @@ class Car extends \yii\db\ActiveRecord {
 				$returnArray[] = self::featuresArray()[$feature];
 		}
 		return $returnArray;
+	}
+	public function getAssociateFeatures() {
+		$res = [];
+		$featuresArray = explode(',',$this->features);
+		foreach ($featuresArray as $feature)
+		{
+			if (isset(self::featuresArray()[$feature]))
+				$res[$feature] = self::featuresArray()[$feature];
+		}
+		return $res;
 	}
 	public function fields() {
 		return [

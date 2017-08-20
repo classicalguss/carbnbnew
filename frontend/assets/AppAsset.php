@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
 	public $js = [
 		'js/app.js',
 		'js/vendors.js',
+		'js/omni-slider.js',
 	];
 
 	public $depends = [

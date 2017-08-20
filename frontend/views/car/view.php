@@ -1,7 +1,5 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\DetailView;
 use frontend\assets\CarViewAsset;
 CarViewAsset::register($this);
 
@@ -12,7 +10,7 @@ $this->title = 'Car View';
 ?>
 <h2>users and cars photos path (<b>$imagesPath</b>): <?=$imagesPath?></h2>
 <h2>site images path (<b>$siteImagesPath</b>): <?=$siteImagesPath?></h2>
-<pre><?=print_r($p,1)?></pre>
+<pre><?=print_r($ownerInfo,1)?></pre>
 
 Variables:
 <ul>
@@ -21,7 +19,6 @@ Variables:
 	<li>$carRatings</li>
 	<li>$ratersInfo</li>
 </ul>
-Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to print variables.
 
 <!-- Slider -->
 <div class="container wide">
@@ -29,25 +26,19 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 		<div id="carousel-full-width" class="carousel slide car-details-slider" data-ride="carousel">
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
-				<li data-target="#carousel-full-width" data-slide-to="0" class="active"></li>
-				<li data-target="#carousel-full-width" data-slide-to="1"></li>
-				<li data-target="#carousel-full-width" data-slide-to="2"></li>
+			<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
+				<li data-target="#carousel-full-width" data-slide-to="<?=$i?>" <?php if ($i==0):?>class="active"<?php endif;?>></li>
+			<?php endforeach;?>
 			</ol>
 
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner" role="listbox">
-				<div class="item active">
-					<img class="img-responsive" src="http://via.placeholder.com/1500x400" alt="Toyota Camry" />
-					<a href="#" class="view-photos"> View Photos </a>
-				</div>
-				<div class="item">
-					<img class="img-responsive" src="http://via.placeholder.com/1500x400" alt="Toyota Camry" />
-					<a href="#" class="view-photos"> View Photos </a>
-				</div>
-				<div class="item">
-					<img class="img-responsive" src="http://via.placeholder.com/1500x400" alt="Toyota Camry" />
-					<a href="#" class="view-photos"> View Photos </a>
-				</div>
+				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
+					<div class="item active">
+						<img class="img-responsive" src="<?=$imagePath?>" alt="<?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?>" />
+						<a href="#" class="view-photos"> View Photos </a>
+					</div>
+				<?php endforeach;?>
 			</div>
 		</div>
 	</div>
@@ -61,13 +52,13 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 			<!-- Car details -->
 			<div class="car-details clearfix">
 				<div class="pull-left">
-					<h1>Audi R8 GT650 2017</h1>
-					<h5>Coupe</h5>
-					<span class="rating-stars"> <span class="rated" style="width:74%"></span> </span> <span class="total-reviews">736 Reviews</span>
+					<h1><?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?></h1>
+					<h5><?=$carInfo['properties']['type_id']?></h5>
+					<span class="rating-stars"> <span class="rated" style="width:<?=20*$ratingsSum/count($carRatings)?>%"></span> </span> <span class="total-reviews"><?=count($carRatings)?> Reviews</span>
 				</div>
 				<div class="pull-right right-side">
-					<img class="img-circle" src="<?=$imagesPath?>user-photo-two.jpg" alt="user photo" />
-					<h6>Owned by Lynne</h6>
+					<img class="img-circle" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
+					<h6>Owned by <?=$ownerInfo['first_name']?></h6>
 					<span>(Responds in 2 days)</span>
 				</div>
 			</div>
@@ -78,171 +69,74 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 				<section>
 					<h3>Description</h3>
 					<p>
-						The new TT Quattro, an architectural rhapsody of circles and arches in which the promise of its
-						artistic form is paid off in full, both outside and inside the car, is a three-door, two-plus-two
-						sports coupe that is the ultimate gadget.Underpinning it is a new full, both outside and inside the car,
-						is a three-door, two-plus-two sports coupe that is the ultimate gadget.Under… <a href="#">See all</a>
+						<?=$carInfo['description']?>... <a href="#">See all</a>
 					</p>
 				</section>
 
 				<section>
 					<h3>Features</h3>
 					<ul class="list-inline list-options">
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
-						<li>
-							<i class="fa fa-bath" aria-hidden="true"></i>
-							<h5>Automatic</h5>
-						</li>
+						<?php foreach ($carInfo['features'] as $featureId=>$featureTxt):?>
+							<li>
+								<i class="fa fa-bath car-feature-<?=$featureId?>" aria-hidden="true"></i>
+								<h5><?=$featureTxt?></h5>
+							</li>
+						<?php endforeach;?>
 					</ul>
 				</section>
 
 				<section>
 					<h3>Insurance Provided by</h3>
-					<p>RSA insurance Company</p>
+					<p><?=$carInfo['insurance_tip']?></p>
 				</section>
 
 				<section>
 					<h3>Miles Included</h3>
-					<p>Unlimited Miles</p>
+					<?php if (!empty($carInfo['milage_limitation'])):?>
+						<p><?=$carInfo['milage_limitation']?> KM</p>
+					<?php else :?>
+						<p>Unlimited Miles</p>
+					<?php endif;?>
 				</section>
 
 				<section>
 					<h3>Car Terms</h3>
 					<ul class="list-unstyled">
-						<li>No Smoking</li>
-						<li>No out of border drives</li>
+						<?php for ($c=1;$c<=4;$c++):?>
+							<?php if (!empty($carInfo['rule_'.$c])):?>
+								<li><?=$carInfo['rule_'.$c]?></li>
+							<?php endif;?>
+						<?php endfor;?>
 					</ul>
 				</section>
 
 				<section>
-					<h3>45 Reviews for Lynne</h3>
-					<div class=""><span class="rating-stars"> <span class="rated" style="width:74%"></span> </span></div>
+					<h3><?=count($carRatings)?> Reviews for <?=$ownerInfo['first_name']?></h3>
+					<div class=""><span class="rating-stars"> <span class="rated" style="width:<?=20*$ratingsSum/count($carRatings)?>%"></span> </span></div>
 
 					<div class="user-comments">
 						<ul class="list-unstyled">
-
-							<li>
-								<div class="clearfix user-comment">
-									<div class="pull-left">
-										<img class="img-circle user-img" src="<?=$imagesPath?>user-photo-two.jpg" alt="user photo" />
-									</div>
-									<div class="pull-left">
-										<h6>Mike Andy</h6>
-										<time>March 2017</time>
-									</div>
-								</div>
-								<p>
-									With snazzy styling and peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp d peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp
-								</p>
-							</li>
-
-							<li>
-								<div class="clearfix user-comment">
-									<div class="pull-left">
-										<img class="img-circle user-img" src="<?=$imagesPath?>user-photo-two.jpg" alt="user photo" />
-									</div>
-									<div class="pull-left">
-										<h6>Mike Andy</h6>
-										<time>March 2017</time>
-									</div>
-								</div>
-								<p>
-									With snazzy styling and peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp d peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp
-								</p>
-							</li>
-
-							<li>
-								<div class="clearfix user-comment">
-									<div class="pull-left">
-										<img class="img-circle user-img" src="<?=$imagesPath?>user-photo-two.jpg" alt="user photo" />
-									</div>
-									<div class="pull-left">
-										<h6>Mike Andy</h6>
-										<time>March 2017</time>
-									</div>
-								</div>
-								<p>
-									With snazzy styling and peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp d peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp
-								</p>
-							</li>
-
-							<li>
-								<div class="clearfix user-comment">
-									<div class="pull-left">
-										<img class="img-circle user-img" src="<?=$imagesPath?>user-photo-two.jpg" alt="user photo" />
-									</div>
-									<div class="pull-left">
-										<h6>Mike Andy</h6>
-										<time>March 2017</time>
-									</div>
-								</div>
-								<p>
-									With snazzy styling and peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp d peppy performance, the TT and TTS appeal to both the practical and the passionate.
-									The TT has a 220-hp
-								</p>
-							</li>
-
+							<?php foreach ($carRatings as $rate):?>
+								<?php if (!empty($ratersInfo[$rate['user_id']])):?>
+									<li>
+										<div class="clearfix user-comment">
+											<div class="pull-left">
+												<img class="img-circle user-img" src="<?=$imagesPath?><?=$ratersInfo[$rate['user_id']]['photo']?>" alt="<?=$ratersInfo[$rate['user_id']]['first_name']?>" />
+											</div>
+											<div class="pull-left">
+												<h6><?=$ratersInfo[$rate['user_id']]['first_name']?> <?=$ratersInfo[$rate['user_id']]['last_name']?></h6>
+												<time><?=date("F Y", strtotime($rate['created_at']))?></time>
+											</div>
+										</div>
+										<p>
+											<?=$rate['description']?>
+										</p>
+									</li>
+								<?php endif;?>
+							<?php endforeach;?>
 						</ul>
 
-						<?/* pagination mhadi*/?>
+						<?/*pagination*/?>
 
 					</div>
 				</section>
@@ -251,20 +145,19 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 			<div class="car-owner">
 				<div class="clearfix car-owner-details">
 					<div class="pull-left">
-						<img class="img-circle user-img" src="<?=$imagesPath?>user-girl.jpg" alt="user photo" />
+						<img class="img-circle user-img" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
 					</div>
 					<div class="pull-left">
-						<h2>Owned by Lynne</h2>
+						<h2>Owned by <?=$ownerInfo['first_name']?></h2>
 						<h6>United Arab Emirates</h6><span>(Responds in 2 days)</span>
 					</div>
 				</div>
-				<h3>Description</h3>
-				<p>
-					I believe every human being needs two types of satisfaction: productive and creative.
-					If you're lucky enough to have a purely creative job, like me, you spend most of your time tweaking
-					and experimenting with concepts, putting words and ideas together. It's really rewarding stuff,
-					but it's all a little abstract, too.
-				</p>
+				<?php if (!empty($ownerInfo['about_me'])):?>
+					<h3>Description</h3>
+					<p>
+						<?=$ownerInfo['about_me']?>
+					</p>
+				<?php endif;?>
 				<a class="btn btn-primary" href="#">Say Hello</a>
 			</div>
 
@@ -274,9 +167,9 @@ Use <b>&lt;pre&gt;&lt;?=print_r($var,1)?&gt;&lt;/pre&gt;</b> in view file to pri
 			<div class="price-and-reserve">
 				<div class="price-details">
 					<div class="price">
-						<span>145 AED</span> Per day
+						<span><?=$carInfo['price']?> <?=$carInfo['currency']?></span> Per day
 					</div>
-					<div class="total-price">TOTAL <span class="text-grey"> for 6 Days	</span> <span class="price-per-days"> 870 </span> <span class="text-grey"> AED </span></div>
+					<div class="total-price">TOTAL <span class="text-grey"> for 6 Days </span> <span class="price-per-days"> <?=$carInfo['price'] * 6?> </span> <span class="text-grey"> <?=$carInfo['currency']?> </span></div>
 					<div class="pick-up-time">
 						<h5 class="bold">Set your pick up time</h5>
 						<select class="form-control">
