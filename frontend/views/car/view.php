@@ -8,18 +8,6 @@ CarViewAsset::register($this);
 
 $this->title = 'Car View';
 ?>
-<h2>users and cars photos path (<b>$imagesPath</b>): <?=$imagesPath?></h2>
-<h2>site images path (<b>$siteImagesPath</b>): <?=$siteImagesPath?></h2>
-<pre><?=print_r($ownerInfo,1)?></pre>
-
-Variables:
-<ul>
-	<li>$carInfo</li>
-	<li>$ownerInfo</li>
-	<li>$carRatings</li>
-	<li>$ratersInfo</li>
-</ul>
-
 <!-- Slider -->
 <div class="container wide">
 	<div class="full-width-slider">
