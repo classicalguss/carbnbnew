@@ -3,6 +3,8 @@
 namespace frontend\assets;
 
 use yii\web\AssetBundle;
+use frontend;
+use yii\web\View;
 
 /**
  * Main frontend application asset bundle.
@@ -16,13 +18,18 @@ class AppAsset extends AssetBundle
 		'css/app.css',
 	];
 	public $js = [
-		'js/app.js',
 		'js/vendors.js',
+		'js/app.js',
 		'js/omni-slider.js',
 	];
 
 	public $depends = [
-		'yii\web\YiiAsset',
+// 		'yii\web\YiiAsset',
 		'yii\bootstrap\BootstrapAsset',
 	];
+
+	public function init() {
+		$this->jsOptions['position'] = View::POS_HEAD;
+		parent::init();
+	}
 }
