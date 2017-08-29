@@ -10,6 +10,7 @@ use common\models\Area;
 use common\models\City;
 use common\models\Util;
 use common\models\Carmake;
+use common\models\Booking;
 
 /**
  * This is the model class for table "car".
@@ -247,8 +248,12 @@ class Car extends \yii\db\ActiveRecord {
 				'carModel',
 				'rate',
 				'milage_limitation',
-				'area'
+				'area',
+				'numberOfBookings'
 		];
+	}
+	public function getNumberOfBookings () {
+		return Booking::find()->where('car_id = :car_id AND status = 1',['car_id'=>$this->id])->count();
 	}
 	public function getRate() {
 		return Rating::find()->where('car_id=:id',[':id'=>$this->id])->average('rating');
