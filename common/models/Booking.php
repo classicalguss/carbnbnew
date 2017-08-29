@@ -52,7 +52,8 @@ class Booking extends \yii\db\ActiveRecord
     			'renter',
     			'status',
     			'statusMessage',
-    			'car'
+    			'car',
+    			'delivery_time'
     	];
     }
     /**
@@ -63,7 +64,7 @@ class Booking extends \yii\db\ActiveRecord
         return [
             [['car_id', '!owner_id', '!renter_id', 'date_start', 'date_end', '!status'], 'required'],
             [['car_id', 'owner_id', 'renter_id', 'status'], 'integer'],
-            [['date_start', 'date_end'], 'safe'],
+        	[['date_start', 'date_end','delivery_time'], 'safe'],
         	[['car_id'], 'validateIsPublished'],
         	[['car_id'], 'validateUserHavePendingBooking'],
         	[['date_start','date_end'],'date','format'=>'yyyy-MM-dd'],
