@@ -113,7 +113,6 @@ class CarSearch extends Car
 				foreach ($bookedCars as $car)
 					$bookedCarIds[] = $car['car_id'];
 				
-				Yii::warning(array_values($bookedCarIds));
 				$query->andFilterWhere(['not in','id',array_values($bookedCarIds)]);
 			}
 		}

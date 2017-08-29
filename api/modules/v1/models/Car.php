@@ -193,6 +193,13 @@ class Car extends \yii\db\ActiveRecord {
 				])
 		];
 	}
+	public function getArea() {
+		$area = $this->hasOne( Area::className(),[
+				'id'=>'area_id'
+		]);
+		
+		return $area;
+	}
 	public function getLocation() {
 		$city = City::findOne([
 				'id'=>$this->city_id
@@ -239,8 +246,8 @@ class Car extends \yii\db\ActiveRecord {
 				'owner_id',
 				'carModel',
 				'rate',
-				'milage_limitation'
-				
+				'milage_limitation',
+				'area'
 		];
 	}
 	public function getRate() {
@@ -264,7 +271,7 @@ class Car extends \yii\db\ActiveRecord {
 				'properties',
 				'location',
 				'similar',
-				'make'
+				'make',
 		];
 	}
 	

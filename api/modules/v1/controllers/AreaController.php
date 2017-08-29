@@ -21,6 +21,7 @@ class AreaController extends ActiveController {
 		$query = $this->modelClass::find();
 		$dataProvider = new ActiveDataProvider([
 				'query' => $query,
+				'limit'=>10
 		]);
 		
 		$query->andFilterWhere([

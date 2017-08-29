@@ -8,6 +8,7 @@ use yii\rest\Controller;
 use common\models\Carmake;
 use common\models\Carmodel;
 use yii\sphinx\Query;
+use common\models\Area;
 
 class ListsController extends Controller {
 	
@@ -21,16 +22,20 @@ class ListsController extends Controller {
 		return Car::gearArray();
 	}
 	public function actionTest() {
-		$makes = Carmake::find()->all();
-		foreach ($makes as $make) {
-			$model = new Carmodel();
-			$model->value = $make->value. ' model';
-			$model->make_id = $make->id;
-			$model->save();
+		$cars = Car::find()->all();
+		foreach ($cars as $car) {
+			$areaId = rand(1,10);
+			$area = Area::findOne($areaId);
+			Yii::warning('Area ID '.$area->id);
+			Yii::warning('city '.$area->city_id);
+			$car->area_id = $area->id;
+			$car->city_id = $area->city_id;
+			$car->save();
 		}
 		
 	}
 	public function actionAreaautocomplete() {
+		header('Access-Control-Allow-Origin: *');  
 		$keyWord = Yii::$app->request->getQueryParam('q',null);
 		if ($keyWord === null)
 			return '';
@@ -39,6 +44,7 @@ class ListsController extends Controller {
 			$query = new Query();
 			$rows = $query->select(['city_id','area_id','city_name','area_name'])
 			->from('sphinx_areas')->match($keyWord.'*')
+			->limit(10)
 			->all();
 			
 			return $rows;

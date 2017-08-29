@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use api\modules\v1\models\User;
+use api\modules\v1\models\Car;
 
 /**
  * This is the model class for table "booking".
@@ -26,6 +27,34 @@ class Booking extends \yii\db\ActiveRecord
         return 'booking';
     }
     
+    public function getOwner() {
+    	return $this->hasOne ( User::className (), [
+    			'id' => 'owner_id'
+    	] );
+    }
+    public function getRenter() {
+    	return $this->hasOne ( User::className (), [
+    			'id' => 'renter_id'
+    	] );
+    }
+    public function getCar() {
+    	return $this->hasOne (Car::className(), [
+    			'id' => 'car_id'
+    	]);
+    }
+    public function fields() {
+    	return [
+    			'id',
+    			'car_id',
+    			'date_start',
+    			'date_end',
+    			'owner',
+    			'renter',
+    			'status',
+    			'statusMessage',
+    			'car'
+    	];
+    }
     /**
      * @inheritdoc
      */
