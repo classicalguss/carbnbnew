@@ -189,6 +189,7 @@ class BookingController extends ActiveController {
 				'car_id' => Yii::$app->request->getQueryParam('car_id',null),
 				'owner_id' => Yii::$app->request->getQueryParam('owner_id',null),
 				'renter_id' => Yii::$app->request->getQueryParam('renter_id',null),
+				'status'=> Yii::$app->request->getQueryParam('status',null),
 		]);
 		
 		return $dataProvider;
