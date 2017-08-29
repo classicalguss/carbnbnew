@@ -63,7 +63,7 @@ AppAsset::register ( $this );
 
 				<div class="col-md-3 text-right">
 					<ul class="list-inline list-links">
-						<li><a href="<?=Url::to(['car/list'])?>">List Your Car</a></li>
+						<li><a href="<?=Url::to(['car/list-a-car'])?>">List Your Car</a></li>
 						<li><a href="<?=Url::to([''])?>">My Drives</a></li>
 						<li><a href="<?=Url::to([''])?>">Messages</a></li>
 						<?php if (Yii::$app->user->isGuest):?>

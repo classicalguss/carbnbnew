@@ -17,6 +17,8 @@ use frontend\models\CarDetailsForm;
 use frontend\models\CarFeaturesForm;
 use frontend\models\CarPhotosForm;
 use frontend\models\CarPublishForm;
+use common\models\Carmodel;
+use yii\web\UploadedFile;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -171,6 +173,60 @@ class CarController extends Controller
 	{
 		$model = new Car();
 
+		$postedData = Yii::$app->request->post();
+		$allFormsData  = [];
+		$allFormsNames = ['CarDetailsForm','CarFeaturesForm','CarPhotosForm','CarPublishForm'];
+		foreach ($allFormsNames as $formName)
+		{
+			if (isset($postedData[$formName]))
+				$allFormsData = array_merge($allFormsData, $postedData[$formName]);
+		}
+
+		$model->load(['Car'=>$allFormsData]);
+		$model->owner_id = Yii::$app->user->id;
+		$model->photoFile1 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile1]' );
+		$model->photoFile2 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile2]' );
+		$model->photoFile3 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile3]' );
+		$model->photoFile4 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile4]' );
+		$model->photoFile5 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile5]' );
+		$model->photoFile6 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile6]' );
+		$model->features   = isset($postedData['features']) ? implode(',', $postedData['features']) : '';
+		$model->scenario = 'create';
+
+		\Yii::error($model->validate());
+		\Yii::error($model->getErrors());
+		if ($model->save())
+		{
+			$model->upload();
+			return $this->redirect(['view', 'id' => $model->id]);
+		}
+		else
+		{
+			$models = [
+					'carDetailsModel'  => new CarDetailsForm(),
+					'carFeaturesModel' => new CarFeaturesForm(),
+					'carPhotosModel'   => new CarPhotosForm(),
+					'carPublishModel'  => new CarPublishForm(),
+			];
+			foreach ($models as &$modelObject)
+			{
+				$modelObject->load($postedData);
+			}
+			return $this->render('create', [
+				'models' => $models,
+			]);
+		}
+	}
+
+	/**
+	 * Creates a new Car model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * @return mixed
+	 */
+	public function actionCreate()
+	{
+		$model = new Car();
+
 		if ($model->load(Yii::$app->request->post()) && $model->save())
 		{
 			return $this->redirect(['view', 'id' => $model->id]);
@@ -184,7 +240,7 @@ class CarController extends Controller
 					'carPublishModel'  => new CarPublishForm(),
 			];
 			return $this->render('create', [
-				'models' => $models,
+					'models' => $models,
 			]);
 		}
 	}
@@ -242,5 +298,10 @@ class CarController extends Controller
 	public static function getCarViewUrl($id)
 	{
 		return Url::to(['car/view/','id'=>$id]);
+	}
+
+	public function actionGetCarMakeModels($id)
+	{
+		return $this->renderAjax('carModelsDropDownListView', ['list'=>Carmodel::getCarMakeModels($id)]);
 	}
 }

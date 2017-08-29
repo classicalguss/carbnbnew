@@ -7,6 +7,8 @@ CarViewAsset::register($this);
 /* @var $model frontend\models\Car */
 
 $this->title = 'Car View';
+$carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRatings) : 0);
+
 ?>
 <!-- Slider -->
 <div class="container wide">
@@ -42,7 +44,7 @@ $this->title = 'Car View';
 				<div class="pull-left">
 					<h1><?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?></h1>
 					<h5><?=$carInfo['properties']['type_id']?></h5>
-					<span class="rating-stars"> <span class="rated" style="width:<?=20*$ratingsSum/count($carRatings)?>%"></span> </span> <span class="total-reviews"><?=count($carRatings)?> Reviews</span>
+					<span class="rating-stars"> <span class="rated" style="width:<?=$carRatingPercentage?>%"></span> </span> <span class="total-reviews"><?=count($carRatings)?> Reviews</span>
 				</div>
 				<div class="pull-right right-side">
 					<img class="img-circle" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
@@ -100,7 +102,7 @@ $this->title = 'Car View';
 
 				<section>
 					<h3><?=count($carRatings)?> Reviews for <?=$ownerInfo['first_name']?></h3>
-					<div class=""><span class="rating-stars"> <span class="rated" style="width:<?=20*$ratingsSum/count($carRatings)?>%"></span> </span></div>
+					<div class=""><span class="rating-stars"> <span class="rated" style="width:<?=$carRatingPercentage?>%"></span> </span></div>
 
 					<div class="user-comments">
 						<ul class="list-unstyled">

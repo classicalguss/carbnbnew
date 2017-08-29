@@ -86,7 +86,7 @@ class Car extends \yii\db\ActiveRecord {
 				4=>'Sunroof',
 				5=>'Heated Seats',
 				6=>'Bluetooth',
-				7=>'Part Assist',
+				7=>'Park Assist',
 				8=>'GPS',
 				9=>'Power Steering',
 				10=>'USB',
