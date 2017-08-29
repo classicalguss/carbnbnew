@@ -45,7 +45,7 @@ $this->title = 'Car View';
 					<span class="rating-stars"> <span class="rated" style="width:<?=20*$ratingsSum/count($carRatings)?>%"></span> </span> <span class="total-reviews"><?=count($carRatings)?> Reviews</span>
 				</div>
 				<div class="pull-right right-side">
-					<img class="img-circle" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
+					<img class="img-circle" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
 					<h6>Owned by <?=$ownerInfo['first_name']?></h6>
 					<span>(Responds in 2 days)</span>
 				</div>
@@ -109,7 +109,7 @@ $this->title = 'Car View';
 									<li>
 										<div class="clearfix user-comment">
 											<div class="pull-left">
-												<img class="img-circle user-img" src="<?=$imagesPath?><?=$ratersInfo[$rate['user_id']]['photo']?>" alt="<?=$ratersInfo[$rate['user_id']]['first_name']?>" />
+												<img class="img-circle user-img" width="70" height="70" src="<?=$imagesPath?><?=$ratersInfo[$rate['user_id']]['photo']?>" alt="<?=$ratersInfo[$rate['user_id']]['first_name']?>" />
 											</div>
 											<div class="pull-left">
 												<h6><?=$ratersInfo[$rate['user_id']]['first_name']?> <?=$ratersInfo[$rate['user_id']]['last_name']?></h6>
@@ -133,7 +133,7 @@ $this->title = 'Car View';
 			<div class="car-owner">
 				<div class="clearfix car-owner-details">
 					<div class="pull-left">
-						<img class="img-circle user-img" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
+						<img class="img-circle user-img" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
 					</div>
 					<div class="pull-left">
 						<h2>Owned by <?=$ownerInfo['first_name']?></h2>
