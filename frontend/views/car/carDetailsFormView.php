@@ -25,9 +25,12 @@ if (!empty($model->make_id))
 
 	<?php $form = ActiveForm::begin(['options'=>['onsubmit' => 'switchForm('.$formNum.',this);return false;']]); ?>
 
-		<?= $form->field($model, 'country_iso') ?>
-		<?= $form->field($model, 'city_id') ?>
-		<?= $form->field($model, 'area_id') ?>
+		<?= $form->field($model, 'location_autocomplete')->textInput(['id'=>'location-autocomplete']) ?>
+		<div class="hide">
+			<?= $form->field($model, 'country_iso')->hiddenInput() ?>
+			<?= $form->field($model, 'city_id')->hiddenInput()?>
+			<?= $form->field($model, 'area_id')->hiddenInput()?>
+		</div>
 		<?= $form->field($model, 'make_id')->dropDownList(Carmake::getAllCarMakes(),['prompt'=>'Select make', 'id'=>'makeId-dd']) ?>
 		<?= $form->field($model, 'model_id')->dropDownList($carModelList, ['prompt'=>'Select model', 'id'=>'modelId-dd']) ?>
 		<?= $form->field($model, 'year_model')->dropDownList($yearsList,['prompt'=>'Select year']) ?>

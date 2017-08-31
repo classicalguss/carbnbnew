@@ -35,11 +35,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['update', 'delete'],
+				'only' => ['list-a-car','update', 'delete'],
 				'rules' => [
 					[
 						'allow' => true,
-						'actions' => ['update', 'delete'],
+						'actions' => ['list-a-car','update', 'delete'],
 						'roles' => ['@'],
 					],
 				],
@@ -160,7 +160,6 @@ class CarController extends Controller
 			'ratingsSum'     => $ratingsSum,
 			'ratersInfo'     => $ratersInfo,
 			'recentlyListedHTML' => $recentlyListedHTML,
-				'p'=>$carInfo,
 		]);
 	}
 
@@ -190,9 +189,10 @@ class CarController extends Controller
 		$model->photoFile4 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile4]' );
 		$model->photoFile5 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile5]' );
 		$model->photoFile6 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile6]' );
-		$model->features   = isset($postedData['features']) ? implode(',', $postedData['features']) : '';
+		$model->features   = isset($allFormsData['features']) ? implode(',', $allFormsData['features']) : '';
 		$model->scenario = 'create';
 
+		\Yii::error($model->features);
 		\Yii::error($model->validate());
 		\Yii::error($model->getErrors());
 		if ($model->save())

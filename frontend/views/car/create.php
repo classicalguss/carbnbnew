@@ -4,16 +4,14 @@ use yii\helpers\Html;
 use yii\bootstrap\Tabs;
 use yii\web\View;
 use yii\helpers\Url;
-
+use frontend\assets\JqueryUIAsset;
+JqueryUIAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
 
 $this->title = 'Create Car';
 ?>
-<pre>
-<?=print_r(Yii::$app->request->post(),1)?>
-</pre>
 <div class="car-create">
 
 	<h1><?= Html::encode($this->title) ?></h1>
@@ -67,6 +65,35 @@ $this->title = 'Create Car';
 			submitCar();
 			return false;
 		});
+
+		$("#location-autocomplete").autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url: "<?=Url::to(['lists/area-autocomplete'])?>",
+					dataType: "json",
+					data: {
+						q: request.term
+					},
+					success: function( data ) {
+						response( data );
+					}
+				});
+			},
+			minLength: 3,
+			select: function(event, ui) {
+				var location = ui.item.id;
+				if(location)
+				{
+					location = location.split(",");
+					if(location.length == 3)
+					{
+						$("#cardetailsform-country_iso").val(location[0]);
+						$("#cardetailsform-city_id").val(location[1]);
+						$("#cardetailsform-area_id").val(location[2]);
+					}
+				}
+			}
+		});
 	});
 	function switchForm(formNum, formObj)
 	{
@@ -95,11 +122,6 @@ $this->title = 'Create Car';
 	function submitCar()
 	{
 		var data = $('#w0,#w1,#w3').serializeArray();
-		console.log(data);
-
-// 		var form = document.createElement("form");
-// 		form.method = "POST";
-		//form.action = "<?=Url::to(['car/list-a-car'])?>";
 
 		for(var cc=0;cc<data.length;cc++)
 		{
@@ -109,27 +131,9 @@ $this->title = 'Create Car';
 				name:  inpData.name,
 				value: inpData.value,
 			}).appendTo('#w2');
-// 			var element1   = document.createElement("input");
-// 			element1.name  = inpData.name;
-// 			element1.value = inpData.value;
-// 			form.append(element1);
 		}
 
-// 		document.body.appendChild(form);
-
 		$('#w2').submit();
-// 		$.ajax({
-// 			type: "POST",
-//			url: "<?=Url::to(['car/list-a-car'])?>",
-// 			data: data,
-// 			dataType: "html",
-// 			success: function(data) {
-// 				alert(data);
-// 			},
-// 			error: function() {
-// 				alert('error handing here');
-// 			}
-// 		});
 		return false;
 	}
 </script>

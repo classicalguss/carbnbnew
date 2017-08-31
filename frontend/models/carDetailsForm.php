@@ -8,6 +8,7 @@ use yii\base\Model;
  * CarDetails form
  */
 class CarDetailsForm extends Model {
+	public $location_autocomplete;
 	public $country_iso;
 	public $city_id;
 	public $area_id;
@@ -23,7 +24,7 @@ class CarDetailsForm extends Model {
 	public function rules() {
 		return [
 			[
-					['country_iso','city_id','area_id','make_id','model_id','year_model','odometer','insurance_tip'],
+					['location_autocomplete','country_iso','city_id','area_id','make_id','model_id','year_model','odometer','insurance_tip'],
 					'required'
 			],
 			[
@@ -46,6 +47,7 @@ class CarDetailsForm extends Model {
 	public function attributeLabels()
 	{
 		return [
+				'location_autocomplete' => 'Where is your car located?',
 				'country_iso' => '',
 				'city_id' => '',
 				'area_id' => '',
