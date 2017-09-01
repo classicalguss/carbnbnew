@@ -26,7 +26,7 @@ class ListsController extends Controller {
 			{
 				$id  = 'ae,'.$row['city_id'].','.$row['area_id'];
 				$val = $row['area_name'].', '.$row['city_name'];
-				$res[][$id] = $val;
+				$res[] = ['id' => $id, 'value' => $val];
 			}
 			return json_encode($res);
 		}
