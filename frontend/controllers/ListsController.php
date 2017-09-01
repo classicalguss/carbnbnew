@@ -22,11 +22,10 @@ class ListsController extends Controller {
 			->all();
 
 			$res = [];
-			\Yii::error($rows);
 			foreach ($rows as $row)
 			{
-				$id  = 'ae,'.$row->city_id.','.$row->area_id;
-				$val = $row->area_name.', '.$row->city_name;
+				$id  = 'ae,'.$row['city_id'].','.$row['area_id'];
+				$val = $row['area_name'].', '.$row['city_name'];
 				$res[$id] = $val;
 			}
 			return json_encode($res);
