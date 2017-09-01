@@ -22,6 +22,7 @@ class ListsController extends Controller {
 			->all();
 
 			$res = [];
+			\Yii::error($rows);
 			foreach ($rows as $row)
 			{
 				$id  = 'ae,'.$row->city_id.','.$row->area_id;
