@@ -7,7 +7,7 @@ use yii\base\Model;
 /**
  * carPhotos form
  */
-class CarPhotosForm extends Model {
+class carPhotosForm extends Model {
 	public $photoFile1;
 	public $photoFile2;
 	public $photoFile3;

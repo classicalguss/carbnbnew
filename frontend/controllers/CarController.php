@@ -13,10 +13,10 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\base\Model;
-use frontend\models\CarDetailsForm;
-use frontend\models\CarFeaturesForm;
-use frontend\models\CarPhotosForm;
-use frontend\models\CarPublishForm;
+use frontend\models\carDetailsForm;
+use frontend\models\carFeaturesForm;
+use frontend\models\carPhotosForm;
+use frontend\models\carPublishForm;
 use common\models\Carmodel;
 use yii\web\UploadedFile;
 
@@ -174,7 +174,7 @@ class CarController extends Controller
 
 		$postedData = Yii::$app->request->post();
 		$allFormsData  = [];
-		$allFormsNames = ['CarDetailsForm','CarFeaturesForm','CarPhotosForm','CarPublishForm'];
+		$allFormsNames = ['carDetailsForm','carFeaturesForm','carPhotosForm','carPublishForm'];
 		foreach ($allFormsNames as $formName)
 		{
 			if (isset($postedData[$formName]))
@@ -183,12 +183,12 @@ class CarController extends Controller
 
 		$model->load(['Car'=>$allFormsData]);
 		$model->owner_id = Yii::$app->user->id;
-		$model->photoFile1 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile1]' );
-		$model->photoFile2 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile2]' );
-		$model->photoFile3 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile3]' );
-		$model->photoFile4 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile4]' );
-		$model->photoFile5 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile5]' );
-		$model->photoFile6 = UploadedFile::getInstanceByName ( 'CarPhotosForm[photoFile6]' );
+		$model->photoFile1 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile1]' );
+		$model->photoFile2 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile2]' );
+		$model->photoFile3 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile3]' );
+		$model->photoFile4 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile4]' );
+		$model->photoFile5 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile5]' );
+		$model->photoFile6 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile6]' );
 		$model->features   = isset($allFormsData['features']) ? implode(',', $allFormsData['features']) : '';
 		$model->scenario = 'create';
 
@@ -203,10 +203,10 @@ class CarController extends Controller
 		else
 		{
 			$models = [
-					'carDetailsModel'  => new CarDetailsForm(),
-					'carFeaturesModel' => new CarFeaturesForm(),
-					'carPhotosModel'   => new CarPhotosForm(),
-					'carPublishModel'  => new CarPublishForm(),
+					'carDetailsModel'  => new carDetailsForm(),
+					'carFeaturesModel' => new carFeaturesForm(),
+					'carPhotosModel'   => new carPhotosForm(),
+					'carPublishModel'  => new carPublishForm(),
 			];
 			foreach ($models as &$modelObject)
 			{
@@ -214,33 +214,6 @@ class CarController extends Controller
 			}
 			return $this->render('create', [
 				'models' => $models,
-			]);
-		}
-	}
-
-	/**
-	 * Creates a new Car model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 * @return mixed
-	 */
-	public function actionCreate()
-	{
-		$model = new Car();
-
-		if ($model->load(Yii::$app->request->post()) && $model->save())
-		{
-			return $this->redirect(['view', 'id' => $model->id]);
-		}
-		else
-		{
-			$models = [
-					'carDetailsModel'  => new CarDetailsForm(),
-					'carFeaturesModel' => new CarFeaturesForm(),
-					'carPhotosModel'   => new CarPhotosForm(),
-					'carPublishModel'  => new CarPublishForm(),
-			];
-			return $this->render('create', [
-					'models' => $models,
 			]);
 		}
 	}

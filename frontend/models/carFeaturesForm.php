@@ -8,7 +8,7 @@ use frontend\models\Car;
 /**
  * carFeatures form
  */
-class CarFeaturesForm extends Model {
+class carFeaturesForm extends Model {
 	public $gear_type_id;
 	public $number_of_doors;
 	public $number_of_seats;

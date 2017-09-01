@@ -5,7 +5,7 @@ use yii\base\Model;
 /**
  * CarPublish form
  */
-class CarPublishForm extends Model {
+class carPublishForm extends Model {
 	public $milage_limitation;
 	public $color;
 	public $price;

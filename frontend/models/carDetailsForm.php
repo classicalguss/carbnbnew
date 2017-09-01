@@ -7,7 +7,7 @@ use yii\base\Model;
 /**
  * CarDetails form
  */
-class CarDetailsForm extends Model {
+class carDetailsForm extends Model {
 	public $location_autocomplete;
 	public $country_iso;
 	public $city_id;
