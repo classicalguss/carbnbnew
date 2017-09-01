@@ -192,9 +192,6 @@ class CarController extends Controller
 		$model->features   = isset($allFormsData['features']) ? implode(',', $allFormsData['features']) : '';
 		$model->scenario = 'create';
 
-		\Yii::error($model->features);
-		\Yii::error($model->validate());
-		\Yii::error($model->getErrors());
 		if ($model->save())
 		{
 			$model->upload();
