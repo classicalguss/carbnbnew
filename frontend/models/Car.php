@@ -285,12 +285,13 @@ class Car extends \yii\db\ActiveRecord {
 			$return[$row->car_id] = [$row->sum, $row->count];
 		return $return;
 	}
-	public static function getRecentlyListed($limit=20)
+	public static function getRecentlyListed($limit=20, $excludedCarIds=[])
 	{
 		return self::find()
 			->joinWith('make',true,'INNER JOIN')
 			->joinWith('model',true,'INNER JOIN')
 			->where('carmake.id = carmodel.make_id')
+			->andFilterWhere(['not in','car.id',$excludedCarIds])
 			->orderBy('created_at DESC')
 			->limit($limit)
 			->all();
