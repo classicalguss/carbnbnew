@@ -10,6 +10,7 @@ use common\models\Util;
 ?>
 <div class="carDetails">
 
+	<h1><?= Html::encode('You\'re Almost Ready to Publish') ?></h1>
 	<?php $form = ActiveForm::begin(); ?>
 
 		<?= $form->field($model, 'milage_limitation') ?>

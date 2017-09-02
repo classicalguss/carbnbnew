@@ -14,8 +14,6 @@ $this->title = 'Create Car';
 ?>
 <div class="car-create">
 
-	<h1><?= Html::encode($this->title) ?></h1>
-
 	<?php echo Tabs::widget([
 		'items' => [
 			[
@@ -114,7 +112,8 @@ $this->title = 'Create Car';
 		if (errorsCount == 0 )
 		{
 			$('#tab'+nextForm).click(); // click on next tab
-			$('#'+formNum).parent().addClass('active'); // add class "active" on current tab
+			for(var cc=1; cc <= formNum; cc++)
+				$('#tab'+cc).parent().addClass('active'); // add class "active" on current tab
 		}
 		return false;
 	}

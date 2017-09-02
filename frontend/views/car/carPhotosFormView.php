@@ -9,6 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="carDetails">
 
+	<h1><?= Html::encode('Upload a Photo of Your Car') ?></h1>
 	<?php $form = ActiveForm::begin(); ?>
 
 		<?= $form->field($model, 'photoFile1')->fileInput()?>

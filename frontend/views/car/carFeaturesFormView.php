@@ -10,6 +10,7 @@ use frontend\models\Car;
 ?>
 <div class="carDetails">
 
+	<h1><?= Html::encode('What Features are also Included?') ?></h1>
 	<?php $form = ActiveForm::begin(['options'=>['onsubmit' => 'switchForm('.$formNum.',this);return false;']]); ?>
 
 		<?= $form->field($model, 'gear_type_id')->radioList(Car::gearArray()) ?>

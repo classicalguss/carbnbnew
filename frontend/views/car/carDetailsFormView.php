@@ -23,6 +23,8 @@ if (!empty($model->make_id))
 ?>
 <div class="carDetails">
 
+	<h1><?= Html::encode('Hi, '.Yii::$app->user->identity->first_name.'! Let\'s get started listing your Car.') ?></h1>
+
 	<?php $form = ActiveForm::begin(['options'=>['onsubmit' => 'switchForm('.$formNum.',this);return false;']]); ?>
 
 		<?= $form->field($model, 'location_autocomplete')->textInput(['id'=>'location-autocomplete']) ?>
