@@ -1,40 +1,40 @@
 <?php
 $params = array_merge ( require (__DIR__ . '/../../common/config/params.php'), require (__DIR__ . '/../../common/config/params-local.php'), require (__DIR__ . '/params.php'), require (__DIR__ . '/params-local.php') );
 
-return [ 
+return [
 		'id' => 'app-frontend',
 		'basePath' => dirname ( __DIR__ ),
-		'bootstrap' => [ 
-				'log' 
+		'bootstrap' => [
+				'log'
 		],
 		'controllerNamespace' => 'frontend\controllers',
-		'components' => [ 
-				'request' => [ 
-						'csrfParam' => '_csrf-frontend' 
+		'components' => [
+				'request' => [
+						'csrfParam' => '_csrf-frontend'
 				],
-				'user' => [ 
+				'user' => [
 						'identityClass' => 'common\models\User',
 						'enableAutoLogin' => true,
-						'identityCookie' => [ 
+						'identityCookie' => [
 								'name' => '_identity-frontend',
-								'httpOnly' => true 
+								'httpOnly' => true
 						],
 						'loginUrl'=>['user/login'],
-						
+
 				],
-				'session' => [ 
+				'session' => [
 						// this is the name of the session cookie used for login on the frontend
-						'name' => 'advanced-frontend' 
+						'name' => 'advanced-frontend'
 				],
-				'log' => [ 
+				'log' => [
 						'traceLevel' => 0,
-						'targets' => [ 
-								[ 
+						'targets' => [
+								[
 										'class' => 'yii\log\FileTarget',
-										'levels' => [ 
+										'levels' => [
 												'error',
 										],
-										
+
 								],
 								[
 										'class' => 'yii\log\FileTarget',
@@ -42,21 +42,33 @@ return [
 												'warning',
 										],
 										'logVars' => [],
-								] 
-						] 
+								]
+						]
 				],
-				'errorHandler' => [ 
-						'errorAction' => 'site/error' 
+				'errorHandler' => [
+						'errorAction' => 'site/error'
 				],
-				'urlManager' => [ 
+				'urlManager' => [
 						'enablePrettyUrl' => true,
 						'showScriptName' => false,
 				],
-				'request' => [ 
-						'parsers' => [ 
-								'application/json' => 'yii\web\JsonParser' 
-						] 
-				] 
+				'request' => [
+						'parsers' => [
+								'application/json' => 'yii\web\JsonParser'
+						]
+				],
+				'assetManager' => [
+						'bundles' => [
+								'yii\web\JqueryAsset' => [
+// 										'jsOptions' => [ 'position' => \yii\web\View::POS_HEAD ],
+										'js' => [],
+								],
+								'yii\web\YiiAsset' => [
+										'jsOptions' => [ 'position' => \yii\web\View::POS_BEGIN ],
+										'depends' => [],
+								],
+						],
+				],
 		],
-		'params' => $params 
+		'params' => $params
 ];

@@ -26,18 +26,97 @@ class BookingController extends ActiveController {
 				'class' => HttpBearerAuth::className (),
 				'only' => [
 						'create',
-						'delete'
+						'delete',
+						'index',
+						'view',
+						'approve',
+						'disapprove'
 				]
 		];
 		return $behaviors;
 	}
 	public function checkAccess($action, $model = null, $params = []) {
-		if ($action === 'delete') {
-			Yii::warning($model->renter_id);
-			Yii::warning(Yii::$app->user->id);
+		if (in_array($action, ['delete','view','approve','disapprove']) && $model == null)
+		{
+			throw new \yii\web\ForbiddenHttpException ('Object not found');
+		}
+		if ($action === 'delete') {			
 			if ($model->renter_id !== \Yii::$app->user->id)
 				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You can only %s bookings that belong to you.', $action ) );
 		}
+		else if ($action === 'index')
+		{
+			$renterId = Yii::$app->request->get('renter_id',null);
+			$ownerId = Yii::$app->request->get('owner_id',null);
+			if ($renterId === null && $ownerId === null)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+			else if ($renterId !== null && $renterId != \Yii::$app->user->id)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+			else if ($ownerId !== null && $ownerId != \Yii::$app->user->id)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+		}
+		else if ($action === 'view')
+		{
+			if ($model->renter_id != \Yii::$app->user->id && $model->owner_id != \Yii::$app->user->id)
+			{
+				throw new \yii\web\ForbiddenHttpException ('You are not allowed to see these bookings.');
+			}
+		}
+		else if ($action === 'approve' || $action === 'disapprove')
+		{
+			if ($model->owner_id !== \Yii::$app->user->id)
+				throw new \yii\web\ForbiddenHttpException ( sprintf ( 'You cannot change the status of this booking.', $action ) );
+		}
+	}
+	public function actionApprove($id) {
+		$model = \common\models\Booking::findOne($id);
+		$this->checkAccess('approve',$model);
+		$existingModel = $this->modelClass::find()->where('(
+			date_start BETWEEN :date_start AND :date_end
+			OR date_end BETWEEN :date_start AND :date_end
+			OR (date_start < :date_start AND date_end > :date_end))',[':date_start'=>$model->date_start,':date_end'=>$model->date_end])
+			->andFilterWhere(['status'=>1,'car_id'=>$model->car_id])
+			->one();
+			
+		if (count($existingModel)>0)
+		{
+			Yii::$app->response->setStatusCode(422,'This car cannot be approved for these dates.');
+			return $existingModel;
+		}
+				
+		if ($model->status == 0)
+		{
+			$model->status = 1;
+			$model->save();
+		}
+		else
+		{
+			Yii::$app->response->setStatusCode(422,'You have already set the status of this booking.');
+			return $model;
+		}
+		
+		return $model;
+	}
+	public function actionDisapprove($id) {
+		$model = \common\models\Booking::findOne($id);
+		$this->checkAccess('disapprove',$model);
+		if ($model->status == 0)
+		{
+			$model->status = 2;
+			$model->save();
+		}
+		else
+		{
+			Yii::$app->response->setStatusCode(422,'You have already set the status of this booking.');
+			return $model;
+		}
+		return $model;
 	}
 	public function actionCreate() {		
 		$model = new $this->modelClass([]);
@@ -53,6 +132,11 @@ class BookingController extends ActiveController {
 		else
 			$model->status = 0;
 		
+		if ($model->renter_id == $model->owner_id)
+		{
+			$response->setStatusCode(422,'You cannot book your own car.');
+			return $model;
+		}
 		if ($model->validate()) {
 			
 			
@@ -90,7 +174,6 @@ class BookingController extends ActiveController {
 		} elseif (!$model->hasErrors()) {
 			throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
 		} else {
-			Yii::warning('validation failed?');
 			return $model->errors;
 		}
 		
@@ -106,6 +189,7 @@ class BookingController extends ActiveController {
 				'car_id' => Yii::$app->request->getQueryParam('car_id',null),
 				'owner_id' => Yii::$app->request->getQueryParam('owner_id',null),
 				'renter_id' => Yii::$app->request->getQueryParam('renter_id',null),
+				'status'=> Yii::$app->request->getQueryParam('status',null),
 		]);
 		
 		return $dataProvider;

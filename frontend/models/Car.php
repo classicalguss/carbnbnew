@@ -86,7 +86,7 @@ class Car extends \yii\db\ActiveRecord {
 				4=>'Sunroof',
 				5=>'Heated Seats',
 				6=>'Bluetooth',
-				7=>'Part Assist',
+				7=>'Park Assist',
 				8=>'GPS',
 				9=>'Power Steering',
 				10=>'USB',
@@ -162,6 +162,16 @@ class Car extends \yii\db\ActiveRecord {
 				]
 		];
 	}
+	public function getPhotos()
+	{
+		$res=[];
+		foreach ([$this->photo1,$this->photo2,$this->photo3,$this->photo4,$this->photo5,$this->photo6] as $photo)
+		{
+			if (!empty($photo))
+				$res[$photo]=Yii::$app->params ['imagesFolder'] .$photo;
+		}
+		return $res;
+	}
 	public function getRules() {
 		return [
 				$this->rule_1,
@@ -220,6 +230,16 @@ class Car extends \yii\db\ActiveRecord {
 		}
 		return $returnArray;
 	}
+	public function getAssociateFeatures() {
+		$res = [];
+		$featuresArray = explode(',',$this->features);
+		foreach ($featuresArray as $feature)
+		{
+			if (isset(self::featuresArray()[$feature]))
+				$res[$feature] = self::featuresArray()[$feature];
+		}
+		return $res;
+	}
 	public function fields() {
 		return [
 				'id',
@@ -251,6 +271,7 @@ class Car extends \yii\db\ActiveRecord {
 			->joinWith('model',true,'INNER JOIN')
 // 			->joinWith('ratings')
 			->where('carmake.id = carmodel.make_id AND car.is_featured = 1')
+			->andWhere('car.is_published = 1')
 			->limit($limit)
 			->all();
 	}
@@ -265,12 +286,14 @@ class Car extends \yii\db\ActiveRecord {
 			$return[$row->car_id] = [$row->sum, $row->count];
 		return $return;
 	}
-	public static function getRecentlyListed($limit=20)
+	public static function getRecentlyListed($limit=20, $excludedCarIds=[])
 	{
 		return self::find()
 			->joinWith('make',true,'INNER JOIN')
 			->joinWith('model',true,'INNER JOIN')
 			->where('carmake.id = carmodel.make_id')
+			->andWhere('car.is_published = 1')
+			->andFilterWhere(['not in','car.id',$excludedCarIds])
 			->orderBy('created_at DESC')
 			->limit($limit)
 			->all();
@@ -286,6 +309,7 @@ class Car extends \yii\db\ActiveRecord {
 			->joinWith('model',true,'INNER JOIN')
 			->where('carmake.id = carmodel.make_id')
 			->andWhere(['car.make_id'=>$featuredCarMakesIds])
+			->andWhere('car.is_published = 1')
 			->orderBy('created_at DESC')
 			->limit($carsLimit)
 			->all();

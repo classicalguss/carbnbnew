@@ -3,31 +3,27 @@
 namespace frontend\assets;
 
 use yii\web\AssetBundle;
-use frontend;
 use yii\web\View;
 
 /**
  * Main frontend application asset bundle.
  */
-class AppAsset extends AssetBundle
+class JqueryUIAsset extends AssetBundle
 {
 	public $basePath = '@webroot';
 	public $baseUrl = '@web';
 	public $css = [
-		'dist/css/site.css',
-		'dist/css/app.css',
 	];
 	public $js = [
-		'dist/js/vendors.js',
-		'dist/js/app.js'
+		'js/jquery-ui.min.js',
 	];
 
 	public $depends = [
-		'yii\web\YiiAsset'
+		'frontend\assets\AppAsset',
 	];
 
 	public function init() {
-		$this->jsOptions['position'] = View::POS_HEAD;
+		$this->jsOptions['position'] = View::POS_END;
 		parent::init();
 	}
 }

@@ -18,6 +18,13 @@ class Area extends \yii\db\ActiveRecord
 			'id'=>'city_id'	
 		]);
 	}
+	
+	public function fields()
+	{
+		$fields = parent::fields();
+		$fields[] = 'city';
+		return $fields;
+	}
     /**
      * @inheritdoc
      */

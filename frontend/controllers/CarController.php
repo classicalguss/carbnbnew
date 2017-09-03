@@ -13,6 +13,14 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\base\Model;
+use frontend\models\carDetailsForm;
+use frontend\models\carFeaturesForm;
+use frontend\models\carPhotosForm;
+use frontend\models\carPublishForm;
+use common\models\Carmodel;
+use common\models\Booking;
+use yii\web\UploadedFile;
+use yii\db\Expression;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -29,11 +37,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['update', 'delete'],
+				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish'],
 				'rules' => [
 					[
 						'allow' => true,
-						'actions' => ['update', 'delete'],
+						'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish'],
 						'roles' => ['@'],
 					],
 				],
@@ -42,6 +50,7 @@ class CarController extends Controller
 				'class' => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['POST'],
+					'toggle-publish' => ['POST'],
 				],
 			],
 		];
@@ -93,21 +102,27 @@ class CarController extends Controller
 						->andWhere(['car.id'=>$id])
 						->one();
 
-		$ownerInfo   = $carModel->user;
+		if (empty($carModel))
+			throw new NotFoundHttpException ( 'The requested page does not exist.' );
+		if ($carModel->owner_id !== \Yii::$app->user->id && $carModel->is_published != 1)
+			throw new NotFoundHttpException ( 'The requested page does not exist.' );
+
+		$ownerInfo   = $carModel->user->attributes;
 		$carRatings  = $carModel->ratings;
 		$makeName    = $carModel->make->value;
 		$modelName   = $carModel->model->value;
 		$carInfo     = $carModel->attributes;
 
-		$carInfo['images']       = $carModel->getImages();
+		$carInfo['images']       = $carModel->getPhotos();
 		$carInfo['location']     = $carModel->getLocation();
 		$carInfo['makeName']     = $makeName;
 		$carInfo['modelName']    = $modelName;
-		$carInfo['features']     = $carModel->getFeaturesArray();
+		$carInfo['features']     = $carModel->getAssociateFeatures();
 		$carInfo['colorText']    = $carModel->colorText;
 		$carInfo['properties']   = $carModel->getProperties();
 		$carInfo['odometerText'] = $carModel->odometerText;
 
+		$ratingsSum  = 0;
 		$ratersInfo  = [];
 
 		if (!empty($carRatings))
@@ -116,16 +131,23 @@ class CarController extends Controller
 			$ratersIds=[];
 			foreach ($carRatings as $rating)
 			{
-				$rateTmp[] = $rating->attributes;
+				$ratingsSum += $rating->rating;
+				$rateTmp[]   = $rating->attributes;
 				$ratersIds[] = $rating->user_id; // to get info about the user who rated this car.
 			}
 			$carRatings = $rateTmp;
 
 			$ratersInfo = User::find()->where(['id'=>$ratersIds])->all();
 			$ratersInfo = \common\models\Util::getModelAttributes($ratersInfo);
+			$ratersTmp = array();
+			foreach ($ratersInfo as $rater)
+			{
+				$ratersTmp[$rater['id']] = $rater;
+			}
+			$ratersInfo = $ratersTmp;
 		}
 
-		$recentlyListed   = Car::getRecentlyListed(3);
+		$recentlyListed   = Car::getRecentlyListed(3, [$id]);
 		foreach ($recentlyListed as $car)
 			$recentlyListedCarIds[] = $car->id;
 		$recentlyListedCarsRatings = Car::getAllRatings($recentlyListedCarIds);
@@ -143,9 +165,9 @@ class CarController extends Controller
 			'carInfo'        => $carInfo,
 			'ownerInfo'      => $ownerInfo,
 			'carRatings'     => $carRatings,
+			'ratingsSum'     => $ratingsSum,
 			'ratersInfo'     => $ratersInfo,
 			'recentlyListedHTML' => $recentlyListedHTML,
-				'p'=>$carInfo,
 		]);
 	}
 
@@ -154,15 +176,49 @@ class CarController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
-	public function actionCreate()
+	public function actionListACar()
 	{
 		$model = new Car();
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		$postedData = Yii::$app->request->post();
+		$allFormsData  = [];
+		$allFormsNames = ['carDetailsForm','carFeaturesForm','carPhotosForm','carPublishForm'];
+		foreach ($allFormsNames as $formName)
+		{
+			if (isset($postedData[$formName]))
+				$allFormsData = array_merge($allFormsData, $postedData[$formName]);
+		}
+
+		$model->load(['Car'=>$allFormsData]);
+		$model->owner_id = Yii::$app->user->id;
+		$model->photoFile1 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile1]' );
+		$model->photoFile2 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile2]' );
+		$model->photoFile3 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile3]' );
+		$model->photoFile4 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile4]' );
+		$model->photoFile5 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile5]' );
+		$model->photoFile6 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile6]' );
+		$model->features   = isset($allFormsData['features']) ? implode(',', $allFormsData['features']) : '';
+		$model->scenario = 'create';
+
+		if ($model->save())
+		{
+			$model->upload();
 			return $this->redirect(['view', 'id' => $model->id]);
-		} else {
+		}
+		else
+		{
+			$models = [
+					'carDetailsModel'  => new carDetailsForm(),
+					'carFeaturesModel' => new carFeaturesForm(),
+					'carPhotosModel'   => new carPhotosForm(),
+					'carPublishModel'  => new carPublishForm(),
+			];
+			foreach ($models as &$modelObject)
+			{
+				$modelObject->load($postedData);
+			}
 			return $this->render('create', [
-				'model' => $model,
+				'models' => $models,
 			]);
 		}
 	}
@@ -193,12 +249,101 @@ class CarController extends Controller
 	 * @param string $id
 	 * @return mixed
 	 */
-	public function actionDelete($id)
+	public function actionDelete()
 	{
-		$this->findModel($id)->delete();
+		$id = Yii::$app->request->post ('id', null);
+		$model = $this->findModel($id);
 		$this->checkAccess($model);
 
-		return $this->redirect(['search']);
+		$model->delete();
+		return $this->redirect(['your-cars']);
+	}
+
+	/**
+	 * List all created cars for logged in user.
+	 * @return mixed
+	 */
+	public function actionYourCars()
+	{
+		$userId = Yii::$app->user->id;
+
+		$imagesPath     = Yii::$app->params['imagesFolder'];
+		$siteImagesPath = Yii::$app->params['siteImagesPath'];
+
+		$carModel = Car::find()
+			->joinWith('make',true,'INNER JOIN')
+			->joinWith('model',true,'INNER JOIN')
+			->where('carmake.id = carmodel.make_id')
+			->andWhere(['car.owner_id'=>$userId])
+			->orderBy('car.is_published DESC, car.created_at DESC')
+			->all();
+
+		$carIds = [];
+		foreach ($carModel as $car)
+			$carIds[] = $car->id;
+
+		$bookings = Booking::find()
+			->select(['car_id','count(*) as count'])
+			->where(['car_id'=>$carIds])
+			->andWhere(['status'=>1])
+			->andWhere(['<', 'date_start', new Expression('NOW()')])
+			->groupBy('car_id')
+			->indexBy('car_id')
+			->all();
+
+		$publishedCars   = [];
+		$unPublishedCars = [];
+
+		foreach ($carModel as $car)
+		{
+			$trips = 0;
+			if (isset($bookings[$car->id]))
+				$trips = $bookings[$car->id]->count;
+			$carDetails = [
+					'id' => $car->id,
+					'make'  => $car->make->value,
+					'model' => $car->model->value,
+					'trips' => $trips,
+					'year_model' => $car->year_model,
+					'updated_at' => date("F d, Y", strtotime($car->created_at)),
+			];
+
+			if ($car->is_published == 1)
+				$publishedCars[] = $carDetails;
+			else
+				$unPublishedCars[] = $carDetails;
+		}
+
+		return $this->render('yourCarsView', [
+				'imagesPath'     => $imagesPath,
+				'siteImagesPath' => $siteImagesPath,
+				'publishedCars'  => $publishedCars,
+				'unPublishedCars' => $unPublishedCars,
+				'p'=>$bookings,
+		]);
+	}
+
+	/**
+	 * Change car publish status
+	 * @return mixed
+	 */
+	public function actionTogglePublish()
+	{
+		$id = Yii::$app->request->post ('id', null);
+		$model = $this->findModel($id);
+		$this->checkAccess($model);
+
+		$publishStatus = Yii::$app->request->post ('is_published', null);
+		if ($publishStatus === null)
+			throw new \yii\web\ForbiddenHttpException ( 'missing publish status' );
+
+		$publishStatus= ($publishStatus== 1 ? 1 : 0);
+
+		$model->is_published = $publishStatus;
+
+		if ($model->save())
+			return $this->redirect(['your-cars']);
+		throw new \yii\web\ForbiddenHttpException ( 'Error editing publish status' );
 	}
 
 	/**
@@ -220,5 +365,10 @@ class CarController extends Controller
 	public static function getCarViewUrl($id)
 	{
 		return Url::to(['car/view/','id'=>$id]);
+	}
+
+	public function actionGetCarMakeModels($id)
+	{
+		return $this->renderAjax('carModelsDropDownListView', ['list'=>Carmodel::getCarMakeModels($id)]);
 	}
 }

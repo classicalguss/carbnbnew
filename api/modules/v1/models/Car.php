@@ -10,6 +10,7 @@ use common\models\Area;
 use common\models\City;
 use common\models\Util;
 use common\models\Carmake;
+use common\models\Booking;
 
 /**
  * This is the model class for table "car".
@@ -193,6 +194,13 @@ class Car extends \yii\db\ActiveRecord {
 				])
 		];
 	}
+	public function getArea() {
+		$area = $this->hasOne( Area::className(),[
+				'id'=>'area_id'
+		]);
+		
+		return $area;
+	}
 	public function getLocation() {
 		$city = City::findOne([
 				'id'=>$this->city_id
@@ -239,9 +247,13 @@ class Car extends \yii\db\ActiveRecord {
 				'owner_id',
 				'carModel',
 				'rate',
-				'milage_limitation'
-				
+				'milage_limitation',
+				'area',
+				'numberOfBookings'
 		];
+	}
+	public function getNumberOfBookings () {
+		return Booking::find()->where('car_id = :car_id AND status = 1',['car_id'=>$this->id])->count();
 	}
 	public function getRate() {
 		return Rating::find()->where('car_id=:id',[':id'=>$this->id])->average('rating');
@@ -264,7 +276,7 @@ class Car extends \yii\db\ActiveRecord {
 				'properties',
 				'location',
 				'similar',
-				'make'
+				'make',
 		];
 	}
 	

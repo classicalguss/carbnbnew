@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use api\modules\v1\models\User;
+use api\modules\v1\models\Car;
 
 /**
  * This is the model class for table "booking".
@@ -18,6 +19,7 @@ use api\modules\v1\models\User;
  */
 class Booking extends \yii\db\ActiveRecord
 {
+	public $count;
     /**
      * @inheritdoc
      */
@@ -25,7 +27,36 @@ class Booking extends \yii\db\ActiveRecord
     {
         return 'booking';
     }
-    
+
+    public function getOwner() {
+    	return $this->hasOne ( User::className (), [
+    			'id' => 'owner_id'
+    	] );
+    }
+    public function getRenter() {
+    	return $this->hasOne ( User::className (), [
+    			'id' => 'renter_id'
+    	] );
+    }
+    public function getCar() {
+    	return $this->hasOne (Car::className(), [
+    			'id' => 'car_id'
+    	]);
+    }
+    public function fields() {
+    	return [
+    			'id',
+    			'car_id',
+    			'date_start',
+    			'date_end',
+    			'owner',
+    			'renter',
+    			'status',
+    			'statusMessage',
+    			'car',
+    			'delivery_time'
+    	];
+    }
     /**
      * @inheritdoc
      */
@@ -34,7 +65,7 @@ class Booking extends \yii\db\ActiveRecord
         return [
             [['car_id', '!owner_id', '!renter_id', 'date_start', 'date_end', '!status'], 'required'],
             [['car_id', 'owner_id', 'renter_id', 'status'], 'integer'],
-            [['date_start', 'date_end'], 'safe'],
+        	[['date_start', 'date_end','delivery_time'], 'safe'],
         	[['car_id'], 'validateIsPublished'],
         	[['car_id'], 'validateUserHavePendingBooking'],
         	[['date_start','date_end'],'date','format'=>'yyyy-MM-dd'],
@@ -58,21 +89,21 @@ class Booking extends \yii\db\ActiveRecord
             'status' => '0: Pending, 1: Approved, 2: Declined',
         ];
     }
-    
+
     public function validateIsPublished($attribute,$params,$validator)
     {
     	$carModel = Car::findOne($this->$attribute);
     	if (is_null($carModel) || !$carModel->is_published)
     		$this->addError($attribute,'This is not a published Car!');
     }
-    
+
     public function validateUserHavePendingBooking($attribute,$params,$validator)
     {
     	$carModel = Booking::find()->andFilterWhere(['renter_id'=>$this->renter_id,'status'=>0]);
     	if (is_null($carModel))
     		$this->addError($attribute,'You already have a pending booking to this Car!');
     }
-    
+
     public function getStatusMessage()
     {
     	if ($this->status == 0)

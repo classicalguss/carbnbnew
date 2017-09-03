@@ -61,4 +61,12 @@ class Carmake extends \yii\db\ActiveRecord
 		}
 		return $res;
 	}
+
+	public static function getAllCarMakes()
+	{
+		$res = [];
+		foreach (self::find()->select(['id','value'])->all() as $carMake)
+			$res[$carMake->id]=$carMake->value;
+		return $res;
+	}
 }
