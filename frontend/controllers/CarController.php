@@ -341,8 +341,12 @@ class CarController extends Controller
 
 		$model->is_published = $publishStatus;
 
+		$newStatus = ($publishStatus== 1 ? 'Published' : 'Unpublished');
 		if ($model->save())
+		{
+			Yii::$app->session->setFlash ( 'success', 'Car status changed to '.$newStatus );
 			return $this->redirect(['your-cars']);
+		}
 		throw new \yii\web\ForbiddenHttpException ( 'Error editing publish status' );
 	}
 
