@@ -271,6 +271,7 @@ class Car extends \yii\db\ActiveRecord {
 			->joinWith('model',true,'INNER JOIN')
 // 			->joinWith('ratings')
 			->where('carmake.id = carmodel.make_id AND car.is_featured = 1')
+			->andWhere('car.is_published = 1')
 			->limit($limit)
 			->all();
 	}
@@ -291,6 +292,7 @@ class Car extends \yii\db\ActiveRecord {
 			->joinWith('make',true,'INNER JOIN')
 			->joinWith('model',true,'INNER JOIN')
 			->where('carmake.id = carmodel.make_id')
+			->andWhere('car.is_published = 1')
 			->andFilterWhere(['not in','car.id',$excludedCarIds])
 			->orderBy('created_at DESC')
 			->limit($limit)
@@ -307,6 +309,7 @@ class Car extends \yii\db\ActiveRecord {
 			->joinWith('model',true,'INNER JOIN')
 			->where('carmake.id = carmodel.make_id')
 			->andWhere(['car.make_id'=>$featuredCarMakesIds])
+			->andWhere('car.is_published = 1')
 			->orderBy('created_at DESC')
 			->limit($carsLimit)
 			->all();

@@ -19,6 +19,7 @@ use api\modules\v1\models\Car;
  */
 class Booking extends \yii\db\ActiveRecord
 {
+	public $count;
     /**
      * @inheritdoc
      */
@@ -26,7 +27,7 @@ class Booking extends \yii\db\ActiveRecord
     {
         return 'booking';
     }
-    
+
     public function getOwner() {
     	return $this->hasOne ( User::className (), [
     			'id' => 'owner_id'
@@ -88,21 +89,21 @@ class Booking extends \yii\db\ActiveRecord
             'status' => '0: Pending, 1: Approved, 2: Declined',
         ];
     }
-    
+
     public function validateIsPublished($attribute,$params,$validator)
     {
     	$carModel = Car::findOne($this->$attribute);
     	if (is_null($carModel) || !$carModel->is_published)
     		$this->addError($attribute,'This is not a published Car!');
     }
-    
+
     public function validateUserHavePendingBooking($attribute,$params,$validator)
     {
     	$carModel = Booking::find()->andFilterWhere(['renter_id'=>$this->renter_id,'status'=>0]);
     	if (is_null($carModel))
     		$this->addError($attribute,'You already have a pending booking to this Car!');
     }
-    
+
     public function getStatusMessage()
     {
     	if ($this->status == 0)
