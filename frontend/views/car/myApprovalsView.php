@@ -15,8 +15,6 @@ $this->title = 'Your Cars';
 	<h2>Published</h2>
 	<?php foreach ($publishedCars as $car):?>
 		<div>
-			<img alt="" src="<?=$car['photo']?>" width="280" height="164">
-			<br/>
 			<?=$car['make']?> <?=$car['model']?> <?=$car['year_model']?>
 			<br/>
 			<?=$car['trips']?> Trips
@@ -41,7 +39,7 @@ $this->title = 'Your Cars';
 	<h2>Unpublished</h2>
 	<?php foreach ($unPublishedCars as $car):?>
 		<div>
-			<img alt="" src="<?=$car['photo']?>" width="280" height="164">
+			<?=$car['id']?>
 			<br/>
 			<?=$car['make']?> <?=$car['model']?> <?=$car['year_model']?>
 			<br/>
