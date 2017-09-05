@@ -1,0 +1,71 @@
+@import "../bootstrap-variables";
+@import "../../../node_modules/slick-carousel/slick/slick.scss";
+
+.grid-carousel{
+  visibility: hidden;
+  margin-bottom: 80px;
+  position: relative;
+  cursor: default;
+  
+  header{
+    margin-bottom: 30px;
+    
+    a{
+      color: $gray-light;
+    }
+  }
+  .single-item{
+    margin-right: 15px;
+    margin-left: 15px;
+    
+    a{
+      color: $gray-dark
+    }
+    
+    .img-wrap{
+      margin-bottom: 12px;
+      img{
+        width: 100%;
+      }
+    }
+    h3{
+      font-size: 14px;
+      max-width: 70%;
+      line-height: 18px;
+    }
+    .price{
+      position: relative;
+      top: -3px;
+    }
+  }
+  .slick-arrow{
+    position: absolute;
+    display: block;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    text-align: center;
+    top: calc(45% - 20px);
+    color: $gray-light;
+    cursor: pointer;
+    &:hover{
+      color: $gray-dark;
+    }
+    &.slick{
+      &-prev{
+        left: -15px;
+      }
+      &-next{
+        right: -15px;
+      }
+      &-disabled{
+        display: none;
+      }
+    }
+  }
+  .total-reviews{
+    font-size: 12px;
+    color: $gray-light;
+    margin-left: 6px
+  }
+}

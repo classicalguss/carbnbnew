@@ -1,0 +1,52 @@
+@import "../global-variables";
+.single-item-lg{
+  margin-bottom: 60px;
+  
+  .view-list &{
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px;
+  }
+  
+  .img-wrap{
+    margin-bottom: 20px;
+    a{}
+    img{}
+  }
+  .title{
+    
+    a{
+      color: $gray-base;
+      font-size: 18px;
+      margin-bottom: 15px;
+      display: block;
+    }
+  }
+  .price{
+    font-size: 28px;
+    line-height: 28px;
+    small{
+      font-size: 14px;
+    }
+  }
+  .total-reviews{
+    font-size: 12px;
+    color: $gray-light;
+    margin-left: 6px
+  }
+  p{
+    height: 40px;
+    overflow: hidden;
+    margin: 15px 0;
+  }
+  .list-features{
+    > li {
+      text-align: center;
+      color: $gray-light;
+      i{
+        font-size: 17px;
+        display: block;
+        color: $gray-base
+      }
+    }
+  }
+}

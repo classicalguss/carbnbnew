@@ -8,7 +8,16 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
 
-AppAsset::register ( $this );
+AppAsset::register($this);
+
+// Assets file Name based on controller ID
+$assetsFileName = Yii::app()->controller->id;
+
+// Register CSS files per controller
+$this->registerCssFile("@web/dist/css/{$assetsFileName}.css", ['media' => 'screen'], $assetsFileName);
+
+// To register javascript files per controller if needed.
+// $this->registerJsFile("@web/dist/js/{$assetsFileName}.js",['position' => \yii\web\View::POS_END], $assetsFileName);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

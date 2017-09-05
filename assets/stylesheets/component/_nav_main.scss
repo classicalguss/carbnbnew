@@ -1,0 +1,19 @@
+.main-nav{
+  padding: 30px 0;
+  
+  ul.list-links{
+    margin: 0;
+  }
+  a:not(.btn){
+    color: $gray-dark;
+    display: block;
+    font-size: 14px
+  }
+  .user-profile{
+    display: inline-block;
+    
+    &:hover, &:active, &:focus{
+      text-decoration: none;
+    }
+  }
+}

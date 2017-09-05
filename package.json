@@ -1,0 +1,37 @@
+{
+  "name": "uchaise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-connect-php": "^1.0.1",
+    "gulp-jshint": "^2.0.4",
+    "jshint": "^2.9.5",
+    "lodash": "^4.17.4"
+  },
+  "dependencies": {
+    "@fancyapps/fancybox": "^3.1.20",
+    "bootstrap-daterangepicker": "^2.1.25",
+    "bootstrap-sass": "^3.3.7",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.2.0",
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1",
+    "omni-slider": "^1.2.1",
+    "pump": "^1.0.1",
+    "slick-carousel": "^1.7.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zahrnhsn@gmail.com",
+  "license": "UNLICENSED",
+  "private": true
+}

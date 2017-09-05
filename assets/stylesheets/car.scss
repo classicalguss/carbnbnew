@@ -1,0 +1,223 @@
+@import "../../node_modules/@fancyapps/fancybox/dist/jquery.fancybox";
+@import "../../node_modules/bootstrap-daterangepicker/daterangepicker.scss";
+@import "global-variables";
+@import "component/nav_two";
+@import "component/grid-carousel";
+@import "component/car-listing";
+@import "component/car-details";
+
+.car-view-slider {
+  max-height: 400px;
+  overflow: hidden;
+  margin-bottom: 40px;
+  .item {
+    .view-photos {
+    position: absolute;
+    color: #333;
+    font-size: 14px;
+    padding: 12px 20px;
+    bottom: 30px;
+    left: 30px;
+    border-radius: 3px;
+    background-color: #fff;
+    border: solid 1px #cbcbcb;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+    &:hover {
+      background-color: #f9f9f9;
+      text-decoration: none;
+      }
+    }
+  }
+}
+.car-view {
+  padding-bottom: 20px;
+  border-bottom: solid 1px #ededed;
+  h1 {
+    font-size: 35px;
+    font-weight: 900;
+    color: #4a4a4a;
+  }
+  h5 {
+    display: inline-block;
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
+    margin-top: 20px;
+  }
+  .total-reviews {
+    font-size: 12px;
+    color: #999;
+  }
+  .right-side {
+    text-align: right;
+    h6{
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 4px;
+      margin-top: 10px;
+    }
+    span {
+      font-size: 13px;
+      text-align: right;
+      color: #9b9b9b;
+    }
+  }
+}
+.list-options {
+  margin-bottom: 0;
+  li {
+    margin: 0 15px 15px 0;
+    text-align: center;
+    h5 {
+      margin-top: 15px;
+      font-size: 13px;
+    }
+    color: #999;
+    i {
+      font-size: 32px;
+     }
+    }
+  }
+  
+.car-content {
+  section {
+    padding: 30px 0;
+    border-bottom: solid 1px #ededed;
+    h3 {
+      font-size: 22px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+
+    .user-comments {
+      margin: 20px 0;
+      .user-img {
+        margin-right: 20px;
+      }
+      h6 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 4px;
+        margin-top: 15px;
+      }
+      time {
+        font-size: 13px;
+        color: #666;
+      }
+      .user-comment {
+        margin-bottom: 15px;
+      }
+      li {
+        border-bottom: solid 1px #ededed;
+        padding: 30px 0;
+      }
+    }
+    &:last-child{
+      border-bottom: 0;
+    }
+  }
+}
+.car-owner {
+  .car-owner-details {
+    h2 {
+      font-size: 22px;
+      margin: 25px 0 5px;
+    }
+    h6 {
+      display: inline-block;
+      font-size: 15px;
+      color: #666;
+      margin: 0 10px 0 0;
+    }
+    span {
+      color: #999;
+      font-size: 13px;
+    }
+  .user-img {
+    margin-right: 15px;
+    }
+  }
+  h3 {
+    font-size: 18px;
+    margin: 25px 0;
+  }
+  a {
+    margin: 25px 0;
+  }
+  margin-bottom: 50px;
+}
+.price-box {
+  margin-top: -100px;
+  .price-and-reserve {
+    margin-bottom: 40px;
+    border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 0 8px 15px 0 rgba(82, 85, 91, 0.27);
+    .price-details {
+      padding: 30px 30px 0px;
+    }
+    .price {
+      border-bottom: solid 1px #f2f2f2;
+      padding: 0 0 30px;
+      font-weight: normal;
+      font-size: 13px;
+      color: #555;
+      span {
+        color: #4a4a4a;
+        font-size: 25px;
+        margin-right: 10px;
+        font-weight: bold;
+        &:last-child {
+          font-size: 16px;
+          color: #555;
+        }
+      }
+    }
+    .total-price {
+      border-bottom: solid 1px #f2f2f2;
+      padding: 20px 0;
+      margin-bottom: 20px;
+      span {
+        margin: 0 5px;
+        &:last-child {
+          margin: 0;
+          font-size: 11px;
+          margin-left: -5px;
+        }
+      }
+      .price-per-days {
+        font-size: 20px;
+      }
+    }
+    .pick-up-time {
+      margin-bottom: 30px;
+      h5 {
+        margin-bottom: 20px;
+      }
+    }
+  }
+  .btn-save {
+     width: 240px;
+     margin: auto;
+     color: #333;
+     transition: color 0.2s ease;
+     &:hover {
+       color: #666;
+     }
+  }
+  .social-media-view {
+    margin: 30px auto;
+    text-align: center;
+    a {
+      color: #888;
+      font-size: 20px;
+      transition: color 0.2s ease;
+      &:hover {
+        color: #111;
+      }
+    }
+  }
+}

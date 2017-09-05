@@ -1,7 +1,7 @@
 <?php
 
-use frontend\assets\CarViewAsset;
-CarViewAsset::register($this);
+use yii\helpers\Html;
+use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
@@ -13,7 +13,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 <!-- Slider -->
 <div class="container wide">
 	<div class="full-width-slider">
-		<div id="carousel-full-width" class="carousel slide car-details-slider" data-ride="carousel">
+		<div id="carousel-full-width" class="carousel slide car-view-slider" data-ride="carousel">
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
 			<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
@@ -40,7 +40,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 	<div class="row">
 		<div class="col-md-8">
 			<!-- Car details -->
-			<div class="car-details clearfix">
+			<div class="car-view clearfix">
 				<div class="pull-left">
 					<h1><?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?></h1>
 					<h5><?=$carInfo['properties']['type_id']?></h5>
@@ -59,7 +59,14 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 				<section>
 					<h3>Description</h3>
 					<p>
+<<<<<<< HEAD
+						The new TT Quattro, an architectural rhapsody of circles and arches in which the promise of its
+						artistic form is paid off in full, both outside and inside the car, is a three-door, two-plus-two
+						sports coupe that is the ultimate gadget.Underpinning it is a new full, both outside and inside the car,
+						is a three-door, two-plus-two sports coupe that is the ultimate gadget.Under� <a href="#">See all</a>
+=======
 						<?=$carInfo['description']?>... <a href="#">See all</a>
+>>>>>>> 092e792d1182b1730bd334ab02dbaeb3deecd8b5
 					</p>
 				</section>
 

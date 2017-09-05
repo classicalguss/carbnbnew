@@ -1,8 +1,6 @@
 <?php
 
 /* @var $this yii\web\View */
-use frontend\assets\HomePageAsset;
-HomePageAsset::register($this);
 $this->title = 'Carbnb';
 ?>
 <main class="home-page content">
