@@ -92,7 +92,7 @@ class Car extends \yii\db\ActiveRecord {
 	public function getReviews() {
 		return $this->hasMany ( Rating::className (), [
 				'car_id' => 'id'
-		] )->sum('car_id');
+		] )->count('car_id');
 	}
 	public static function featuresArray() {
 		return [

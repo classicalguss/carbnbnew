@@ -15,6 +15,7 @@ class HomePageAsset extends AssetBundle
         'css/home-page.css',
     ];
     public $js = [
+    		'js/jquery-migrate-3.0.0.js'
     ];
 
     public $depends = [

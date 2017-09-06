@@ -18,8 +18,7 @@ use frontend\models\Car;
 		<h4 class="bold">Filters</h4>
 	</div>
 	<div class="pull-right">
-		<a class="form-clear text-gray" href="<?=Url::toRoute('search/index')?>">Clear
-			All</a>
+		<a class="form-clear text-gray" href="<?=Yii::$app->request->url?>">Clear All</a>
 	</div>
 </div>
 <?php
@@ -36,6 +35,8 @@ use frontend\models\Car;
 				'fieldConfig'=>['options'=>['tag'=>false],'template'=>"{input}\n{label}\n{hint}\n{error}"]
 		] );
 ?>
+	<?= $form->field($model, 'area_id')->input('hidden')->label(false)?>
+	<?= Html::hiddenInput('daterange', Yii::$app->request->getQueryParam('daterange'));?>
 	<ul class="list-unstyled general-filters">
 		<li class="row-small-gutter">
 			<div class="col col-xs-9">

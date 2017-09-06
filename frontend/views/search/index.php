@@ -38,19 +38,18 @@ $this->title = 'Carbnb2';
 						</div>
 					</div>
 				
-				<div class="search-list view-grid" data-thumb-class="view-grid" data-list-class="view-list">
 						<?php echo ListView::widget([
-						    'dataProvider' => $dataProvider,
-						    'itemView' => '_item',
+							'dataProvider' => $dataProvider,
+							'itemView' => '_item',
 							'itemOptions'=>[
 								'data-thumb-class'=>'col-md-6',
 								'data-list-class'=>'col-md-12',
 								'class'=>'col-md-6'
 							],
 							'summary'=>'',
-							'options'=>['class'=>'row']
+							'options'=>['class'=>'search-list view-grid','data-thumb-class'=>'view-grid','data-list-class'=>'view-list'],
+							'layout'=>'<div class="row">{items}</div><div class="text-center">{pager}</div>'
 						]);?>
-				</div>
 			<?php EPjax::end(); ?>
 		</div>
 </div>

@@ -18,6 +18,7 @@ class CarSearch extends Car {
 	public $max_price;
 	public $min_milage_limitation;
 	public $max_milage_limitation;
+	public $test;
 	/**
 	 * @inheritdoc
 	 */
