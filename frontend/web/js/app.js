@@ -5,28 +5,24 @@ var breakpoint = {
 };
 
 $(function(){
-  console.log('App init');
-  initRangeDatepicker();
   initSlickCarousel();
   initCountUp();  
   initFancyBoxy();
   initLayoutSwitcher();
   
   // Initialize range slider
-  initRangeSlider('priceRangeSlider');
-  initRangeSlider('mileageRangeSlider');
 });
 /**
  * http://www.daterangepicker.com/
  */
-function initRangeDatepicker(){
+function initRangeDatepicker(startDate,endDate){
   $('input[name="daterange"]').daterangepicker(
   {
       locale: {
         format: 'YYYY-MM-DD'
       },
-      startDate: '2017-01-01',
-      endDate: '2017-12-31'
+      startDate: startDate,
+      endDate: endDate
   },
   function(start, end, label) { // callback
     // alert("A new date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
@@ -138,19 +134,22 @@ function initRangeSlider(id)
       max: sliderID.data('initial-end'),
       start: sliderID.data('start'),
       end: sliderID.data('end'),
-      overlap: true
+      overlap: true,
+
     });
 
     slider.subscribe('moving', function(data) {
       var dataLeft = roundTo(data.left,'down'),
           dataRight = roundTo(data.right, 'up');
-
       minText.text( dataLeft );
       maxText.text( dataRight );
       minValue.val( dataLeft );
       maxValue.val( dataRight );
     });
 
+    slider.subscribe('stop', function(data) {
+    	jQuery(minValue).submit();
+    });
     var dataLeft = roundTo(slider.getInfo().left, 'down'),
         dataRight = roundTo(slider.getInfo().right, 'up');
 

@@ -11,6 +11,7 @@ use common\models\City;
 use common\models\Util;
 use common\models\Carmake;
 use common\models\User;
+use common\models\Booking;
 
 /**
  * This is the model class for table "car".
@@ -18,7 +19,6 @@ use common\models\User;
  * @property string $id
  * @property integer $price
  * @property string $created_at
- * @property integer $rent_it_now
  * @property string $area_id //Will be the area within the city
  * @property string $description
  * @property integer $milage_limitation
@@ -54,6 +54,7 @@ use common\models\User;
  * @property integer $odometer
  * @property integer $is_published
  * @property integer $book_instantly
+ * @property integer $delivery
  */
 class Car extends \yii\db\ActiveRecord {
 	public $photoFile1; // The file instance of the model
@@ -65,7 +66,7 @@ class Car extends \yii\db\ActiveRecord {
 	public $photoFile1Array;
 	public $colorText;
 	public $odometerText;
-
+	public $max_price;
 	/**
 	 * @inheritdoc
 	 */
@@ -76,6 +77,22 @@ class Car extends \yii\db\ActiveRecord {
 		return $this->hasOne ( User::className (), [
 				'id' => 'owner_id'
 		] );
+	}
+	public function getBookings ()
+	{
+		return $this->hasMany(Booking::className(), [
+				'car_id' => 'id'
+		]);
+	}
+	public function getRate() {
+		return $this->hasMany ( Rating::className (), [
+				'car_id' => 'id'
+		] )->average('rating');
+	}
+	public function getReviews() {
+		return $this->hasMany ( Rating::className (), [
+				'car_id' => 'id'
+		] )->sum('car_id');
 	}
 	public static function featuresArray() {
 		return [
@@ -91,7 +108,7 @@ class Car extends \yii\db\ActiveRecord {
 				9=>'Power Steering',
 				10=>'USB',
 				11=>'ABS'
-
+				
 		];
 	}
 	public static function gearArray() {
@@ -261,71 +278,65 @@ class Car extends \yii\db\ActiveRecord {
 				'carModel',
 				'rate',
 				'milage_limitation'
-
+				
 		];
 	}
 	public static function getFeaturedCars($limit=20)
 	{
 		return self::find()
-			->joinWith('make',true,'INNER JOIN')
-			->joinWith('model',true,'INNER JOIN')
-// 			->joinWith('ratings')
-			->where('carmake.id = carmodel.make_id AND car.is_featured = 1')
-			->andWhere('car.is_published = 1')
-			->limit($limit)
-			->all();
+		->joinWith('make',true,'INNER JOIN')
+		->joinWith('model',true,'INNER JOIN')
+		// 			->joinWith('ratings')
+		->where('carmake.id = carmodel.make_id AND car.is_featured = 1')
+		->limit($limit)
+		->all();
 	}
 	public static function getAllRatings($carIds=[])
 	{
 		if (empty($carIds))
 			return [];
-		settype($carIds, 'array');
-		$return=[];
-		$ratings = Rating::find()->select(['car_id', 'sum(rating) as sum, count(rating) as count'])->where(['car_id'=>$carIds])->groupBy('car_id')->all();
-		foreach ($ratings as $row)
-			$return[$row->car_id] = [$row->sum, $row->count];
-		return $return;
+			settype($carIds, 'array');
+			$return=[];
+			$ratings = Rating::find()->select(['car_id', 'sum(rating) as sum, count(rating) as count'])->where(['car_id'=>$carIds])->groupBy('car_id')->all();
+			foreach ($ratings as $row)
+				$return[$row->car_id] = [$row->sum, $row->count];
+				return $return;
 	}
 	public static function getRecentlyListed($limit=20, $excludedCarIds=[])
 	{
 		return self::find()
-			->joinWith('make',true,'INNER JOIN')
-			->joinWith('model',true,'INNER JOIN')
-			->where('carmake.id = carmodel.make_id')
-			->andWhere('car.is_published = 1')
-			->andFilterWhere(['not in','car.id',$excludedCarIds])
-			->orderBy('created_at DESC')
-			->limit($limit)
-			->all();
+		->joinWith('make',true,'INNER JOIN')
+		->joinWith('model',true,'INNER JOIN')
+		->where('carmake.id = carmodel.make_id')
+		->andFilterWhere(['not in','car.id',$excludedCarIds])
+		->orderBy('created_at DESC')
+		->limit($limit)
+		->all();
 	}
 	public static function getFeaturedCarMakes($makesLimit=10, $carsLimit=10)
 	{
 		$featuredCarMakesIds = Carmake::getFeaturedCarMakesIds($makesLimit);
 		if (count($featuredCarMakesIds) == 0)
 			return ['cars'=>[],'carIds'=>[]];
-
-		$tmp = self::find()
+			
+			$tmp = self::find()
 			->joinWith('make',true,'INNER JOIN')
 			->joinWith('model',true,'INNER JOIN')
 			->where('carmake.id = carmodel.make_id')
 			->andWhere(['car.make_id'=>$featuredCarMakesIds])
-			->andWhere('car.is_published = 1')
 			->orderBy('created_at DESC')
 			->limit($carsLimit)
 			->all();
-
-		$carIds=[];
-		$carResults=[];
-		foreach ($tmp as $car)
-		{
-			$carIds[] = $car->id;
-			$make = $car->make->value;
-			$carResults[$make][] = $car;
-		}
-		return ['cars'=>$carResults,'carIds'=>$carIds];
-	}
-	public function getRate() {
-		return Rating::find()->where('car_id=:id',[':id'=>$this->id])->average('rating');
+			
+			$carIds=[];
+			$carResults=[];
+			foreach ($tmp as $car)
+			{
+				$carIds[] = $car->id;
+				$make = $car->make->value;
+				$carResults[$make][] = $car;
+			}
+			return ['cars'=>$carResults,'carIds'=>$carIds];
 	}
 	public function getCarRatings() {
 		return Rating::find()->where('car_id=:id',[':id'=>$this->id])->all();
@@ -355,7 +366,7 @@ class Car extends \yii\db\ActiveRecord {
 				'make'
 		];
 	}
-
+	
 	/**
 	 * @inheritdoc
 	 */
@@ -398,7 +409,6 @@ class Car extends \yii\db\ActiveRecord {
 				[
 						[
 								'price',
-								'rent_it_now',
 								'milage_limitation',
 								'owner_id',
 								'is_featured',
@@ -479,13 +489,14 @@ class Car extends \yii\db\ActiveRecord {
 				[
 						[
 								'report',
-								'book_instantly'
+								'book_instantly',
+								'delivery'
 						],
 						'safe'
 				]
 		];
 	}
-
+	
 	/**
 	 * @inheritdoc
 	 */
@@ -494,7 +505,6 @@ class Car extends \yii\db\ActiveRecord {
 				'id' => 'ID',
 				'price' => 'Price',
 				'created_at' => 'Created At',
-				'rent_it_now' => 'Rent It Now',
 				'area' => 'Area',
 				'description' => 'Description',
 				'milage_limitation' => 'Milage Limitation',
@@ -529,60 +539,63 @@ class Car extends \yii\db\ActiveRecord {
 		if (! parent::beforeSave ( $insert )) {
 			return false;
 		}
-
+		
 		if ($this->photoFile1 !== null)
 			$this->photo1 = Util::generateRandomString() . '_' . $this->photoFile1->name;
-
-		if ($this->photoFile2!== null)
-			$this->photo2 = Util::generateRandomString(). '_' . $this->photoFile2->name;
-
-		if ($this->photoFile3!== null)
-			$this->photo3 = Util::generateRandomString(). '_' . $this->photoFile3->name;
-
-		if ($this->photoFile4= null)
-			$this->photo4 = Util::generateRandomString(). '_' . $this->photoFile4->name;
-
-		if ($this->photoFile5!== null)
-			$this->photo5 = Util::generateRandomString(). '_' . $this->photoFile5->name;
-
-		if ($this->photoFile6!== null)
-			$this->photo6 = Util::generateRandomString(). '_' . $this->photoFile6->name;
-
-		return true;
+			
+			if ($this->photoFile2!== null)
+				$this->photo2 = Util::generateRandomString(). '_' . $this->photoFile2->name;
+				
+				if ($this->photoFile3!== null)
+					$this->photo3 = Util::generateRandomString(). '_' . $this->photoFile3->name;
+					
+					if ($this->photoFile4= null)
+						$this->photo4 = Util::generateRandomString(). '_' . $this->photoFile4->name;
+						
+						if ($this->photoFile5!== null)
+							$this->photo5 = Util::generateRandomString(). '_' . $this->photoFile5->name;
+							
+							if ($this->photoFile6!== null)
+								$this->photo6 = Util::generateRandomString(). '_' . $this->photoFile6->name;
+								
+								return true;
 	}
 	public function upload() {
 		if ($this->validate ()) {
-
+			
 			if ($this->photoFile1)
 				$this->photoFile1->saveAs ( '../../uploads/' . $this->photo1 );
-
-			if ($this->photoFile2)
-				$this->photoFile2->saveAs ( '../../uploads/' . $this->photo2 );
-
-			if ($this->photoFile3)
-				$this->photoFile3->saveAs ( '../../uploads/' . $this->photo3);
-
-			if ($this->photoFile4)
-				$this->photoFile4->saveAs ( '../../uploads/' . $this->photo4);
-
-			if ($this->photoFile5)
-				$this->photoFile5->saveAs ( '../../uploads/' . $this->photo5);
-
-			if ($this->photoFile6)
-				$this->photoFile6->saveAs ( '../../uploads/' . $this->photo6);
-
-			return true;
+				
+				if ($this->photoFile2)
+					$this->photoFile2->saveAs ( '../../uploads/' . $this->photo2 );
+					
+					if ($this->photoFile3)
+						$this->photoFile3->saveAs ( '../../uploads/' . $this->photo3);
+						
+						if ($this->photoFile4)
+							$this->photoFile4->saveAs ( '../../uploads/' . $this->photo4);
+							
+							if ($this->photoFile5)
+								$this->photoFile5->saveAs ( '../../uploads/' . $this->photo5);
+								
+								if ($this->photoFile6)
+									$this->photoFile6->saveAs ( '../../uploads/' . $this->photo6);
+									
+									return true;
 		} else {
 			return false;
 		}
 	}
 	public function afterFind() {
-		$this->odometerText = self::odometerArray()[$this->odometer];
-		$this->colorText = self::colorArray()[$this->color];
-		$this->photoFile1Array = [
-				'fileName' => $this->photo1,
-				'path' => Yii::$app->params ['imagesFolder'] . $this->photo1
-		];
+		if ($this->id !== null)
+		{
+			$this->odometerText = self::odometerArray()[$this->odometer];
+			$this->colorText = self::colorArray()[$this->color];
+			$this->photoFile1Array = [
+					'fileName' => $this->photo1,
+					'path' => Yii::$app->params ['imagesFolder'] . $this->photo1
+			];
+		}
 		return parent::afterFind();
 	}
 }

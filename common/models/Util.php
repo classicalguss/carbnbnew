@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use DateTime;
 class Util {
 
 	public static function generateRandomString($length = 10) {
@@ -32,6 +33,12 @@ class Util {
 		return $res;
 	}
 
+	public static function isValidDate($date‌​='')
+	{
+		$dt = DateTime::createFromFormat("Y-m-d", $date‌​);
+		return $dt !== false && !array_sum($dt->getLastErrors());
+	}
+	
 	public static function getCurrenciesList()
 	{
 		$list = [
@@ -97,7 +104,6 @@ class Util {
 			'HTG' => 'Haitian gourde',
 			'HUF' => 'Hungarian forint',
 			'IDR' => 'Indonesian rupiah',
-			'ILS' => 'Israeli new shekel',
 			'INR' => 'Indian rupee',
 			'IQD' => 'Iraqi dinar',
 			'IRR' => 'Iranian rial',
