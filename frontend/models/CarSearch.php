@@ -141,7 +141,7 @@ class CarSearch extends Car {
 				'book_instantly' => $this->book_instantly,
 				'delivery'=>$this->delivery
 		] );
-		$query->andFilterWhere(['in','year',$this->year_model]);
+		$query->andFilterWhere(['in','year_model',$this->year_model]);
 		$query->andFilterWhere(['in','type_id',$this->type_id]);
 		$query->andFilterWhere(['in','color',$this->color]);
 		$query->andFilterWhere(['in','gear_type_id',$this->gear_type_id]);
