@@ -63,6 +63,8 @@ class SearchController extends Controller
 		
     	$stats['min_price'] = floor($stats['min_price']/ 100) * 100;
     	$stats['max_price'] = ceil($stats['max_price']/ 100) * 100;
+    	$stats['min_milage_limitation'] = floor($stats['min_milage_limitation']/ 100) * 100;
+    	$stats['max_milage_limitation'] = ceil($stats['max_milage_limitation']/ 100) * 100;
     	
     	foreach (['min_price','max_price','min_milage_limitation','max_milage_limitation'] as $default)
     	{
