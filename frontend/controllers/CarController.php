@@ -18,7 +18,9 @@ use frontend\models\carFeaturesForm;
 use frontend\models\carPhotosForm;
 use frontend\models\carPublishForm;
 use common\models\Carmodel;
+use common\models\Booking;
 use yii\web\UploadedFile;
+use yii\db\Expression;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -35,11 +37,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['list-a-car','update', 'delete'],
+				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals'],
 				'rules' => [
 					[
 						'allow' => true,
-						'actions' => ['list-a-car','update', 'delete'],
+						'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals'],
 						'roles' => ['@'],
 					],
 				],
@@ -48,6 +50,7 @@ class CarController extends Controller
 				'class' => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['POST'],
+					'toggle-publish' => ['POST'],
 				],
 			],
 		];
@@ -98,6 +101,11 @@ class CarController extends Controller
 						->where('carmake.id = carmodel.make_id')
 						->andWhere(['car.id'=>$id])
 						->one();
+
+		if (empty($carModel))
+			throw new NotFoundHttpException ( 'The requested page does not exist.' );
+		if ($carModel->owner_id !== \Yii::$app->user->id && $carModel->is_published != 1)
+			throw new NotFoundHttpException ( 'The requested page does not exist.' );
 
 		$ownerInfo   = $carModel->user->attributes;
 		$carRatings  = $carModel->ratings;
@@ -241,12 +249,165 @@ class CarController extends Controller
 	 * @param string $id
 	 * @return mixed
 	 */
-	public function actionDelete($id)
+	public function actionDelete()
 	{
-		$this->findModel($id)->delete();
+		$id = Yii::$app->request->post ('id', null);
+		$model = $this->findModel($id);
 		$this->checkAccess($model);
 
-		return $this->redirect(['search']);
+		$model->delete();
+		return $this->redirect(['your-cars']);
+	}
+
+	/**
+	 * List all created cars for logged in user.
+	 * @return mixed
+	 */
+	public function actionYourCars()
+	{
+		$userId = Yii::$app->user->id;
+
+		$siteImagesPath = Yii::$app->params['siteImagesPath'];
+
+		$carModel = Car::find()
+			->joinWith('make',true,'INNER JOIN')
+			->joinWith('model',true,'INNER JOIN')
+			->where('carmake.id = carmodel.make_id')
+			->andWhere(['car.owner_id'=>$userId])
+			->orderBy('car.is_published DESC, car.created_at DESC')
+			->all();
+
+		$carIds = [];
+		foreach ($carModel as $car)
+			$carIds[] = $car->id;
+
+		$bookings = Booking::find()
+			->select(['car_id','count(*) as count'])
+			->where(['car_id'=>$carIds])
+			->andWhere(['status'=>1])
+			->andWhere(['<', 'date_start', new Expression('NOW()')])
+			->groupBy('car_id')
+			->indexBy('car_id')
+			->all();
+
+		$publishedCars   = [];
+		$unPublishedCars = [];
+
+		foreach ($carModel as $car)
+		{
+			$trips = 0;
+			if (isset($bookings[$car->id]))
+				$trips = $bookings[$car->id]->count;
+			$carDetails = [
+					'id' => $car->id,
+					'make'  => $car->make->value,
+					'model' => $car->model->value,
+					'trips' => $trips,
+					'photo' => Yii::$app->params['imagesFolder'].$car->photo1,
+					'year_model' => $car->year_model,
+					'updated_at' => date("F d, Y", strtotime($car->created_at)),
+			];
+
+			if ($car->is_published == 1)
+				$publishedCars[] = $carDetails;
+			else
+				$unPublishedCars[] = $carDetails;
+		}
+
+		return $this->render('yourCarsView', [
+				'siteImagesPath' => $siteImagesPath,
+				'publishedCars'  => $publishedCars,
+				'unPublishedCars' => $unPublishedCars,
+		]);
+	}
+
+	/**
+	 * Change car publish status
+	 * @return mixed
+	 */
+	public function actionTogglePublish()
+	{
+		$id = Yii::$app->request->post ('id', null);
+		$model = $this->findModel($id);
+		$this->checkAccess($model);
+
+		$publishStatus = Yii::$app->request->post ('is_published', null);
+		if ($publishStatus === null)
+			throw new \yii\web\ForbiddenHttpException ( 'missing publish status' );
+
+		$publishStatus= ($publishStatus== 1 ? 1 : 0);
+
+		$model->is_published = $publishStatus;
+
+		$newStatus = ($publishStatus== 1 ? 'Published' : 'Unpublished');
+		if ($model->save())
+		{
+			Yii::$app->session->setFlash ( 'success', 'Car status changed to '.$newStatus );
+			return $this->redirect(['your-cars']);
+		}
+		throw new \yii\web\ForbiddenHttpException ( 'Error editing publish status' );
+	}
+
+	/**
+	 * Get logged-in user a list of all cars he/she drove
+	 */
+	public function actionMyDrives()
+	{
+		$userId = Yii::$app->user->id;
+
+		$siteImagesPath = Yii::$app->params['siteImagesPath'];
+
+		$bookings = Booking::find()
+			->where(['renter_id'=>$userId])
+			->andWhere(['status'=>1])
+			->andWhere(['<', 'date_end', new Expression('NOW()')])
+			->all();
+
+		$carIds = [];
+		foreach ($bookings as $carBook)
+			$carIds[] = $carBook->car_id;
+
+		$carIds = array_unique($carIds);
+
+		$carModel = Car::find()
+			->joinWith('make',true,'INNER JOIN')
+			->joinWith('model',true,'INNER JOIN')
+			->where('carmake.id = carmodel.make_id')
+			->andWhere(['car.id'=>$carIds])
+			->indexBy('id')
+			->all();
+
+		$result = [];
+
+		foreach ($bookings as $carBook)
+		{
+			if (!isset($carModel[$carBook->car_id]))
+				continue;
+			$carInfo = $carModel[$carBook->car_id];
+
+			$carDetails = [
+					'id' => $carBook->id,
+					'make'  => $carInfo->make->value,
+					'model' => $carInfo->model->value,
+					'year_model' => $carInfo->year_model,
+					'photo' => Yii::$app->params['imagesFolder'].$carInfo->photo1,
+			];
+
+			$result[] = $carDetails;
+		}
+
+		return $this->render('myDrivesView', [
+				'siteImagesPath' => $siteImagesPath,
+				'carsInfo'  => $result,
+		]);
+	}
+
+	/**
+	 * Get logged-in user a list of drive requests on his/her cars
+	 */
+	public function actionMyApprovals()
+	{
+		;
 	}
 
 	/**
