@@ -2,6 +2,8 @@
 
 /* @var $this yii\web\View */
 use frontend\assets\HomePageAsset;
+use frontend\widgets\QuickSearch;
+use yii\base\Widget;
 HomePageAsset::register($this);
 $this->title = 'Carbnb';
 ?>
@@ -24,27 +26,7 @@ $this->title = 'Carbnb';
 			</div>
 		</section>
 
-		<div class="main-search-bar">
-			<form class="" action="" method="get">
-				<div class="row row-small-gutter">
-					<div class="col col-md-5">
-						<div class="form-group border-right">
-							<label for="search-where">Where</label>
-							<input type="search" class="form-control" id="search-where" name="location" placeholder="Choose destination">
-						</div>
-					</div>
-					<div class="col col-md-5">
-						<div class="form-group">
-							<label for="search-when">When</label>
-							<input type="text" class="form-control" id="search-when" name="daterange" placeholder="Pick date">
-						</div>
-					</div>
-					<div class="col col-md-2">
-						<button type="submit" name="button" class="btn btn-search btn-primary btn-lg btn-block">Search</button>
-					</div>
-				</div>
-			</form>
-		</div>
+		<?php echo QuickSearch::widget();?>
 
 		<?=$featuredCarsHTML?>
 

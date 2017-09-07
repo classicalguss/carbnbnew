@@ -7,15 +7,18 @@ use yii\web\AssetBundle;
 /**
  * Main frontend application asset bundle.
  */
-class HomePageAsset extends AssetBundle
+class SearchPageAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/home-page.css',
+        'css/search-page.css',
+    	'css/site.css',
+    	'css/app.css',
     ];
     public $js = [
-    		'js/jquery-migrate-3.0.0.js'
+    	'js/jquery.pjax.js',
+    	'js/jquery-migrate-3.0.0.js'
     ];
 
     public $depends = [

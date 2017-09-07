@@ -65,7 +65,7 @@ AppAsset::register ( $this );
 		</div>
 	</div>
 
-	<div class="<?php if (!in_array(Yii::$app->requestedRoute, ['site/index'])):?>container <?php endif;?>">
+	<div class="<?php if (!in_array(Yii::$app->requestedRoute, ['site/index','search/index','search'])):?>container <?php endif;?>">
 		<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
 		<?= Alert::widget() ?>
 		<?= $content ?>
