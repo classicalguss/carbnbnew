@@ -1,15 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
 
-$this->title = 'Your Cars';
+$this->title = 'Car Reserved Successfully';
 ?>
-<div class="car-update">
+<div>
 
 	<h1><?=Html::encode($this->title)?></h1>
-	<pre><?=print_r($rentsInfo,1)?></pre>
+	<p>You have successfully reserved the car</p>
 </div>

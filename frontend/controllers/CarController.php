@@ -21,6 +21,7 @@ use common\models\Carmodel;
 use common\models\Booking;
 use yii\web\UploadedFile;
 use yii\db\Expression;
+use common\models\Util;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -37,11 +38,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals'],
+				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car'],
 				'rules' => [
 					[
 						'allow' => true,
-						'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals'],
+							'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car'],
 						'roles' => ['@'],
 					],
 				],
@@ -407,7 +408,113 @@ class CarController extends Controller
 	 */
 	public function actionMyApprovals()
 	{
-		;
+		$userId = Yii::$app->user->id;
+
+		$siteImagesPath = Yii::$app->params['siteImagesPath'];
+
+		\Yii::error($userId);
+		$bookings = Booking::find()
+			->joinWith('renter',true,'INNER JOIN')
+			->where(['owner_id'=>$userId])
+			->andWhere(['booking.status'=>0])
+			->andWhere(['>', 'date_start', new Expression('NOW()')])
+			->all();
+
+		$carIds = [];
+		foreach ($bookings as $carBook)
+			$carIds[] = $carBook->car_id;
+
+		$carIds = array_unique($carIds);
+
+		$carModel = Car::find()
+			->joinWith('make',true,'INNER JOIN')
+			->joinWith('model',true,'INNER JOIN')
+			->where('carmake.id = carmodel.make_id')
+			->andWhere(['car.id'=>$carIds])
+			->indexBy('id')
+			->all();
+
+		$result = [];
+
+		foreach ($bookings as $carBook)
+		{
+			if (!isset($carModel[$carBook->car_id]))
+				continue;
+			$carInfo = $carModel[$carBook->car_id];
+			$renterInfo = $carBook->renter;
+
+			$rentDetails = [
+					'id' => $carBook->id,
+					'make'  => $carInfo->make->value,
+					'model' => $carInfo->model->value,
+					'year_model' => $carInfo->year_model,
+					'carPhoto' => Yii::$app->params['imagesFolder'].$carInfo->photo1,
+					'renterPhoto' => $renterInfo->photoFile,
+			];
+
+			$result[] = $rentDetails;
+		}
+
+		return $this->render('myApprovalsView', [
+				'siteImagesPath' => $siteImagesPath,
+				'rentsInfo'  => $result,
+				'p'=>$bookings,
+		]);
+	}
+
+	public function actionReserveACar()
+	{
+		$carId     = Yii::$app->request->post ('id', null);
+		$startDate = Yii::$app->request->post ('start_date', null);
+		$endDate   = Yii::$app->request->post ('end_date', null);
+
+		$errorMsg = '';
+		if (!Util::validateDate($startDate) || !Util::validateDate($endDate))
+			$errorMsg = 'Wrong reservation date format';
+		elseif ($startDate > $endDate)
+			$errorMsg = 'Start reservation date should be greater than end date';
+		elseif ($startDate < date('Y-m-d'))
+			$errorMsg = 'Reservation should be in future';
+
+		$renterId = Yii::$app->user->id;
+
+		$carModal = $this->findModel($carId);
+
+		if ($renterId == $carModal->owner_id)
+			$errorMsg = 'You can rent your own car!';
+
+		if (!empty($errorMsg))
+		{
+			Yii::$app->session->setFlash ( 'error', $errorMsg);
+			return $this->redirect(['view', 'id' => $carId]);
+		}
+		else
+		{
+			\Yii::error([$renterId,$carId]);
+			// check if user already reserved the car on the same period
+			$overlappedRentsCountOnTheSameCar = Booking::find()
+					->select('id')
+					->where(['between','date_start',$startDate,$endDate])
+					->orWhere(['between','date_end',$startDate,$endDate])
+					->andWhere(['renter_id'=>$renterId,'car_id'=>$carId])
+					->all();
+			\Yii::error(['aaaa'=>print_r($overlappedRentsCountOnTheSameCar,1)]);
+			if (count($overlappedRentsCountOnTheSameCar) > 0)
+			{
+				Yii::$app->session->setFlash ( 'error', 'You already rented this car on this period');
+				return $this->redirect(['view', 'id' => $carId]);
+			}
+		}
+
+		$bookingModal = new Booking();
+		$bookingModal->status    = ($carModal->book_instantly ? 1 : 0);
+		$bookingModal->car_id    = $carModal->id;
+		$bookingModal->owner_id  = $carModal->owner_id;
+		$bookingModal->renter_id = $renterId;
+		$bookingModal->date_end  = $endDate;
+		$bookingModal->date_start= $startDate;
+		$bookingModal->save();
+		return $this->render('carReservedSuccessfully', []);
 	}
 
 	/**

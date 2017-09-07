@@ -32,6 +32,12 @@ class Util {
 		return $res;
 	}
 
+	public static function validateDate($date, $format='Y-m-d')
+	{
+		$d = \DateTime::createFromFormat($format, $date);
+		return $d && $d->format($format) === $date;
+	}
+
 	public static function getCurrenciesList()
 	{
 		$list = [

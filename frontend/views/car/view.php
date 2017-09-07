@@ -1,6 +1,8 @@
 <?php
 
 use frontend\assets\CarViewAsset;
+use yii\helpers\Url;
+use yii\helpers\Html;
 CarViewAsset::register($this);
 
 /* @var $this yii\web\View */
@@ -154,23 +156,24 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 		</div>
 
 		<aside class="col-md-4 price-box">
-			<div class="price-and-reserve">
-				<div class="price-details">
-					<div class="price">
-						<span><?=$carInfo['price']?> <?=$carInfo['currency']?></span> Per day
+			<?= Html::beginForm (['/car/reserve-a-car'], 'post')
+				.Html::hiddenInput('id', $carInfo['id'])?>
+				<div class="price-and-reserve">
+					<div class="price-details">
+						<div class="price">
+							<span><?=$carInfo['price']?> <?=$carInfo['currency']?></span> Per day
+						</div>
+						<div class="total-price">TOTAL <span class="text-grey"> for 6 Days </span> <span class="price-per-days"> <?=$carInfo['price'] * 6?> </span> <span class="text-grey"> <?=$carInfo['currency']?> </span></div>
+						<div class="pick-up-time">
+								<h5 class="bold">Set your reservation period</h5>
+								From:<input type="date" class="form-control" name="start_date" placeholder="YYYY-MM-DD">
+								<br/>
+								To:<input type="date" class="form-control" name="end_date" placeholder="YYYY-MM-DD">
+						</div>
 					</div>
-					<div class="total-price">TOTAL <span class="text-grey"> for 6 Days </span> <span class="price-per-days"> <?=$carInfo['price'] * 6?> </span> <span class="text-grey"> <?=$carInfo['currency']?> </span></div>
-					<div class="pick-up-time">
-						<h5 class="bold">Set your pick up time</h5>
-						<select class="form-control">
-							<option value="9:00 AM">9:00 AM</option>
-							<option value="10:00 AM">10:00 AM</option>
-							<option value="11:00 AM">11:00 AM</option>
-						</select>
-					</div>
+					<?= Html::submitButton ( 'Reserve', ['class' => 'btn btn-primary btn-block no-radius btn-lg'] )?>
 				</div>
-				<a class="btn btn-primary btn-block no-radius btn-lg" href="#">Reserve</a>
-			</div>
+			<?= Html::endForm ()?>
 			<a class="btn btn-blank btn-block btn-save" href="#"><i class="fa fa-star-o"></i> Save for later</a>
 			<ul class="list-inline social-media-view">
 				<li><a href="#"><i class="fa fa-facebook"></i></a></li>
