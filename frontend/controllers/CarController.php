@@ -38,11 +38,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car'],
+				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully'],
 				'rules' => [
 					[
 						'allow' => true,
-							'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car'],
+							'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully'],
 						'roles' => ['@'],
 					],
 				],
@@ -204,7 +204,7 @@ class CarController extends Controller
 		if ($model->save())
 		{
 			$model->upload();
-			return $this->redirect(['carListedSuccessfully', 'id' => $model->id]);
+			return $this->redirect(['car-listed-successfully', 'id' => $model->id]);
 		}
 		else
 		{
@@ -222,6 +222,22 @@ class CarController extends Controller
 				'models' => $models,
 			]);
 		}
+	}
+
+	/**
+	 * Updates an existing Car model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param string $id
+	 * @return mixed
+	 */
+	public function actionCarListedSuccessfully($id)
+	{
+		$model = $this->findModel($id);
+		$this->checkAccess($model);
+
+		return $this->render('carListedSuccessfully', [
+				'model' => $model,
+		]);
 	}
 
 	/**
