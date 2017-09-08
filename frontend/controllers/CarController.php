@@ -204,7 +204,7 @@ class CarController extends Controller
 		if ($model->save())
 		{
 			$model->upload();
-			return $this->redirect(['view', 'id' => $model->id]);
+			return $this->redirect(['carListedSuccessfully', 'id' => $model->id]);
 		}
 		else
 		{
