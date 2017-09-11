@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\Util;
+use frontend\models\Car;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
@@ -14,7 +15,7 @@ use common\models\Util;
 	<?php $form = ActiveForm::begin(); ?>
 
 		<?= $form->field($model, 'milage_limitation') ?>
-		<?= $form->field($model, 'color') ?>
+		<?= $form->field($model, 'color')->dropDownList(Car::colorArray(), ['prompt'=>'Select color']) ?>
 		<?= $form->field($model, 'price') ?>
 		<?= $form->field($model, 'currency')->dropDownList(Util::getCurrenciesList(), ['prompt'=>'Select currency']) ?>
 		<?= $form->field($model, 'book_instantly')->checkbox() ?> - Travelers can book your car instantly without waiting for your approval
