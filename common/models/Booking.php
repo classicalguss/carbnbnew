@@ -113,4 +113,24 @@ class Booking extends \yii\db\ActiveRecord
     	else
     		return 'Sorry maybe next time, rental declined.';
     }
+
+	/**
+	 * check if car already reserved on the same period
+	 * @param number $carId
+	 * @param date $startDate
+	 * @param date $endDate
+	 * @return boolean
+	 */
+	public static function isCarRentedOnAPeriod($carId, $startDate, $endDate)
+	{
+		$overlappedRentsCountOnTheSameCar = Booking::find()
+			->select('id')
+			->where(['between','date_start',$startDate,$endDate])
+			->orWhere(['between','date_end',$startDate,$endDate])
+			->andWhere(['status'=>1,'car_id'=>$carId])
+			->all();
+		if (count($overlappedRentsCountOnTheSameCar) > 0)
+			return true;
+		return false;
+	}
 }

@@ -38,11 +38,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully'],
+				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-reserve'],
 				'rules' => [
 					[
 						'allow' => true,
-							'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully'],
+							'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-reserve'],
 						'roles' => ['@'],
 					],
 				],
@@ -428,7 +428,6 @@ class CarController extends Controller
 
 		$siteImagesPath = Yii::$app->params['siteImagesPath'];
 
-		\Yii::error($userId);
 		$bookings = Booking::find()
 			->joinWith('renter',true,'INNER JOIN')
 			->where(['owner_id'=>$userId])
@@ -461,21 +460,55 @@ class CarController extends Controller
 
 			$rentDetails = [
 					'id' => $carBook->id,
+					'to' => $carBook->date_end,
+					'from' => $carBook->date_start,
 					'make'  => $carInfo->make->value,
 					'model' => $carInfo->model->value,
+					'price' => $carInfo->price,
+					'currency' => $carInfo->currency,
+					'days_diff' => Util::dateDiff($carBook->date_start, $carBook->date_end)->days,
 					'year_model' => $carInfo->year_model,
+					'reserved_at' => $carBook->date_created,
+					'renter_name' => $renterInfo->first_name,
 					'carPhoto' => Yii::$app->params['imagesFolder'].$carInfo->photo1,
 					'renterPhoto' => $renterInfo->photoFile,
+					'left_to_confirm' => Util::dateDiff(date('Y-m-d'), $carBook->date_start)->days,
 			];
 
+			$rentDetails['days_diff'] = ($rentDetails['days_diff'] == 0 ? 1 : $rentDetails['days_diff']);
 			$result[] = $rentDetails;
 		}
 
 		return $this->render('myApprovalsView', [
 				'siteImagesPath' => $siteImagesPath,
 				'rentsInfo'  => $result,
-				'p'=>$bookings,
 		]);
+	}
+
+	public function actionApproveReserve()
+	{
+		$ownerId = Yii::$app->user->id;
+		$rentId  = Yii::$app->request->post ('id', null);
+		$action  = Yii::$app->request->post ('action', null);
+
+		$bookModel = Booking::find()->where(['owner_id'=>$ownerId, 'id'=>$rentId])->one();
+		if (empty($bookModel))
+			throw new \yii\web\ForbiddenHttpException ( 'Wrong data given' );
+
+		// check if car already reserved on the same period
+		if (Booking::isCarRentedOnAPeriod($bookModel->car_id, $bookModel->date_start, $bookModel->date_end))
+		{
+			Yii::$app->session->setFlash ( 'error', 'Sorry, Your car is already reserved during this period');
+			return $this->redirect(['my-approvals']);
+		}
+
+		$status = 2; // decline
+		if ($action == 'approve')
+			$status = 1; // approve
+
+		$bookModel->status = $status;
+		$bookModel->save();
+		return $this->redirect(['my-approvals']);
 	}
 
 	public function actionReserveACar()
@@ -506,18 +539,10 @@ class CarController extends Controller
 		}
 		else
 		{
-			\Yii::error([$renterId,$carId]);
-			// check if user already reserved the car on the same period
-			$overlappedRentsCountOnTheSameCar = Booking::find()
-					->select('id')
-					->where(['between','date_start',$startDate,$endDate])
-					->orWhere(['between','date_end',$startDate,$endDate])
-					->andWhere(['renter_id'=>$renterId,'car_id'=>$carId])
-					->all();
-			\Yii::error(['aaaa'=>print_r($overlappedRentsCountOnTheSameCar,1)]);
-			if (count($overlappedRentsCountOnTheSameCar) > 0)
+			// check if car already reserved on the same period
+			if (Booking::isCarRentedOnAPeriod($carId, $startDate, $endDate))
 			{
-				Yii::$app->session->setFlash ( 'error', 'You already rented this car on this period');
+				Yii::$app->session->setFlash ( 'error', 'Sorry, This car is already reserved during this period');
 				return $this->redirect(['view', 'id' => $carId]);
 			}
 		}

@@ -33,6 +33,14 @@ class Util {
 		return $res;
 	}
 
+	public static function dateDiff($dStart,$dEnd)
+	{
+		$dStart = new DateTime($dStart);
+		$dEnd  = new DateTime($dEnd);
+		$dDiff = $dStart->diff($dEnd);
+		return $dDiff;
+	}
+
 	public static function validateDate($date, $format='Y-m-d')
 	{
 		$d = \DateTime::createFromFormat($format, $date);
