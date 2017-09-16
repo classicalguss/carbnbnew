@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 		<?= $form->field($model, 'photoFile6')->fileInput()?>
 
 		<div class="form-group">
-			<?= Html::button('Next', ['class' => 'btn btn-primary', 'onclick' => 'switchForm('.$formNum.',-1);']) ?>
+			<?= Html::button('Next', ['class' => 'btn btn-primary btn-lg btn-submit', 'onclick' => 'switchForm('.$formNum.',-1);']) ?>
 		</div>
 	<?php ActiveForm::end(); ?>
 

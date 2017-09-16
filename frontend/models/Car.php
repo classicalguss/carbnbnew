@@ -54,6 +54,7 @@ use common\models\Booking;
  * @property integer $odometer
  * @property integer $is_published
  * @property integer $book_instantly
+ * @property string $license_plate_number
  * @property integer $delivery
  */
 class Car extends \yii\db\ActiveRecord {
@@ -129,10 +130,10 @@ class Car extends \yii\db\ActiveRecord {
 	}
 	public static function gasArray() {
 		return [
-				0=>'Diesel',
+				3=>'Gas',
 				1=>'Hybrid',
 				2=>'Electric',
-				3=>'Gas',
+				0=>'Diesel',
 		];
 	}
 	public static function odometerArray() {
@@ -141,14 +142,6 @@ class Car extends \yii\db\ActiveRecord {
 				1=>'80k-160 Kilometers',
 				2=>'160k-200 Kilometers',
 				3=>'200k+ Kilometers',
-		];
-	}
-	public static function colorArray() {
-		return [
-				0=>'Red',
-				1=>'White',
-				2=>'Blue',
-				3=>'Silver',
 		];
 	}
 	public function getImages() {
@@ -490,7 +483,8 @@ class Car extends \yii\db\ActiveRecord {
 						[
 								'report',
 								'book_instantly',
-								'delivery'
+								'delivery',
+								'license_plate_number'
 						],
 						'safe'
 				]
@@ -597,5 +591,19 @@ class Car extends \yii\db\ActiveRecord {
 			];
 		}
 		return parent::afterFind();
+	}
+	public static function colorArray() {
+		return [
+				0=>'White',
+				1=>'Black',
+				2=>'Silver',
+				3=>'Gray',
+				4=>'Red',
+				5=>'Blue',
+				6=>'Brown/Biege',
+				7=>'Green',
+				8=>'Yellow/Gold',
+				9=>'Others',
+		];
 	}
 }

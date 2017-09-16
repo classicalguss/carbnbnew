@@ -54,6 +54,7 @@ use common\models\Booking;
  * @property integer $odometer
  * @property integer $is_published
  * @property integer $book_instantly
+ * @property string $license_plate_number
  */
 class Car extends \yii\db\ActiveRecord {
 	public $photoFile1; // The file instance of the model
@@ -128,10 +129,16 @@ class Car extends \yii\db\ActiveRecord {
 	}
 	public static function colorArray() {
 		return [
-				0=>'Red',
-				1=>'White',
-				2=>'Blue',
-				3=>'Silver',
+				0=>'White',
+				1=>'Black',
+				2=>'Silver',
+				3=>'Gray',
+				4=>'Red',
+				5=>'Blue',
+				6=>'Brown/Biege',
+				7=>'Green',
+				8=>'Yellow/Gold',
+				9=>'Others',
 		];
 	}
 	public function getImages() {
@@ -403,7 +410,8 @@ class Car extends \yii\db\ActiveRecord {
 				[
 						[
 								'report',
-								'book_instantly'
+								'book_instantly',
+								'license_plate_number'
 						],
 						'safe'
 				]

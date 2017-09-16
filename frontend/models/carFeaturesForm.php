@@ -9,10 +9,10 @@ use frontend\models\Car;
  * carFeatures form
  */
 class carFeaturesForm extends Model {
-	public $gear_type_id;
-	public $number_of_doors;
-	public $number_of_seats;
-	public $gas_type_id;
+	public $gear_type_id = 0;
+	public $number_of_doors = 4;
+	public $number_of_seats = 4;
+	public $gas_type_id = 3;
 	public $type_id;
 	public $features;
 
@@ -27,8 +27,12 @@ class carFeaturesForm extends Model {
 					'required'
 			],
 			[
-					['gear_type_id','gas_type_id','type_id','number_of_doors','number_of_seats'],
+					['gear_type_id','gas_type_id','type_id','number_of_seats'],
 					'integer'
+			],
+			[
+					['number_of_doors'],
+					'integer',
 			],
 			[
 					'features',

@@ -178,7 +178,7 @@ use frontend\models\Car;
 			<div id="collapse-year" class="panel-collapse collapse"
 				role="tabpanel">
 				<div class="panel-body">
-					<?=$form->field($model, 'year_model')->checkboxList(['2017'=>'2017','2016'=>'2016','2015'=>'2015','2014'=>'2014'],['tag'=>'ul','class'=>"list-unstyled",'item'=>function($index,$label,$name,$checked,$value) {
+					<?=$form->field($model, 'year_model')->checkboxList(['2017'=>'2017','2016'=>'2016','2015'=>'2015','2014'=>'2014','2013'=>'2013'],['tag'=>'ul','class'=>"list-unstyled",'item'=>function($index,$label,$name,$checked,$value) {
 						if ($checked == 1)
 							$checked = 'checked';
 						return '<li class="checkbox"><label><input name='.$name.' value='.$value.' type="checkbox" '.$checked.'>'.$label.'</label></li>';

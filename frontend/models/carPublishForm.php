@@ -11,8 +11,10 @@ class carPublishForm extends Model {
 	public $price;
 	public $currency;
 	public $book_instantly;
+	public $license_plate_number;
 	public $description;
-
+	public $delivery;
+	
 	/**
 	 * @inheritdoc
 	 */
@@ -23,11 +25,11 @@ class carPublishForm extends Model {
 						'required',
 				],
 				[
-						['milage_limitation','color'],
+						['milage_limitation','color','price'],
 						'integer'
 				],
 				[
-						['book_instantly'],
+						['book_instantly','license_plate_number','delivery'],
 						'safe'
 				],
 		];
@@ -38,6 +40,7 @@ class carPublishForm extends Model {
 		return [
 			'price' => 'Price per day',
 			'currency' => 'Currency',
+			'license_plate_number'=>'License Plate Number',
 			'book_instantly' => 'Book Instantly',
 			'description' => 'Describe Your Car',
 		];

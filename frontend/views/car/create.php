@@ -5,42 +5,51 @@ use yii\bootstrap\Tabs;
 use yii\web\View;
 use yii\helpers\Url;
 use frontend\assets\JqueryUIAsset;
+use frontend\assets\CarAsset;
 JqueryUIAsset::register($this);
-
+CarAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
 
 $this->title = 'Create Car';
 ?>
-<div class="car-create">
-
-	<?php echo Tabs::widget([
-		'items' => [
-			[
-				'label' => 'Car Details',
-				'content' => $this->render('carDetailsFormView', ['model' => $models['carDetailsModel'], 'formNum' => 1]),
-				'active' => true,
-				'linkOptions' => ['id' => 'tab1'],
-			],
-			[
-				'label' => 'Car Features',
-				'content' => $this->render('carFeaturesFormView', ['model' => $models['carFeaturesModel'], 'formNum' => 2]),
-				'linkOptions' => ['id' => 'tab2'],
-			],
-			[
-				'label' => 'Photos',
-				'content' => $this->render('carPhotosFormView', ['model' => $models['carPhotosModel'], 'formNum' => 3]),
-				'linkOptions' => ['id' => 'tab3'],
-			],
-			[
-				'label' => 'Publish',
-				'content' => $this->render('carPublishFormView', ['model' => $models['carPublishModel'], 'formNum' => 4]),
-				'linkOptions' => ['id' => 'tab4'],
-			],
+<?php echo Tabs::widget([
+	'items' => [
+		[
+			'label' => 'Car Details',
+			'content' => $this->render('carDetailsFormView', ['model' => $models['carDetailsModel'], 'formNum' => 1]),
+			'linkOptions' => ['id' => 'tab1'],
+			
 		],
-	]);?>
+		[
+			'label' => 'Car Features',
+			'content' => $this->render('carFeaturesFormView', ['model' => $models['carFeaturesModel'], 'formNum' => 2]),
+			'linkOptions' => ['id' => 'tab2'],
+			'options'=>['class'=>'disabled'],
+		],
+		[
+			'label' => 'Photos',
+			'content' => $this->render('carPhotosFormView', ['model' => $models['carPhotosModel'], 'formNum' => 3]),
+			'linkOptions' => ['id' => 'tab3'],
+			'options'=>['class'=>'disabled'],
+				
+				
+		],
+		[
+			'label' => 'Publish',
+			'content' => $this->render('carPublishFormView', ['model' => $models['carPublishModel'], 'formNum' => 4]),
+			'linkOptions' => ['id' => 'tab4'],
+			'options'=>['class'=>'disabled'],
+				'active'=>true
+		],
+	],
+	'navType'=>'nav nav-tabs nav-uchaise',
+	'headerOptions'=>[
+		'role'=>'presentation',
+		'class'=>'disabled',
+	],
+]);?>
 
-</div>
 
 <script>
 	$( document ).ready(function() {

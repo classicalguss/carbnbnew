@@ -17,14 +17,15 @@ class carDetailsForm extends Model {
 	public $year_model;
 	public $odometer;
 	public $insurance_tip;
-
+	public $area;
+	
 	/**
 	 * @inheritdoc
 	 */
 	public function rules() {
 		return [
 			[
-					['location_autocomplete','country_iso','city_id','area_id','make_id','model_id','year_model','odometer','insurance_tip'],
+					['area','country_iso','city_id','area_id','make_id','model_id','year_model','odometer','insurance_tip'],
 					'required'
 			],
 			[

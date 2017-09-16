@@ -33,43 +33,47 @@ AppAsset::register ( $this );
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap">
-	<div class="main-nav">
-		<div class="container wide">
-			<div class="row">
-				<div class="col-md-4">
-					<a href="<?=Url::to(['site/index'])?>" title="Uchaise">
-						<img width="88" height="20" src="<?=Yii::$app->params ['siteImagesPath']?>/logo.svg" alt="Uchaise" />
-					</a>
-				</div>
-				<div class="col-md-8 text-right">
-					<ul class="list-inline list-links">
-						<li><a href="<?=Url::to(['car/list-a-car'])?>">List Your Car</a></li>
-						<li><a href="<?=Url::to(['car/my-drives'])?>">My Drives</a></li>
-						<li><a href="<?=Url::to([''])?>">Messages</a></li>
-						<?php if (Yii::$app->user->isGuest):?>
-							<li><a href="<?=Url::to(['user/login'])?>">Sign In</a></li>
-							<li><a href="<?=Url::to(['user/signup'])?>" class="btn btn-primary">Sign Up</a></li>
-						<?php else :?>
-							<li>
-								<?=Html::beginForm ([
-										'/user/logout'
-								], 'post' ) . Html::submitButton ( '<img src="'.frontend\controllers\UserController::getUserPhoto().'" class="img-circle" alt="'.Yii::$app->user->identity->first_name.'" width="45" height="45">', [
-										'class' => 'btn btn-link logout'
-								] ).Html::endForm ()?>
-							</li>
-						<?php endif;?>
-					</ul>
-				</div>
+<div class="main-nav">
+	<div class="container wide">
+		<div class="row">
+			<div class="col-md-4">
+				<a href="<?=Url::to(['site/index'])?>" title="Uchaise">
+					<img width="88" height="20" src="<?=Yii::$app->params ['siteImagesPath']?>/logo.svg" alt="Uchaise" />
+				</a>
+			</div>
+			<div class="col-md-8 text-right">
+				<ul class="list-inline list-links">
+					<li><a href="<?=Url::to(['car/list-a-car'])?>">List Your Car</a></li>
+					<li><a href="<?=Url::to(['car/my-drives'])?>">My Drives</a></li>
+					<li><a href="<?=Url::to([''])?>">Messages</a></li>
+					<?php if (Yii::$app->user->isGuest):?>
+						<li><a href="<?=Url::to(['user/login'])?>">Sign In</a></li>
+						<li><a href="<?=Url::to(['user/signup'])?>" class="btn btn-primary">Sign Up</a></li>
+					<?php else :?>
+						<li>
+							<?=Html::beginForm ([
+									'/user/logout'
+							], 'post' ) . Html::submitButton ( '<img src="'.frontend\controllers\UserController::getUserPhoto().'" class="img-circle" alt="'.Yii::$app->user->identity->first_name.'" width="45" height="45">', [
+									'class' => 'btn btn-link logout'
+							] ).Html::endForm ()?>
+						</li>
+					<?php endif;?>
+				</ul>
 			</div>
 		</div>
 	</div>
-
-	<div class="<?php if (!in_array(Yii::$app->requestedRoute, ['site/index','search/index','search'])):?>container <?php endif;?>">
-		<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
-		<?= Alert::widget() ?>
-		<?= $content ?>
-	</div>
+</div>
+<div class="
+	<?php if (!in_array(Yii::$app->requestedRoute, ['site/index','search/index','search'])):?>
+		container 
+	<?php endif;?> 
+	<?php if (in_array(Yii::$app->requestedRoute,['car/list-a-car'])):?>
+		container-narrow
+	<?php endif;?>"
+>
+	<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
+	<?= Alert::widget() ?>
+	<?= $content ?>
 </div>
 
 <div class="container">

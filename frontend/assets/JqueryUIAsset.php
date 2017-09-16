@@ -16,6 +16,7 @@ class JqueryUIAsset extends AssetBundle
 	];
 	public $js = [
 		'js/jquery-ui.min.js',
+		'js/jquery-migrate-3.0.0.js'
 	];
 
 	public $depends = [
