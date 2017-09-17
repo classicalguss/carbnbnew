@@ -32,7 +32,7 @@ use yii\helpers\Url;
 			<ul class="list-inline list-features">
 					<li><i class="fa fa-car"></i> <span><?=Car::gearArray()[$model->gear_type_id]?></span></li>
 					<li><i class="fa fa-car"></i> <span><?=$model->number_of_doors?> doors</span></li>
-					<li><i class="fa fa-car"></i> <span><?=$model->number_of_seats?> doors</span></li>
+					<li><i class="fa fa-car"></i> <span><?=$model->number_of_seats?> seats</span></li>
 					<li><i class="fa fa-car"></i> <span><?=Car::gasArray()[$model->gas_type_id]?></span></li>
 			</ul>
 

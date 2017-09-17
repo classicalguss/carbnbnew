@@ -6,34 +6,62 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use frontend\assets\UserAsset;
+use frontend\assets\AppAsset;
+use yii\helpers\Url;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
+UserAsset::register ( $this );
+AppAsset::register ( $this );
 ?>
-<div class="container site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
+<div class="main-nav sign-nav">
+	<div class="container wide">
+		<div class="row">
+			<div class="col-md-4">
+				<a href="<?=Url::to(['site/index'])?>" title="Home page"> <img
+					width="88" height="20"
+					src="<?=Yii::$app->params ['siteImagesPath']?>/logo-white.svg"
+					alt="Uchaise">
+				</a>
+			</div>
+			<div class="col-md-8 text-right">
+				<ul class="list-inline list-links">
+					<li>Not a member yet?</li>
+					<li><a class="white" href="<?=Url::to(['user/signup'])?>">Sign up</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="sign-up-in">
+	<div class="row">
+		<div class="col-sm-4 hidden-xs">
+			<div class="car-bg">
+				<div class="sign-content">
+					<img src="<?=Yii::$app->params ['siteImagesPath']?>/car-icon.png"
+						alt="Car icon">
+					<h5>Rent a Car Easily</h5>
+					<p>Search our vast selection of unique, locally owned cars within your area</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-8">
+			<div class="sign-forms">
+				<h6>Sign in to uchase</h6>
+				<p>Enter your details below</p>
+				<?php $form = ActiveForm::begin(['id' => 'form-signup','class'=>'form']); ?>
+					<?= $form->field($model, 'email')->textInput(['placeHolder'=>'Email Address','class'=>'form-control input-lg'])->label(false)->error(['tag'=>'span'])?>
+					<?= $form->field($model, 'password')->passwordInput(['placeHolder'=>'Create Password','class'=>'form-control input-lg'])->label(false)->error(['tag'=>'span'])?>
+					<?= Html::a('Forgot password?', ['user/request-password-reset'],['class'=>'forget-password']) ?>
+					<div class="form-group">
+						<?= Html::submitButton('Login', ['class' => 'btn btn-lg btn-primary btn-block', 'name' => 'login-button']) ?>
+					</div>
+				<?php ActiveForm::end(); ?>
+			</div>
+		</div>
+	</div>
+</div>
                 <div style="color:#999;margin:1em 0">
                     If you forgot your password you can <?= Html::a('reset it', ['user/request-password-reset']) ?>.
                 </div>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-</div>

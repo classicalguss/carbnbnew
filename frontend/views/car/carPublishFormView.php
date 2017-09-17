@@ -22,6 +22,6 @@ use frontend\models\Car;
 	<?= $form->field($model, 'delivery')->checkbox()->hint(' - Delivering your car to people who book it make it much more attractive to rent',['tag'=>false]) ?>
 	<?= $form->field($model, 'description')->textarea(['placeholder'=>'Describe the car features and properties such as Top Speed, Engine Size, Gas economy etc...','rows'=>5]) ?>
 	<div class="form-group">
-		<?= Html::submitButton('Publish', ['class' => 'btn btn-primary btn-lg btn-submit']) ?>
+		<?= Html::submitButton('Publish', ['name'=>'form-submit','class' => 'btn btn-primary btn-lg btn-submit']) ?>
 	</div>
 <?php ActiveForm::end(); ?>

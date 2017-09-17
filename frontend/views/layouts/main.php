@@ -50,12 +50,24 @@ AppAsset::register ( $this );
 						<li><a href="<?=Url::to(['user/login'])?>">Sign In</a></li>
 						<li><a href="<?=Url::to(['user/signup'])?>" class="btn btn-primary">Sign Up</a></li>
 					<?php else :?>
-						<li>
-							<?=Html::beginForm ([
-									'/user/logout'
-							], 'post' ) . Html::submitButton ( '<img src="'.frontend\controllers\UserController::getUserPhoto().'" class="img-circle" alt="'.Yii::$app->user->identity->first_name.'" width="45" height="45">', [
-									'class' => 'btn btn-link logout'
-							] ).Html::endForm ()?>
+						<li class="dropdown">
+							<a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<img src="<?=frontend\controllers\UserController::getUserPhoto()?>" width="40" class="img-circle" alt="<?=Yii::$app->user->identity->first_name?>"> <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li><a href="#">My Profile</a></li>
+								<li><a href="#">Favorites</a></li>
+								<li role="separator" class="divider"></li>
+								<li>
+									<?=Html::beginForm ([
+										'/user/logout'
+									], 'post' )?>
+										<a href="#" onclick="$(this).closest('form').submit(); return false;" style="padding: 3px 20px">Logout</a>
+									<?=Html::endForm ()?>
+									
+								</li>
+							</ul>
+
 						</li>
 					<?php endif;?>
 				</ul>
@@ -67,7 +79,7 @@ AppAsset::register ( $this );
 	<?php if (!in_array(Yii::$app->requestedRoute, ['site/index','search/index','search'])):?>
 		container 
 	<?php endif;?> 
-	<?php if (in_array(Yii::$app->requestedRoute,['car/list-a-car'])):?>
+	<?php if (in_array(Yii::$app->requestedRoute,['car/list-a-car','car/car-listed-successfully'])):?>
 		container-narrow
 	<?php endif;?>"
 >

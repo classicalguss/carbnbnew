@@ -19,13 +19,14 @@ $this->title = 'Create Car';
 			'label' => 'Car Details',
 			'content' => $this->render('carDetailsFormView', ['model' => $models['carDetailsModel'], 'formNum' => 1]),
 			'linkOptions' => ['id' => 'tab1'],
-			
+			'active'=>true
 		],
 		[
 			'label' => 'Car Features',
 			'content' => $this->render('carFeaturesFormView', ['model' => $models['carFeaturesModel'], 'formNum' => 2]),
 			'linkOptions' => ['id' => 'tab2'],
 			'options'=>['class'=>'disabled'],
+			
 		],
 		[
 			'label' => 'Photos',
@@ -40,7 +41,6 @@ $this->title = 'Create Car';
 			'content' => $this->render('carPublishFormView', ['model' => $models['carPublishModel'], 'formNum' => 4]),
 			'linkOptions' => ['id' => 'tab4'],
 			'options'=>['class'=>'disabled'],
-				'active'=>true
 		],
 	],
 	'navType'=>'nav nav-tabs nav-uchaise',

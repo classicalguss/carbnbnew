@@ -22,6 +22,7 @@ use common\models\Booking;
 use yii\web\UploadedFile;
 use yii\db\Expression;
 use common\models\Util;
+use common\models\Area;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -201,6 +202,15 @@ class CarController extends Controller
 		$model->features   = isset($allFormsData['features']) ? implode(',', $allFormsData['features']) : '';
 		$model->scenario = 'create';
 
+		if ($model->area_id != null)
+		{
+			$area = Area::find()->where('id = :areaId',[':areaId'=>$model->area_id])->one();
+			if ($area != null)
+			{
+				$model->country_iso = 'ae';
+				$model->city_id = $area->city_id;
+			}
+		}
 		if ($model->save())
 		{
 			$model->upload();
@@ -208,6 +218,7 @@ class CarController extends Controller
 		}
 		else
 		{
+			Yii::warning($model->errors);
 			$models = [
 					'carDetailsModel'  => new carDetailsForm(),
 					'carFeaturesModel' => new carFeaturesForm(),
