@@ -257,7 +257,7 @@ class User extends ActiveRecord implements IdentityInterface {
 		if (!empty($this->photo))
 			$this->photoFile = Yii::$app->params['imagesFolder'].$this->photo;
 		else
-			$this->photoFile = '';
+			$this->photoFile = Yii::$app->params['siteImagesPath'].'/user-no-photo.png';
 			
 		if (!empty($this->license_image_file))
 			$this->licenseImage = Yii::$app->params['imagesFolder'].$this->license_image_file;
