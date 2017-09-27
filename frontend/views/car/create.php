@@ -1,5 +1,6 @@
 <?php
 
+use frontend\widgets\ETabs;
 use yii\helpers\Html;
 use yii\bootstrap\Tabs;
 use yii\web\View;
@@ -13,7 +14,7 @@ CarAsset::register($this);
 
 $this->title = 'Create Car';
 ?>
-<?php echo Tabs::widget([
+<?php echo ETabs::widget([
 	'items' => [
 		[
 			'label' => 'Car Details',
@@ -26,6 +27,7 @@ $this->title = 'Create Car';
 			'content' => $this->render('carFeaturesFormView', ['model' => $models['carFeaturesModel'], 'formNum' => 2]),
 			'linkOptions' => ['id' => 'tab2'],
 			'options'=>['class'=>'disabled'],
+				
 			
 		],
 		[

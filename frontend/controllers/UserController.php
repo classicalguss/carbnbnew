@@ -12,8 +12,9 @@ use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
-use common\fixtures\User;
-
+use common\models\User;
+use Codeception\Module\Yii2;
+use common\models\Util;
 /**
  * Site controller
  */
@@ -68,7 +69,11 @@ class UserController extends Controller {
 		return [
 				'error' => [
 						'class' => 'yii\web\ErrorAction'
-				]
+				],
+				'auth' => [
+						'class' => 'yii\authclient\AuthAction',
+						'successCallback' => [$this, 'oAuthSuccess'],
+				],
 		];
 	}
 
@@ -182,5 +187,44 @@ class UserController extends Controller {
 			return Yii::$app->params['imagesFolder'].$userPhoto;
 		else
 			return Yii::$app->params['siteImagesPath'].'/user-no-photo.png';
+	}
+	
+	/**
+	 * This function will be triggered when user is successfuly authenticated using some oAuth client.
+	 *
+	 * @param yii\authclient\ClientInterface $client
+	 * @return boolean|yii\web\Response
+	 */
+	public function oAuthSuccess($client) {
+		// get user data from client
+		$userAttributes = $client->getUserAttributes();
+		Yii::warning($userAttributes);
+		$user = User::find()->where(['registration_token'=>$userAttributes['id']])->one();
+		if (!$user)
+		{
+			$user = new User ();
+			$photoUrl = $userAttributes['picture']['data']['url'];
+			
+			$image = file_get_contents($photoUrl);
+			Yii::warning($image);
+			$user->setPassword ('facebookPass');
+			$user->generateAuthKey ();
+			$user->email = $userAttributes['id'].'@facebook.com';
+			$user->first_name = $userAttributes['first_name'];
+			$user->last_name = $userAttributes['last_name'];
+			$user->registration_type = 1;
+			$user->registration_token = $userAttributes['id'];
+			$user->user_type = 1;
+			Yii::warning('>>>'.$photoUrl);
+			$photoName = $userAttributes['id'].'_'.Util::generateRandomString().'.'.pathinfo(parse_url($photoUrl)['path'])['extension'];
+			Yii::warning($photoName);
+			file_put_contents('../../uploads/'.$photoName, $image);
+			$user->photo = $photoName;
+			$user->save();
+			
+			Yii::warning($user->errors);
+		}
+		Yii::$app->getUser ()->login ( $user );
+
 	}
 }

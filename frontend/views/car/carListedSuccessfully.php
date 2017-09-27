@@ -44,10 +44,10 @@ CarAsset::register($this);
 			<p><?=$model->description?></p>
 
 			<ul class="list-inline list-features">
-					<li><i class="fa fa-car"></i> <span><?=Car::gearArray()[$model->gear_type_id]?></span></li>
-					<li><i class="fa fa-car"></i> <span><?=$model->number_of_doors?> doors</span></li>
-					<li><i class="fa fa-car"></i> <span><?=$model->number_of_seats?> seats</span></li>
-					<li><i class="fa fa-car"></i> <span><?=Car::gasArray()[$model->gas_type_id]?></span></li>
+					<li><img src="<?=Yii::$app->params['siteImagesPath'].'/'.Car::gearArray()[$model->gear_type_id].'_icon_sm.png'?>"> <div><?=Car::gearArray()[$model->gear_type_id]?></<div></li>
+					<li><img src="<?=Yii::$app->params['siteImagesPath'].'/Door_icon_sm.png'?>"><div><?=$model->number_of_doors?> doors</div></li>
+					<li><img src="<?=Yii::$app->params['siteImagesPath'].'/Seat_icon_sm.png'?>"><div><?=$model->number_of_seats?> seats</div></li>
+					<li><img src="<?=Yii::$app->params['siteImagesPath'].'/'.Car::gasArray()[$model->gas_type_id].'_icon_sm.png'?>"></i> <div><?=Car::gasArray()[$model->gas_type_id]?></div></li>
 			</ul>
 
 		</div>

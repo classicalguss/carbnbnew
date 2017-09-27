@@ -3,15 +3,16 @@
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
-
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use frontend\assets\UserAsset;
 use frontend\assets\AppAsset;
 use yii\helpers\Url;
+use yii\authclient\widgets\AuthChoice;
+use yii\base\Widget;
 
 $this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params ['breadcrumbs'] [] = $this->title;
 UserAsset::register ( $this );
 AppAsset::register ( $this );
 ?>
@@ -42,13 +43,14 @@ AppAsset::register ( $this );
 					<img src="<?=Yii::$app->params ['siteImagesPath']?>/car-icon.png"
 						alt="Car icon">
 					<h5>Rent a Car Easily</h5>
-					<p>Search our vast selection of unique, locally owned cars within your area</p>
+					<p>Search our vast selection of unique, locally owned cars within
+						your area</p>
 				</div>
 			</div>
 		</div>
 		<div class="col-sm-8">
 			<div class="sign-forms">
-				<h6>Sign in to uchase</h6>
+				<h6>Sign in to uchaise</h6>
 				<p>Enter your details below</p>
 				<?php $form = ActiveForm::begin(['id' => 'form-signup','class'=>'form']); ?>
 					<?= $form->field($model, 'email')->textInput(['placeHolder'=>'Email Address','class'=>'form-control input-lg'])->label(false)->error(['tag'=>'span'])?>
@@ -58,10 +60,15 @@ AppAsset::register ( $this );
 						<?= Html::submitButton('Login', ['class' => 'btn btn-lg btn-primary btn-block', 'name' => 'login-button']) ?>
 					</div>
 				<?php ActiveForm::end(); ?>
+				<div class="separator-sign-in">Or</div>
+				<?= AuthChoice::widget([
+					'baseAuthUrl' => ['user/auth']
+				]) ?>
+				<a href="#" class="btn btn-block btn-lg btn-facebook"> <i class="fa fa-facebook"></i> Connect with Facebook </a>
 			</div>
 		</div>
 	</div>
 </div>
-                <div style="color:#999;margin:1em 0">
-                    If you forgot your password you can <?= Html::a('reset it', ['user/request-password-reset']) ?>.
-                </div>
+<div style="color: #999; margin: 1em 0">
+	If you forgot your password you can <?= Html::a('reset it', ['user/request-password-reset']) ?>.
+</div>

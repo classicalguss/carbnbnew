@@ -32,7 +32,6 @@ AppAsset::register ( $this );
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="main-nav">
 	<div class="container wide">
 		<div class="row">
@@ -43,7 +42,7 @@ AppAsset::register ( $this );
 			</div>
 			<div class="col-md-8 text-right">
 				<ul class="list-inline list-links">
-					<li><a href="<?=Url::to(['car/list-a-car'])?>">List Your Car</a></li>
+					<li><a href="<?=Url::to(['car/your-cars'])?>">List Your Car</a></li>
 					<li><a href="<?=Url::to(['car/my-drives'])?>">My Drives</a></li>
 					<li><a href="<?=Url::to([''])?>">Messages</a></li>
 					<?php if (Yii::$app->user->isGuest):?>
@@ -51,7 +50,7 @@ AppAsset::register ( $this );
 						<li><a href="<?=Url::to(['user/signup'])?>" class="btn btn-primary">Sign Up</a></li>
 					<?php else :?>
 						<li class="dropdown">
-							<a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<a href="#" class="user-profile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<img src="<?=frontend\controllers\UserController::getUserPhoto()?>" width="40" class="img-circle" alt="<?=Yii::$app->user->identity->first_name?>"> <span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu dropdown-menu-right">

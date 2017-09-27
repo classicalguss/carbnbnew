@@ -9,6 +9,18 @@ return [
 		],
 		'controllerNamespace' => 'frontend\controllers',
 		'components' => [
+				'authClientCollection' => [
+						'class' => 'yii\authclient\Collection',
+						'clients' => [
+								'facebook' => [
+										'class' => 'yii\authclient\clients\Facebook',
+										'authUrl' => 'https://www.facebook.com/dialog/oauth',
+										'clientId' => $params['facebookAppId'],
+										'clientSecret' => $params['facebookAppSecret'],
+										'attributeNames' => ['picture','name', 'email', 'first_name', 'last_name'],
+								],
+						],
+				],
 				'request' => [
 						'csrfParam' => '_csrf-frontend'
 				],

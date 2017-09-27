@@ -38,6 +38,8 @@ class User extends ActiveRecord implements IdentityInterface {
 	const ROLE_MODERATOR = 20;
 	const ROLE_ADMIN = 30;
 
+	public $photoFile;
+	public $licenseImage;
 	/**
 	 * @inheritdoc
 	 */
@@ -245,5 +247,23 @@ class User extends ActiveRecord implements IdentityInterface {
 	public function isAdmin()
 	{
 		return $this->role == self::ROLE_ADMIN;
+	}
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see \yii\db\BaseActiveRecord::afterFind()
+	 */
+	public function afterFind() {
+		if (!empty($this->photo))
+			$this->photoFile = Yii::$app->params['imagesFolder'].$this->photo;
+		else
+			$this->photoFile = '';
+			
+		if (!empty($this->license_image_file))
+			$this->licenseImage = Yii::$app->params['imagesFolder'].$this->license_image_file;
+		else
+			$this->licenseImage = '';
+					
+		return parent::afterFind();
 	}
 }

@@ -95,6 +95,11 @@ class Car extends \yii\db\ActiveRecord {
 				'car_id' => 'id'
 		] )->count('car_id');
 	}
+	public function getCity() {
+		return $this->hasOne( City::className(), [
+				'id' => 'city_id'
+		]);
+	}
 	public static function featuresArray() {
 		return [
 				0=>'4G LTE',
@@ -109,7 +114,6 @@ class Car extends \yii\db\ActiveRecord {
 				9=>'Power Steering',
 				10=>'USB',
 				11=>'ABS'
-				
 		];
 	}
 	public static function gearArray() {

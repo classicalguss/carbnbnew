@@ -23,17 +23,17 @@ use frontend\models\Car;
 	<?= $form->field($model, 'gas_type_id')->radioList(Car::gasArray(),['class'=>'list-inline feature-checkbox','item'=>function($index,$label,$name,$checked,$value) {
 		if ($checked == 1)
 			$checked = 'checked';
-		return '<li><label><i class="icon fa fa-car"></i><div>'.$label.'</div><input name='.$name.' value='.$value.' type="radio" '.$checked.'></label></li>';
+		return '<li><label><img src="'.Yii::$app->params['siteImagesPath'].'/'.$label.'_icon.png"><div>'.$label.'</div><input name='.$name.' value='.$value.' type="radio" '.$checked.'></label></li>';
 	}]) ?>
 	<?= $form->field($model, 'type_id')->radioList(Car::typeArray(),['class'=>'list-inline feature-checkbox','item'=>function($index,$label,$name,$checked,$value) {
 		if ($checked == 1)
 			$checked = 'checked';
-		return '<li><label><i class="icon fa fa-car"></i><div>'.$label.'</div><input name='.$name.' value='.$value.' type="radio" '.$checked.'></label></li>';
+		return '<li><label><img src="'.Yii::$app->params['siteImagesPath'].'/'.$label.'_icon.png"><div>'.$label.'</div><input name='.$name.' value='.$value.' type="radio" '.$checked.'></label></li>';
 	}]) ?>
 	<?= $form->field($model, 'features')->checkboxList(Car::featuresArray(),['class'=>'list-inline feature-checkbox','item'=>function($index,$label,$name,$checked,$value) {
 		if ($checked == 1)
 			$checked = 'checked';
-		return '<li><label><i class="icon fa fa-car"></i><div>'.$label.'</div><input name='.$name.' value='.$value.' type="checkbox" '.$checked.'></label></li>';
+		return '<li><label><img src="'.Yii::$app->params['siteImagesPath'].'/'.$label.'_icon.png"><div>'.$label.'</div><input name='.$name.' value='.$value.' type="checkbox" '.$checked.'></label></li>';
 	}]) ?>
 	<div class="form-group">
 		<?= Html::submitButton('Next', ['class' => 'btn btn-primary btn-lg btn-submit']) ?>

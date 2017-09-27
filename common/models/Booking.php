@@ -2,8 +2,8 @@
 namespace common\models;
 
 use Yii;
-use api\modules\v1\models\User;
-use api\modules\v1\models\Car;
+use common\models\User;
+use common\models\Car;
 
 /**
  * This is the model class for table "booking".

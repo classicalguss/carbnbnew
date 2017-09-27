@@ -23,22 +23,8 @@ class TestController extends ActiveController {
 	public $modelClass='test';
 	public function actionTest() {
 		
-		$query = new Query();
-		$rows = $query->select('id')
-		->from('sphinx_areas')->match('duba*')
-		->all();
-		//return $rows;
-
-		$areas = Area::find()->with('city')->all();
-		$sql = 'TRUNCATE areas; INSERT INTO `areas` (`city_id`,`area_id`,`city_name`,`area_name`) VALUES ';
-		$valuesArray = [];
-		foreach ($areas as $area)
-		{
-			$elementArray = [$area->city->id,$area->id,'\''.$area->city->value.'\'','\''.str_replace('\'', '\'\'', $area->value).'\''];
-			$valuesArray[] = '('.implode(',',$elementArray).')';
-		}
-		$sql .= implode(',',$valuesArray);
-		return $sql;
+		$image = file_get_contents('https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/18118821_10101752857313411_7550685757608308442_n.jpg?_nc_eui2=v1%3AAeFqxmFPtediQjHmzyfrSpy8aimJ5qckkuYWpgA7kOcio4emoMadEEogpELUzUXITvw&oh=b5cd504a44a1c92fa20fc76ce34951d5&oe=5A880DA9');
+		file_put_contents('../../uploads/sdhfjksdfhjksdlfsd.png', $image);
 	}
 }
 
