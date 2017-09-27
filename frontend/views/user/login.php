@@ -61,10 +61,7 @@ AppAsset::register ( $this );
 					</div>
 				<?php ActiveForm::end(); ?>
 				<div class="separator-sign-in">Or</div>
-				<?= AuthChoice::widget([
-					'baseAuthUrl' => ['user/auth']
-				]) ?>
-				<a href="#" class="btn btn-block btn-lg btn-facebook"> <i class="fa fa-facebook"></i> Connect with Facebook </a>
+				<a target="_blank" href="/web/user/auth?authclient=facebook" title="Facebook" data-popup-width="860" data-popup-height="480" class="facebook auth-link btn btn-block btn-lg btn-facebook"> <i class="fa fa-facebook"></i> Connect with Facebook </a>
 			</div>
 		</div>
 	</div>
