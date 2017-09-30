@@ -74,19 +74,24 @@ AppAsset::register ( $this );
 		</div>
 	</div>
 </div>
-<div class="
-	<?php if (!in_array(Yii::$app->requestedRoute, ['site/index','search/index','search'])):?>
-		container 
-	<?php endif;?> 
-	<?php if (in_array(Yii::$app->requestedRoute,['car/list-a-car','car/car-listed-successfully'])):?>
-		container-narrow
-	<?php endif;?>"
->
+<?php if (in_array(Yii::$app->requestedRoute,['car/view'])):?>
 	<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
 	<?= Alert::widget() ?>
 	<?= $content ?>
-</div>
-
+<?php else:?>
+	<div class="
+		<?php if (!in_array(Yii::$app->requestedRoute, ['site/index','search/index','search'])):?>
+			container 
+		<?php endif;?> 
+		<?php if (in_array(Yii::$app->requestedRoute,['car/list-a-car','car/car-listed-successfully'])):?>
+			container-narrow
+		<?php endif;?>"
+	>
+		<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
+		<?= Alert::widget() ?>
+		<?= $content ?>
+	</div>
+<?php endif;?>
 <div class="container">
 	<footer class="main-footer">
 		<div class="row">

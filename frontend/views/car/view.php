@@ -3,6 +3,7 @@
 use frontend\assets\CarViewAsset;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\authclient\signature\RsaSha;
 CarViewAsset::register($this);
 
 /* @var $this yii\web\View */
@@ -18,9 +19,9 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 		<div id="carousel-full-width" class="carousel slide car-details-slider" data-ride="carousel">
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
-			<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
-				<li data-target="#carousel-full-width" data-slide-to="<?=$i?>" <?php if ($i==0):?>class="active"<?php endif;?>></li>
-			<?php endforeach;?>
+				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
+					<li data-target="#carousel-full-width" data-slide-to="<?=$i?>" <?php if ($i==0):?>class="active"<?php endif;?>></li>
+				<?php endforeach;?>
 			</ol>
 
 			<!-- Wrapper for slides -->
@@ -154,7 +155,6 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 			</div>
 
 		</div>
-
 		<aside class="col-md-4 price-box">
 			<?= Html::beginForm (['/car/reserve-a-car'], 'post')
 				.Html::hiddenInput('id', $carInfo['id'])?>
@@ -181,9 +181,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 				<li><a href="#"><i class="fa fa-instagram"></i></a></li>
 			</ul>
 		</aside>
-
 	</div>
-
 	<?=$recentlyListedHTML?>
 
 </div>
