@@ -304,7 +304,7 @@ class Car extends \yii\db\ActiveRecord {
 		return self::find()
 		->joinWith('make',true,'INNER JOIN')
 		->joinWith('model',true,'INNER JOIN')
-		->where('carmake.id = carmodel.make_id')
+		->where('carmake.id = carmodel.make_id and is_published = 1')
 		->andFilterWhere(['not in','car.id',$excludedCarIds])
 		->orderBy('created_at DESC')
 		->limit($limit)

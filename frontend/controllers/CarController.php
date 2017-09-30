@@ -150,6 +150,7 @@ class CarController extends Controller
 		}
 
 		$recentlyListed   = Car::getRecentlyListed(3, [$id]);
+		$recentlyListedCarIds = [];
 		foreach ($recentlyListed as $car)
 			$recentlyListedCarIds[] = $car->id;
 		$recentlyListedCarsRatings = Car::getAllRatings($recentlyListedCarIds);
