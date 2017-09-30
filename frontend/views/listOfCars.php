@@ -14,7 +14,7 @@
 			<div class="single-item">
 				<div class="img-wrap">
 					<a href="<?=frontend\controllers\CarController::getCarViewUrl($car->id)?>" class="block">
-						<img class="carved" width="350" height="220" src="<?=$imagesPath.$car->photo1?>" alt="<?=$car->description?>">
+						<img class="carved" src="<?=$imagesPath.$car->photo1?>" alt="<?=$car->description?>">
 					</a>
 				</div>
 				<div class="clearfix">
