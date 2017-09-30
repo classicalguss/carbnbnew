@@ -10,7 +10,7 @@ use Yii;
 use api\modules\v1\models\Car;
 
 class BookingController extends ActiveController {
-	public $modelClass = 'common\models\Booking';
+	public $modelClass = 'api\modules\v1\models\Booking';
 	public function actions() {
 		$actions = parent::actions ();
 		unset($actions['create'],$actions['update']);

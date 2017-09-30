@@ -10,7 +10,7 @@ use common\models\Area;
 use common\models\City;
 use common\models\Util;
 use common\models\Carmake;
-use common\models\Booking;
+use api\modules\v1\models\Booking;
 
 /**
  * This is the model class for table "car".
@@ -202,11 +202,9 @@ class Car extends \yii\db\ActiveRecord {
 		];
 	}
 	public function getArea() {
-		$area = $this->hasOne( Area::className(),[
+		return $this->hasOne( Area::className(),[
 				'id'=>'area_id'
 		]);
-		
-		return $area;
 	}
 	public function getLocation() {
 		$city = City::findOne([
@@ -256,7 +254,8 @@ class Car extends \yii\db\ActiveRecord {
 				'rate',
 				'milage_limitation',
 				'area',
-				'numberOfBookings'
+				'numberOfBookings',
+				'location'
 		];
 	}
 	public function getNumberOfBookings () {
