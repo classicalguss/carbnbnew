@@ -203,6 +203,7 @@ $('#reserver-form').submit(function() {
             {
                 document.frm['amount'].value = data.amount;
                 document.frm['signature'].value = data.signature;
+                document.frm.submit();
             }
             else
             {
