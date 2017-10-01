@@ -603,10 +603,10 @@ class CarController extends Controller
 			}
 		}
 		
-		$amount = $carModal->price*Util::dateDiff($startDate, $endDate)->days;
+		$amount = $carModal->price*Util::dateDiff($startDate, $endDate)->days*100;
 		$paymentParams = array(
 				'access_code' => 'mjYoPHsRkzTGIlLPVvkX',
-				'amount' => $amount*100,
+				'amount' => $amount,
 				'command' => ($carModal->book_instantly == 1? 'PURCHASE':'AUTHORIZATION'),
 				'currency' => 'AED',
 				'customer_email' => 'test@payfort.com',
