@@ -28,7 +28,9 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 			<div class="carousel-inner" role="listbox">
 				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
 					<div class="item active">
-						<img class="img-responsive" src="<?=$imagePath?>" alt="<?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?>" />
+						<div style="margin-top:-300px">
+							<img class="img-responsive" src="<?=$imagePath?>" alt="<?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?>" />
+						</div>
 						<a href="#" class="view-photos"> View Photos </a>
 					</div>
 				<?php endforeach;?>
@@ -203,7 +205,9 @@ $('#reserver-form').submit(function() {
             {
                 document.frm['amount'].value = data.amount;
                 document.frm['signature'].value = data.signature;
-                document.frm.submit();
+                document.frm['return_url'].value = data.return_url;
+                document.frm['merchant_reference'].value = data.merchant_reference;
+                //document.frm.submit();
             }
             else
             {

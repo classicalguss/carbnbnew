@@ -16,8 +16,10 @@ $this->title = 'Reservation Requests';
 		<ul class="nav nav-pills nav-stacked nav-stacked-uchaise">
 			<li role="presentation"><a href="<?=Url::to(['car/your-cars'])?>">Your
 					Cars</a></li>
-			<li role="presentation" class="active"><a
+			<li role="presentation" class="<?php if (in_array(Yii::$app->requestedRoute,['car/my-approvals'])):?>active<?php endif;?>"><a
 				href="<?=Url::to(['car/my-approvals'])?>">Reservation Requests</a></li>
+			<li role="presentation" class="<?php if (in_array(Yii::$app->requestedRoute,['car/approved-requests'])):?>active<?php endif;?>"><a
+				href="<?=Url::to(['car/approved-requests'])?>">Approved Requests</a></li>
 		</ul>
 		<br> <br> <a href="<?=Url::to(['car/list-a-car'])?>"
 			class="btn btn-primary btn-lg">List a Car</a>
@@ -28,8 +30,11 @@ $this->title = 'Reservation Requests';
 				<div class="single-reservation clearfix">
 					<div class="row">
 						<div class="col-md-8">
-							<h5 class="bold"><?=$rent['renter_name']?> has requested to reserve your <?=$rent['make']?> <?=$rent['model']?> <?=$rent['year_model']?></h5>
-	
+							<?php if($rent['status'] == 0):?>
+								<h5 class="bold"><?=$rent['renter_name']?> has requested to reserve your <?=$rent['make']?> <?=$rent['model']?> <?=$rent['year_model']?></h5>
+							<?php elseif($rent['status'] == 1):?>
+								<h5 class="bold"><?=$rent['renter_name']?> has reserved your <?=$rent['make']?> <?=$rent['model']?> <?=$rent['year_model']?></h5>
+							<?php endif;?>
 							<div class="media">
 								<div class="media-left media-middle">
 									<a href="#"> <img class="media-object img-circle" width="70px"
@@ -44,23 +49,28 @@ $this->title = 'Reservation Requests';
 							</div>
 						</div>
 						<div class="col-md-4 text-right">
-							<span class="text-gray">Requested on <?=date('F j, Y',strtotime($rent['reserved_at']))?></span>
-	
+							<?php if($rent['status'] == 0):?>
+								<span class="text-gray">Requested on <?=date('F j, Y',strtotime($rent['reserved_at']))?></span>
+							<?php elseif($rent['status'] == 1):?>
+								<span class="text-gray">Reserved on <?=date('F j, Y',strtotime($rent['reserved_at']))?></span>
+							<?php endif;?>
 							<div class="price">
 								<?=$rent['price']*$rent['days_diff']?> <small><?=$rent['currency']?></small>
 							</div>
 							<span>for <?=$rent['days_diff']?> days</span>
 						</div>
 					</div>
-					<ul class="list-inline buttons-group">
-						<li>
-							<?=Html::beginForm ( [ '/car/approve-booking' ], 'post' ) . Html::hiddenInput ( 'id', $rent ['id'] ) . Html::hiddenInput ( 'action', 'approve' ) . Html::submitButton ( 'Approve', [ 'class' => 'btn btn-primary' ] ) . Html::endForm ()?>
-						</li>
-						<li>
-							<?=Html::beginForm ( [ '/car/decline-booking' ], 'post' ) . Html::hiddenInput ( 'id', $rent ['id'] ) . Html::hiddenInput ( 'action', 'decline' ) . Html::submitButton ( 'Decline', [ 'class' => 'btn btn-default' ] ) . Html::endForm ()?>
-						</li>
-						<li class="text-gray"><?=$rent['left_to_confirm']?> Days left to confirm</li>
-					</ul>
+					<?php if($rent['status'] == 0):?>
+						<ul class="list-inline buttons-group">
+							<li>
+								<?=Html::beginForm ( [ '/car/approve-booking' ], 'post' ) . Html::hiddenInput ( 'id', $rent ['id'] ) . Html::hiddenInput ( 'action', 'approve' ) . Html::submitButton ( 'Approve', [ 'class' => 'btn btn-primary' ] ) . Html::endForm ()?>
+							</li>
+							<li>
+								<?=Html::beginForm ( [ '/car/decline-booking' ], 'post' ) . Html::hiddenInput ( 'id', $rent ['id'] ) . Html::hiddenInput ( 'action', 'decline' ) . Html::submitButton ( 'Decline', [ 'class' => 'btn btn-default' ] ) . Html::endForm ()?>
+							</li>
+							<li class="text-gray"><?=$rent['left_to_confirm']?> Days left to confirm</li>
+						</ul>
+					<?php endif;?>
 				</div>
 			<?php endforeach;?>
 		</div>

@@ -40,11 +40,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['ajax-reserve-a-car','list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
+				'only' => ['approved-requests','booking','ajax-reserve-a-car','list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
 				'rules' => [
 					[
 						'allow' => true,
-							'actions' => ['ajax-reserve-a-car','list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
+							'actions' => ['approved-requests','booking','ajax-reserve-a-car','list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
 						'roles' => ['@'],
 					],
 				],
@@ -163,16 +163,16 @@ class CarController extends Controller
 			'carsRating' => $recentlyListedCarsRatings,
 		]);
 		$paymentParams = array(
-				'command' => ($carModel->book_instantly == 1? 'PURCHASE':'AUTHORIZATION'),
+				'command' => 'AUTHORIZATION',
 				'access_code' => 'mjYoPHsRkzTGIlLPVvkX',
 				'merchant_identifier' => 'ULhiPMaP',
-				'merchant_reference' => $carModel->id.'-'.Yii::$app->user->id,
+				'merchant_reference' => '',
 				'amount' => '',
 				'currency' => 'AED',
 				'language' => 'en',
 				'customer_email' => 'test@payfort.com',
 				'signature' => '',
-				'return_url'=>Url::to(['car/my-drives'],true)
+				'return_url'=>'',
 		);
 		return $this->render('view', [
 			'imagesPath'     => $imagesPath,
@@ -499,7 +499,8 @@ class CarController extends Controller
 					'renterPhoto' => $renterInfo->photoFile,
 					'left_to_confirm' => Util::dateDiff(date('Y-m-d'), $carBook->date_start)->days,
 					'delivery_time'=>$carBook->delivery_time,
-					'city'=>$carInfo->city->value
+					'city'=>$carInfo->city->value,
+					'status'=>0
 			];
 
 			$rentDetails['days_diff'] = ($rentDetails['days_diff'] == 0 ? 1 : $rentDetails['days_diff']);
@@ -512,6 +513,71 @@ class CarController extends Controller
 		]);
 	}
 
+	public function actionApprovedRequests()
+	{
+		$userId = Yii::$app->user->id;
+		
+		$siteImagesPath = Yii::$app->params['siteImagesPath'];
+		
+		$bookings = Booking::find()
+		->where(['owner_id'=>$userId])
+		->andWhere(['booking.status'=>1])
+		->all();
+		
+		$carIds = [];
+		foreach ($bookings as $carBook)
+			$carIds[] = $carBook->car_id;
+			
+			$carIds = array_unique($carIds);
+			
+			$carModel = Car::find()
+			->joinWith('make',true,'INNER JOIN')
+			->joinWith('model',true,'INNER JOIN')
+			->joinWith('city',true,'INNER JOIN')
+			->where('carmake.id = carmodel.make_id')
+			->andWhere(['car.id'=>$carIds])
+			->indexBy('id')
+			->all();
+			
+			$result = [];
+			
+			foreach ($bookings as $carBook)
+			{
+				if (!isset($carModel[$carBook->car_id]))
+					continue;
+					$carInfo = $carModel[$carBook->car_id];
+					$renterInfo = $carBook->renter;
+					
+					$rentDetails = [
+							'id' => $carBook->id,
+							'to' => $carBook->date_end,
+							'from' => $carBook->date_start,
+							'make'  => $carInfo->make->value,
+							'model' => $carInfo->model->value,
+							'price' => $carInfo->price,
+							'currency' => $carInfo->currency,
+							'days_diff' => Util::dateDiff($carBook->date_start, $carBook->date_end)->days,
+							'year_model' => $carInfo->year_model,
+							'reserved_at' => $carBook->date_created,
+							'renter_name' => $renterInfo->first_name,
+							'carPhoto' => Yii::$app->params['imagesFolder'].$carInfo->photo1,
+							'renterPhoto' => $renterInfo->photoFile,
+							'left_to_confirm' => Util::dateDiff(date('Y-m-d'), $carBook->date_start)->days,
+							'delivery_time'=>$carBook->delivery_time,
+							'city'=>$carInfo->city->value,
+							'status'=>1
+					];
+					
+					$rentDetails['days_diff'] = ($rentDetails['days_diff'] == 0 ? 1 : $rentDetails['days_diff']);
+					$result[] = $rentDetails;
+			}
+			
+			return $this->render('myApprovalsView', [
+					'siteImagesPath' => $siteImagesPath,
+					'rentsInfo'  => $result,
+			]);
+	}
+	
 	public function actionApproveBooking()
 	{
 		$ownerId = Yii::$app->user->id;
@@ -546,26 +612,7 @@ class CarController extends Controller
 		$bookModel->save();
 		return $this->redirect(['my-approvals']);
 	}
-	/**
-	public function actionAjaxReserveACar()
-	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-		$post = Yii:: $app->request->post();
-		$data = [];
-		if (Yii::$app->request->isAjax) {
-			// do your data processing here
-			
-			// set response data
-			if (0) {
-				$data = ['success' => true,];
-			}
-			else {
-				$data = ['success' => false, 'error' => 'Some error message'];
-			}
-			return $data;
-		}
-	}
-	**/
+	
 	public function actionAjaxReserveACar()
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
@@ -604,16 +651,17 @@ class CarController extends Controller
 		}
 		
 		$amount = $carModal->price*Util::dateDiff($startDate, $endDate)->days*100;
+		$merchantReference = strtotime($startDate).'-'.strtotime($endDate).'-'.$carModal->id.'-'.Yii::$app->user->id;
 		$paymentParams = array(
 				'access_code' => 'mjYoPHsRkzTGIlLPVvkX',
 				'amount' => $amount,
-				'command' => ($carModal->book_instantly == 1? 'PURCHASE':'AUTHORIZATION'),
+				'command' => 'AUTHORIZATION',
 				'currency' => 'AED',
 				'customer_email' => 'test@payfort.com',
 				'language' => 'en',
 				'merchant_identifier' => 'ULhiPMaP',
-				'merchant_reference' => $carModal->id.'-'.Yii::$app->user->id,
-				'return_url'=>Url::to(['car/my-drives'],true),
+				'merchant_reference' => $merchantReference,
+				'return_url'=>Url::to(['car/booking'],true),
 		);
 		$signature = 'iuytrertyui';
 		foreach ($paymentParams as $key=>$value)
@@ -621,20 +669,107 @@ class CarController extends Controller
 			$signature .= $key.'='.$value;
 		}
 		$signature .= 'iuytrertyui';
-		$data = ['success' => true, 'amount'=>$amount,'signature'=>hash('sha256',$signature)];
-		return $data;
-		
-		$bookingModal = new Booking();
-		$bookingModal->status    = ($carModal->book_instantly ? 1 : 0);
-		$bookingModal->car_id    = $carModal->id;
-		$bookingModal->owner_id  = $carModal->owner_id;
-		$bookingModal->renter_id = $renterId;
-		$bookingModal->date_end  = $endDate;
-		$bookingModal->date_start= $startDate;
-		$bookingModal->save();
-		return $this->render('carReservedSuccessfully', []);
-	}
+		$data = ['success' => true, 'amount'=>$amount,'signature'=>hash('sha256',$signature),'merchant_reference'=>$merchantReference,'return_url'=>Url::to(['car/booking'],true)];
 
+		return $data;
+	}
+	public function actionBooking()
+	{
+		$message = '';
+		$paymentStatus = Yii::$app->request->get('status','00');
+		if ($paymentStatus !== '02')
+		{
+			$message = 'Oops! Something went wrong with the payment, please contact us on barghouti_since88@hotmail.com';
+			return $this->render('carReservedSuccessfully', ['message'=>$message]);
+		}
+		
+		$merchantReference = Yii::$app->request->get('merchant_reference',[]);
+		$merchantReferenceArray = explode('-',$merchantReference);
+		if (count($merchantReferenceArray) != 4)
+		{
+			$message = 'Oops! Something went wrong with your purchase, please contact us on barghouti_since88@hotmail.com';
+			return $this->render('carReservedSuccessfully', ['message'=>$message]);
+		}
+		$startDate = date('Y-m-d',$merchantReferenceArray[0]);
+		$endDate = date('Y-m-d',$merchantReferenceArray[1]);
+		$carId = $merchantReferenceArray[2];
+		$renterId = $merchantReferenceArray[3];
+		if ((int)$renterId !== Yii::$app->user->id)
+		{
+			$message = 'It doesn\'t seem that this purchase belongs to you! Please contact us on barghouti_since88@hotmail.com';
+			return $this->render('carReservedSuccessfully', ['message'=>$message]);
+		}
+		
+		$carModel = Car::findOne($carId);
+		if ($carModel === null)
+		{
+			$message = 'Invalid car. Please contact us on barghouti_since88@hotmail.com';
+			return $this->render('carReservedSuccessfully', ['message'=>$message]);
+		}
+		
+		if (Booking::isCarRentedOnAPeriod($carId, $startDate, $endDate))
+		{
+			$message = 'Oops! Sorry but it seems someone already rented the car in this period!';
+			return $this->render('carReservedSuccessfully', ['message'=>$message]);
+		}
+		
+		if ($carModel->book_instantly == 1)
+		{
+			//Capture the purchase
+			$url = 'https://paymentservices.payfort.com/FortAPI/paymentApi';
+			
+			$arrData = array(
+					'access_code' => Yii::$app->request->get('access_code'),
+					'amount' => Yii::$app->request->get('amount'),
+					'command' => 'CAPTURE',
+					'currency' => Yii::$app->request->get('currency'),
+					'language' => Yii::$app->request->get('language'),
+					'merchant_identifier' => Yii::$app->request->get('merchant_identifier'),
+					'merchant_reference' => Yii::$app->request->get('merchant_reference'),
+			);
+			
+			
+			$signature = 'iuytrertyui';
+			foreach ($arrData as $key=>$value)
+			{
+				$signature .= $key.'='.$value;
+			}
+			$signature .= 'iuytrertyui';
+			
+			$arrData['signature'] = hash('sha256',$signature);
+			$ch = curl_init( $url );
+			# Setup request to send json via POST.
+			$data = json_encode($arrData);
+			curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+			curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+			# Return response instead of printing.
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
+			# Send request.
+			$result = curl_exec($ch);
+			curl_close($ch);
+			# Print response.
+			$result = json_decode($result,true);
+			if ($result['status'] !== '04')
+			{
+				$message = 'Oops! Something went wrong with authorizing your purchase, please contact us on barghouti_since88@hotmail.com';
+				return $this->render('carReservedSuccessfully', ['message'=>$message]);
+			}
+			$booking = new Booking();
+			$booking->car_id = $carId;
+			$booking->date_start = $startDate;
+			$booking->date_end = $endDate;
+			$booking->renter_id = $renterId;
+			$booking->owner_id = $carModel->owner_id;
+			$booking->status = 1;
+			$booking->save();
+			return $this->render('carReservedSuccessfully', ['message'=>'']);
+		}
+		else
+		{
+			//Only check the status
+		}
+	}
 	/**
 	 * Finds the Car model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.

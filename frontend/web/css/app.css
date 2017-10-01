@@ -324,7 +324,7 @@ img {
 
 .img-responsive {
     display: block;
-    max-width: 100%;
+    min-width: 100%;
     height: auto
 }
 
@@ -6993,10 +6993,12 @@ h4 {
     display: block
 }
 
-.publishded-alert .icon {
+.publishded-alert .fa-check-circle {
     color: #02b7ff
 }
-
+.publishded-alert .fa-times-circle {
+    color: rgb(253, 44, 44)
+}
 .publishded-alert h1 {
     font-weight: bold;
     margin: 25px 0
