@@ -21,18 +21,19 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 			<ol class="carousel-indicators">
 				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
 					<li data-target="#carousel-full-width" data-slide-to="<?=$i?>" <?php if ($i==0):?>class="active"<?php endif;?>></li>
+					<?php $i++;?>
 				<?php endforeach;?>
 			</ol>
 
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner" role="listbox">
 				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
-					<div class="item active">
+					<div class="item <?php if($i==0):?>active<?php endif;?>">
 						<div style="margin-top:-300px">
 							<img class="img-responsive" src="<?=$imagePath?>" alt="<?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?>" />
 						</div>
-						<a href="#" class="view-photos"> View Photos </a>
 					</div>
+					<?php $i++;?>
 				<?php endforeach;?>
 			</div>
 		</div>
