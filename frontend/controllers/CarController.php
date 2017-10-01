@@ -23,7 +23,7 @@ use yii\web\UploadedFile;
 use yii\db\Expression;
 use common\models\Util;
 use common\models\Area;
-
+use yii\web\Response;
 /**
  * CarController implements the CRUD actions for Car model.
  */
@@ -40,11 +40,11 @@ class CarController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
+				'only' => ['ajax-reserve-a-car','list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
 				'rules' => [
 					[
 						'allow' => true,
-							'actions' => ['list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
+							'actions' => ['ajax-reserve-a-car','list-a-car','update', 'delete','your-cars','toggle-publish','my-drives','my-approvals','reserve-a-car','car-listed-successfully','approve-booking','decline-booking'],
 						'roles' => ['@'],
 					],
 				],
@@ -95,8 +95,8 @@ class CarController extends Controller
 		$imagesPath     = Yii::$app->params['imagesFolder'];
 		$siteImagesPath = Yii::$app->params['siteImagesPath'];
 
-		$carModel = Car::find()
-						->joinWith('make',true,'INNER JOIN')
+		$carModel = new Car();
+		$carModel = Car::find()->joinWith('make',true,'INNER JOIN')
 						->joinWith('model',true,'INNER JOIN')
 						->joinWith('ratings')
 						->joinWith('user')
@@ -162,6 +162,18 @@ class CarController extends Controller
 			'imagesPath' => $imagesPath,
 			'carsRating' => $recentlyListedCarsRatings,
 		]);
+		$paymentParams = array(
+				'command' => ($carModel->book_instantly == 1? 'PURCHASE':'AUTHORIZATION'),
+				'access_code' => 'mjYoPHsRkzTGIlLPVvkX',
+				'merchant_identifier' => 'ULhiPMaP',
+				'merchant_reference' => $carModel->id.'-'.Yii::$app->user->id,
+				'amount' => '',
+				'currency' => 'AED',
+				'language' => 'en',
+				'customer_email' => 'test@payfort.com',
+				'signature' => '',
+				'return_url'=>Url::to(['car/my-drives'],true)
+		);
 		return $this->render('view', [
 			'imagesPath'     => $imagesPath,
 			'siteImagesPath' => $siteImagesPath,
@@ -171,6 +183,7 @@ class CarController extends Controller
 			'ratingsSum'     => $ratingsSum,
 			'ratersInfo'     => $ratersInfo,
 			'recentlyListedHTML' => $recentlyListedHTML,
+			'paymentParams'=>$paymentParams
 		]);
 	}
 
@@ -533,15 +546,36 @@ class CarController extends Controller
 		$bookModel->save();
 		return $this->redirect(['my-approvals']);
 	}
-	public function actionReserveACar()
+	/**
+	public function actionAjaxReserveACar()
 	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		$post = Yii:: $app->request->post();
+		$data = [];
+		if (Yii::$app->request->isAjax) {
+			// do your data processing here
+			
+			// set response data
+			if (0) {
+				$data = ['success' => true,];
+			}
+			else {
+				$data = ['success' => false, 'error' => 'Some error message'];
+			}
+			return $data;
+		}
+	}
+	**/
+	public function actionAjaxReserveACar()
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
 		$carId     = Yii::$app->request->post ('id', null);
 		$startDate = Yii::$app->request->post ('start_date', null);
 		$endDate   = Yii::$app->request->post ('end_date', null);
 
 		$errorMsg = '';
 		if (!Util::validateDate($startDate) || !Util::validateDate($endDate))
-			$errorMsg = 'Wrong reservation date format';
+			$errorMsg = 'Please select correct dates';
 		elseif ($startDate > $endDate)
 			$errorMsg = 'Start reservation date should be greater than end date';
 		elseif ($startDate < date('Y-m-d'))
@@ -552,23 +586,44 @@ class CarController extends Controller
 		$carModal = $this->findModel($carId);
 
 		if ($renterId == $carModal->owner_id)
-			$errorMsg = 'You can rent your own car!';
+			$errorMsg = 'You can\'t rent your own car!';
 
 		if (!empty($errorMsg))
 		{
-			Yii::$app->session->setFlash ( 'error', $errorMsg);
-			return $this->redirect(['view', 'id' => $carId]);
+			$data = ['success' => false, 'error' => $errorMsg];
+			return $data;
 		}
 		else
 		{
 			// check if car already reserved on the same period
 			if (Booking::isCarRentedOnAPeriod($carId, $startDate, $endDate))
 			{
-				Yii::$app->session->setFlash ( 'error', 'Sorry, This car is already reserved during this period');
-				return $this->redirect(['view', 'id' => $carId]);
+				$data = ['success' => false, 'error' => 'Sorry, This car is already reserved during this period'];
+				return $data;
 			}
 		}
-
+		
+		$amount = $carModal->price*Util::dateDiff($startDate, $endDate)->days;
+		$paymentParams = array(
+				'access_code' => 'mjYoPHsRkzTGIlLPVvkX',
+				'amount' => $amount*100,
+				'command' => ($carModal->book_instantly == 1? 'PURCHASE':'AUTHORIZATION'),
+				'currency' => 'AED',
+				'customer_email' => 'test@payfort.com',
+				'language' => 'en',
+				'merchant_identifier' => 'ULhiPMaP',
+				'merchant_reference' => $carModal->id.'-'.Yii::$app->user->id,
+				'return_url'=>Url::to(['car/my-drives'],true),
+		);
+		$signature = 'iuytrertyui';
+		foreach ($paymentParams as $key=>$value)
+		{
+			$signature .= $key.'='.$value;
+		}
+		$signature .= 'iuytrertyui';
+		$data = ['success' => true, 'amount'=>$amount,'signature'=>hash('sha256',$signature)];
+		return $data;
+		
 		$bookingModal = new Booking();
 		$bookingModal->status    = ($carModal->book_instantly ? 1 : 0);
 		$bookingModal->car_id    = $carModal->id;

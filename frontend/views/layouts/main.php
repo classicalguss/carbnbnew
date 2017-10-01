@@ -76,7 +76,6 @@ AppAsset::register ( $this );
 </div>
 <?php if (in_array(Yii::$app->requestedRoute,['car/view'])):?>
 	<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
-	<?= Alert::widget() ?>
 	<?= $content ?>
 <?php else:?>
 	<div class="

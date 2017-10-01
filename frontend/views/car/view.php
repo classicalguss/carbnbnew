@@ -3,7 +3,7 @@
 use frontend\assets\CarViewAsset;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\authclient\signature\RsaSha;
+use common\widgets\Alert;
 CarViewAsset::register($this);
 
 /* @var $this yii\web\View */
@@ -156,7 +156,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 
 		</div>
 		<aside class="col-md-4 price-box">
-			<?= Html::beginForm (['/car/reserve-a-car'], 'post')
+			<?= Html::beginForm (['/car/reserve-a-car'], 'post',['id'=>'reserver-form'])
 				.Html::hiddenInput('id', $carInfo['id'])?>
 				<div class="price-and-reserve">
 					<div class="price-details">
@@ -170,6 +170,8 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 								<br/>
 								To:<input type="date" class="form-control" name="end_date" placeholder="YYYY-MM-DD">
 						</div>
+					</div>
+					<div id="w0-error-0" class="alert-danger fade in">
 					</div>
 					<?= Html::submitButton ( 'Reserve', ['class' => 'btn btn-primary btn-block no-radius btn-lg'] )?>
 				</div>
@@ -185,3 +187,32 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 	<?=$recentlyListedHTML?>
 
 </div>
+<form action='https://checkout.payfort.com/FortAPI/paymentPage' method='post' name='frm'>
+<?php foreach($paymentParams as $key=>$param):?>
+	<?php echo "\t<input type='hidden' name='".htmlentities($key)."' value='".htmlentities($param)."'>\n";?>
+<?php endforeach;?>
+</form>
+<script>
+$('#reserver-form').submit(function() { 
+    $.ajax({ 
+        url: '/car/ajax-reserve-a-car', 
+        type: 'post', 
+        data: $(this).serialize(), 
+        success: function(data) { 
+            if (data.success == true)
+            {
+                document.frm['amount'].value = data.amount;
+                document.frm['signature'].value = data.signature;
+            }
+            else
+            {
+            	$('#w0-error-0').addClass('alert').html(data.error);
+            }
+        },
+        error: function(data) {
+			$('#w0-error-0').addClass('alert').html(data.error);
+        }
+    }); 
+    return false;
+}); 
+</script>
