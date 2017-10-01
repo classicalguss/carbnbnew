@@ -402,13 +402,12 @@ class CarController extends Controller
 		$bookings = Booking::find()
 			->where(['renter_id'=>$userId])
 			->andWhere(['status'=>1])
-			->andWhere(['<', 'date_end', new Expression('NOW()')])
 			->all();
 
 		$carIds = [];
 		foreach ($bookings as $carBook)
 			$carIds[] = $carBook->car_id;
-
+			
 		$carIds = array_unique($carIds);
 
 		$carModel = Car::find()
@@ -713,61 +712,63 @@ class CarController extends Controller
 			return $this->render('carReservedSuccessfully', ['message'=>$message]);
 		}
 		
+		//Capture the purchase
+		$url = 'https://paymentservices.payfort.com/FortAPI/paymentApi';
+		
+		$arrData = array(
+				'access_code' => Yii::$app->request->get('access_code'),
+				'amount' => Yii::$app->request->get('amount'),
+				'command' => 'CAPTURE',
+				'currency' => Yii::$app->request->get('currency'),
+				'language' => Yii::$app->request->get('language'),
+				'merchant_identifier' => Yii::$app->request->get('merchant_identifier'),
+				'merchant_reference' => Yii::$app->request->get('merchant_reference'),
+		);
+		
+		
+		$signature = 'iuytrertyui';
+		foreach ($arrData as $key=>$value)
+		{
+			$signature .= $key.'='.$value;
+		}
+		$signature .= 'iuytrertyui';
+		
+		$arrData['signature'] = hash('sha256',$signature);
+		$ch = curl_init( $url );
+		# Setup request to send json via POST.
+		$data = json_encode($arrData);
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+		# Return response instead of printing.
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
+		# Send request.
+		$result = curl_exec($ch);
+		curl_close($ch);
+		# Print response.
+		$result = json_decode($result,true);
+		if ($result['status'] !== '04')
+		{
+			$message = 'Oops! Something went wrong with authorizing your purchase, please contact us on barghouti_since88@hotmail.com';
+			return $this->render('carReservedSuccessfully', ['message'=>$message]);
+		}
+		$booking = new Booking();
+		$booking->car_id = $carId;
+		$booking->date_start = $startDate;
+		$booking->date_end = $endDate;
+		$booking->renter_id = $renterId;
+		$booking->owner_id = $carModel->owner_id;
 		if ($carModel->book_instantly == 1)
 		{
-			//Capture the purchase
-			$url = 'https://paymentservices.payfort.com/FortAPI/paymentApi';
-			
-			$arrData = array(
-					'access_code' => Yii::$app->request->get('access_code'),
-					'amount' => Yii::$app->request->get('amount'),
-					'command' => 'CAPTURE',
-					'currency' => Yii::$app->request->get('currency'),
-					'language' => Yii::$app->request->get('language'),
-					'merchant_identifier' => Yii::$app->request->get('merchant_identifier'),
-					'merchant_reference' => Yii::$app->request->get('merchant_reference'),
-			);
-			
-			
-			$signature = 'iuytrertyui';
-			foreach ($arrData as $key=>$value)
-			{
-				$signature .= $key.'='.$value;
-			}
-			$signature .= 'iuytrertyui';
-			
-			$arrData['signature'] = hash('sha256',$signature);
-			$ch = curl_init( $url );
-			# Setup request to send json via POST.
-			$data = json_encode($arrData);
-			curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
-			curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-			# Return response instead of printing.
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-			curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
-			# Send request.
-			$result = curl_exec($ch);
-			curl_close($ch);
-			# Print response.
-			$result = json_decode($result,true);
-			if ($result['status'] !== '04')
-			{
-				$message = 'Oops! Something went wrong with authorizing your purchase, please contact us on barghouti_since88@hotmail.com';
-				return $this->render('carReservedSuccessfully', ['message'=>$message]);
-			}
-			$booking = new Booking();
-			$booking->car_id = $carId;
-			$booking->date_start = $startDate;
-			$booking->date_end = $endDate;
-			$booking->renter_id = $renterId;
-			$booking->owner_id = $carModel->owner_id;
 			$booking->status = 1;
 			$booking->save();
 			return $this->render('carReservedSuccessfully', ['message'=>'']);
 		}
 		else
 		{
-			//Only check the status
+			$booking->status = 0;
+			$booking->save();
+			return $this->render('carReservedSuccessfully', ['message'=>'']);
 		}
 	}
 	/**

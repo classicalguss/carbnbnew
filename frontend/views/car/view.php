@@ -32,6 +32,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 						<div style="margin-top:-300px">
 							<img class="img-responsive" src="<?=$imagePath?>" alt="<?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?>" />
 						</div>
+						<a href="<?=$imagePath?>" title="Title goes here" class="view-photos" data-fancybox="gallery"> View Photos </a>
 					</div>
 					<?php $i++;?>
 				<?php endforeach;?>
