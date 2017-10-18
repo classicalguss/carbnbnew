@@ -414,7 +414,7 @@
 }
 
 .price-box .price-and-reserve .pick-up-time h5 {
-	margin-bottom: 20px
+	margin: 20px 0px;
 }
 
 .price-box .btn-save {
