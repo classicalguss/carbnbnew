@@ -51,7 +51,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 				<div class="pull-left">
 					<h1><?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?></h1>
 					<h5><?=$carInfo['properties']['type_id']?></h5>
-					<span class="rating-stars"> <span class="rated" style="width:<?=$carRatingPercentage?>%"></span> </span> <span class="total-reviews"><?=count($carRatings)?> Reviews</span>
+					<span class="rating-stars"> <span class="rated" style="width:<?=(5-($carInfo['id']%5))*20?>%"></span> </span> <span class="total-reviews"><?=count($carRatings)?> Reviews</span>
 				</div>
 				<div class="pull-right right-side">
 					<img class="img-circle" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
@@ -90,36 +90,6 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 					<?php endif;?>
 				</section>
 
-				<section>
-					<h3><?=count($carRatings)?> Reviews for <?=$ownerInfo['first_name']?></h3>
-					<div class=""><span class="rating-stars"> <span class="rated" style="width:<?=$carRatingPercentage?>%"></span> </span></div>
-
-					<div class="user-comments">
-						<ul class="list-unstyled">
-							<?php foreach ($carRatings as $rate):?>
-								<?php if (!empty($ratersInfo[$rate['user_id']])):?>
-									<li>
-										<div class="clearfix user-comment">
-											<div class="pull-left">
-												<img class="img-circle user-img" width="70" height="70" src="<?=$imagesPath?><?=$ratersInfo[$rate['user_id']]['photo']?>" alt="<?=$ratersInfo[$rate['user_id']]['first_name']?>" />
-											</div>
-											<div class="pull-left">
-												<h6><?=$ratersInfo[$rate['user_id']]['first_name']?> <?=$ratersInfo[$rate['user_id']]['last_name']?></h6>
-												<time><?=date("F Y", strtotime($rate['created_at']))?></time>
-											</div>
-										</div>
-										<p>
-											<?=$rate['description']?>
-										</p>
-									</li>
-								<?php endif;?>
-							<?php endforeach;?>
-						</ul>
-
-						<?/*pagination*/?>
-
-					</div>
-				</section>
 			</div>
 
 			<div class="car-owner">
