@@ -250,7 +250,8 @@
 	font-size: 22px;
 	font-weight: bold;
 	color: #333;
-	margin-right: 15px
+	margin-right: 15px;
+	margin-top: 10px
 }
 
 .car-details .total-reviews {
@@ -260,13 +261,13 @@
 
 .car-details .right-side {
 	text-align: right;
-	margin-top: 15px
 }
 
 .car-details .right-side h6 {
 	font-size: 16px;
 	color: #333;
-	margin-bottom: 4px
+	margin-bottom: 4px;
+	margin-top: 10px;
 }
 
 .car-details .right-side span {
