@@ -29,8 +29,8 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 			<div class="carousel-inner" role="listbox">
 				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
 					<div class="item <?php if($i==0):?>active<?php endif;?>">
-						<div style="margin-top:-300px">
-							<img class="img-responsive" src="<?=$imagePath?>" alt="<?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?>" />
+						<div class="img-slider-container">
+							<img class="slider-img" src="<?=$imagePath?>" alt="<?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?>">
 						</div>
 						<a href="<?=$imagePath?>" title="Title goes here" class="view-photos" data-fancybox="gallery"> View Photos </a>
 					</div>
