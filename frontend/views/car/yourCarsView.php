@@ -19,7 +19,7 @@ CarAsset::register ( $this );
 			<li role="presentation"><a
 				href="<?=Url::to(['car/my-approvals'])?>">Reservation Requests</a></li>
 			<li role="presentation"><a
-				href="<?=Url::to(['car/my-approvals'])?>">Approved Requests</a></li>
+				href="<?=Url::to(['car/approved-requests'])?>">Approved Requests</a></li>
 		</ul>
 		<br> <br> <a href="<?=Url::to(['car/list-a-car'])?>"
 			class="btn btn-primary btn-lg">List a Car</a>
