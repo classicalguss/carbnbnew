@@ -298,7 +298,9 @@
 	margin-top: 15px;
 	font-size: 13px
 }
-
+.car-details p {
+	margin-top: 10px
+}
 .car-content section .list-options li i {
 	font-size: 32px
 }

@@ -52,6 +52,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 					<h1><?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?></h1>
 					<h5><?=$carInfo['properties']['type_id']?></h5>
 					<span class="rating-stars"> <span class="rated" style="width:<?=(5-($carInfo['id']%5))*20?>%"></span> </span> <span class="total-reviews"></span>
+					<p class="text-gray"><?=$carInfo['location']?></p>
 				</div>
 				<div class="pull-right right-side">
 					<img class="img-circle" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
