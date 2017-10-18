@@ -176,7 +176,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 					</div>
 					<div id="w0-error-0" class="alert-danger fade in">
 					</div>
-					<?= Html::submitButton ( 'Reserve', ['class' => 'btn btn-primary btn-block no-radius btn-lg'] )?>
+					<?= Html::submitButton ( 'Get it now!', ['class' => 'btn btn-primary btn-block no-radius btn-lg'] )?>
 				</div>
 			<?= Html::endForm ()?>
 			<a class="btn btn-blank btn-block btn-save" href="#"><i class="fa fa-star-o"></i> Save for later</a>
