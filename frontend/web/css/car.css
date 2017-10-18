@@ -1780,7 +1780,8 @@ h1.listing-title {
 }
 
 .user-drives .car-container h2 {
-    font-size: 24px
+    font-size: 24px;
+    margin-bottom: 15px;
 }
 
 .car-view-slider {

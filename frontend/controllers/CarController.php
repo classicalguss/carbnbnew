@@ -401,7 +401,6 @@ class CarController extends Controller
 
 		$bookings = Booking::find()
 			->where(['renter_id'=>$userId])
-			->andWhere(['status'=>1])
 			->all();
 
 		$carIds = [];
@@ -413,6 +412,7 @@ class CarController extends Controller
 		$carModel = Car::find()
 			->joinWith('make',true,'INNER JOIN')
 			->joinWith('model',true,'INNER JOIN')
+			->joinWith('user',true,'INNER JOIN')
 			->where('carmake.id = carmodel.make_id')
 			->andWhere(['car.id'=>$carIds])
 			->indexBy('id')
@@ -430,9 +430,14 @@ class CarController extends Controller
 					'id' => $carBook->id,
 					'make'  => $carInfo->make->value,
 					'model' => $carInfo->model->value,
+					'date_start' =>date("F d", strtotime($carBook['date_start'])),
+					'date_end' =>date("F d", strtotime($carBook['date_end'])),
 					'year_model' => $carInfo->year_model,
 					'photo' => Yii::$app->params['imagesFolder'].$carInfo->photo1,
-					'milage_limitation'=> $carInfo->milage_limitation
+					'milage_limitation'=> $carInfo->milage_limitation,
+					'location'=>$carInfo->getLocation(),
+					'status'=>$carBook['status'],
+					'owner_name'=>$carInfo->user->first_name
 			];
 
 			$result[] = $carDetails;
