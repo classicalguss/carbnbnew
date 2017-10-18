@@ -79,9 +79,9 @@ AppAsset::register ( $this );
 	<?= $content ?>
 <?php else:?>
 	<div class="
-		<?php if (!in_array(Yii::$app->requestedRoute, ['site/index','search/index','search'])):?>
-			container 
-		<?php endif;?> 
+		<?php if (in_array(Yii::$app->requestedRoute, ['car/my-drives'])):?>
+			container user-drives
+		<?php endif;?>
 		<?php if (in_array(Yii::$app->requestedRoute,['car/booking','car/list-a-car','car/car-listed-successfully'])):?>
 			container-narrow
 		<?php endif;?>"

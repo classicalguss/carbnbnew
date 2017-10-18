@@ -167,6 +167,11 @@ class UserController extends ActiveController {
 		}
 		else
 		{
+			if (empty($model->access_key))
+			{
+				$user->generateAuthKey();
+				$user->save();
+			}
 			$response->setStatusCode ( 200 );
 		}
 		return [

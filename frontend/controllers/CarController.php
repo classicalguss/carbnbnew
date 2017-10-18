@@ -432,6 +432,7 @@ class CarController extends Controller
 					'model' => $carInfo->model->value,
 					'year_model' => $carInfo->year_model,
 					'photo' => Yii::$app->params['imagesFolder'].$carInfo->photo1,
+					'milage_limitation'=> $carInfo->milage_limitation
 			];
 
 			$result[] = $carDetails;

@@ -5,7 +5,6 @@ use frontend\assets\CarAsset;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
 
-$this->title = 'Your Cars';
 CarAsset::register ( $this );
 $this->title = 'Reservation Requests';
 ?>
