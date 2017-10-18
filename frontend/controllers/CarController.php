@@ -667,6 +667,7 @@ class CarController extends Controller
 				'merchant_identifier' => 'ULhiPMaP',
 				'merchant_reference' => $merchantReference,
 				'return_url'=>Url::to(['car/booking'],true),
+				'merchant_name' => 'Uchaise'
 		);
 		$signature = 'iuytrertyui';
 		foreach ($paymentParams as $key=>$value)

@@ -82,11 +82,8 @@ AppAsset::register ( $this );
 		<?php if (in_array(Yii::$app->requestedRoute, ['car/my-drives'])):?>
 			container user-drives
 		<?php endif;?>
-		<?php if (in_array(Yii::$app->requestedRoute,['car/your-cars','car/my-approvals','car/approved-requests'])):?>
+		<?php if (in_array(Yii::$app->requestedRoute,['car/car-listed-successfully','car/booking','car/list-a-car','car/your-cars','car/my-approvals','car/approved-requests'])):?>
 			container
-		<?php endif;?>"
-		<?php if (in_array(Yii::$app->requestedRoute,['car/booking','car/list-a-car','car/car-listed-successfully'])):?>
-			container-narrow
 		<?php endif;?>"
 	>
 		<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->

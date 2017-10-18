@@ -75,7 +75,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 					<ul class="list-inline list-options">
 						<?php foreach ($carInfo['features'] as $featureId=>$featureTxt):?>
 							<li>
-								<i class="fa fa-bath car-feature-<?=$featureId?>" aria-hidden="true"></i>
+								<img src="<?=Yii::$app->params['siteImagesPath'].'/'.$featureTxt.'_icon_sm.png'?>">
 								<h5><?=$featureTxt?></h5>
 							</li>
 						<?php endforeach;?>
@@ -167,7 +167,6 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 						<div class="price">
 							<span><?=$carInfo['price']?> <?=$carInfo['currency']?></span> Per day
 						</div>
-						<div class="total-price">TOTAL <span class="text-grey"> for 6 Days </span> <span class="price-per-days"> <?=$carInfo['price'] * 6?> </span> <span class="text-grey"> <?=$carInfo['currency']?> </span></div>
 						<div class="pick-up-time">
 								<h5 class="bold">Set your reservation period</h5>
 								From:<input type="date" class="form-control" name="start_date" placeholder="YYYY-MM-DD">
@@ -209,7 +208,7 @@ $('#reserver-form').submit(function() {
                 document.frm['signature'].value = data.signature;
                 document.frm['return_url'].value = data.return_url;
                 document.frm['merchant_reference'].value = data.merchant_reference;
-                //document.frm.submit();
+                document.frm.submit();
             }
             else
             {

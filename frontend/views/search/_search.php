@@ -101,7 +101,7 @@ use frontend\models\Car;
 		</li>
 		<li>
 			<strong class="filter-title">Transmission</strong>
-			<?=$form->field($model, 'gear_type_id')->checkboxList(['0'=>'Manual','1'=>'Automatic'],['tag'=>'ul','class'=>"list-inline",'item'=>function($index,$label,$name,$checked,$value) {
+			<?=$form->field($model, 'gear_type_id')->checkboxList(['1'=>'Manual','0'=>'Automatic'],['tag'=>'ul','class'=>"list-inline",'item'=>function($index,$label,$name,$checked,$value) {
 				if ($checked == 1)
 					$checked = 'checked';
 				return '<li class="checkbox"><label><input name='.$name.' value='.$value.' type="checkbox" '.$checked.'>'.$label.'</label></li>';

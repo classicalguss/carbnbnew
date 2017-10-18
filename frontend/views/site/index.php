@@ -5,7 +5,7 @@ use frontend\assets\HomePageAsset;
 use frontend\widgets\QuickSearch;
 use yii\base\Widget;
 HomePageAsset::register($this);
-$this->title = 'Carbnb';
+$this->title = 'Uchaise';
 ?>
 <main class="home-page content">
 	<div class="container">
@@ -20,7 +20,9 @@ $this->title = 'Carbnb';
 				</div>
 				<div class="col-md-7">
 					<p>
-						Browse our huge car market place to find the car you want to book, Find a car you fancy?
+						Rent a car in Dubai – simple and affordable. 
+						<br>
+						Own the trip, not the car!
 					</p>
 				</div>
 			</div>
@@ -33,9 +35,9 @@ $this->title = 'Carbnb';
 		<?=$recentlyListedHTML?>
 
 		<section class="block-list-car text-center">
-			<h2>Ready to List Your Car?</h2>
-			<p>Put your car to work with just a few clicks. upload your registration along with quality photos and your car is ready to go!</p>
-			<p><a class="btn btn-primary btn-lg" href="#" role="button">List Your Car</a></p>
+			<h2>Ready To Make Extra Money? Upload Your Car?</h2>
+			<p>Do you want to make extra money? Upload your car now and make money instantly by renting it out. </p>
+			<p><a class="btn btn-primary btn-lg" href="#" role="button">List Your Car Now</a></p>
 		</section>
 
 		<?=$featuredCarMakesHTML?>
@@ -73,49 +75,6 @@ $this->title = 'Carbnb';
 			</div>
 		</section>
 
-		<section class="block-share-uchaise">
-			<h2>Share and Get Free Credit!</h2>
-
-			<div class="row">
-				<div class="col-md-6">
-					<a href="#">
-						<img class="carved" src="<?= $siteImagesPath ?>/share.jpg" alt="">
-					</a>
-				</div>
-				<div class="col-md-6">
-					<ul class="list-unstyled list-tips">
-						<li class="row">
-							<div class="col-sm-3 text-center">
-								<img src="<?= $siteImagesPath?>/1.svg" alt="">
-							</div>
-							<div class="col-sm-9">
-								<h3>Share with a friend</h3>
-								<p>Browse our huge car market place to find the car you want to book, Find a car you</p>
-							</div>
-						</li>
-
-						<li class="row">
-							<div class="col-sm-3 text-center">
-								<img src="<?= $siteImagesPath?>/2.svg" alt="">
-							</div>
-							<div class="col-sm-9">
-								<h3>Share with a friend</h3>
-								<p>Browse our huge car market place to find the car you want to book, Find a car you</p>
-							</div>
-						</li>
-
-						<li class="row">
-							<div class="col-sm-3 text-center">
-								<img src="<?= $siteImagesPath?>/3.svg" alt="">
-							</div>
-							<div class="col-sm-9">
-								<h3>Share with a friend</h3>
-								<p>Browse our huge car market place to find the car you want to book, Find a car you</p>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</section>
+		
 	</div>
 </main>

@@ -27,8 +27,6 @@ $this->title = 'Create Car';
 			'content' => $this->render('carFeaturesFormView', ['model' => $models['carFeaturesModel'], 'formNum' => 2]),
 			'linkOptions' => ['id' => 'tab2'],
 			'options'=>['class'=>'disabled'],
-				
-			
 		],
 		[
 			'label' => 'Photos',
