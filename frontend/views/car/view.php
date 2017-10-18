@@ -81,26 +81,6 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 					</ul>
 				</section>
 			</div>
-
-			<div class="car-owner">
-				<div class="clearfix car-owner-details">
-					<div class="pull-left">
-						<img class="img-circle user-img" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
-					</div>
-					<div class="pull-left">
-						<h2>Owned by <?=$ownerInfo['first_name']?></h2>
-						<h6>United Arab Emirates</h6><span>(Responds in 2 days)</span>
-					</div>
-				</div>
-				<?php if (!empty($ownerInfo['about_me'])):?>
-					<h3>Description</h3>
-					<p>
-						<?=$ownerInfo['about_me']?>
-					</p>
-				<?php endif;?>
-				<a class="btn btn-primary" href="#">Say Hello</a>
-			</div>
-
 		</div>
 		<aside class="col-md-4 price-box">
 			<?= Html::beginForm (['/car/reserve-a-car'], 'post',['id'=>'reserver-form'])
