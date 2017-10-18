@@ -95,12 +95,8 @@ class CarSearch extends Car {
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($stats=false) {
+	public function search() {
 		$query = Car::find ();
-		
-		// add conditions that should always apply here
-		
-
 		
 		if (! $this->validate ()) {
 			// uncomment the following line if you do not want to return any records when validation fails
@@ -108,19 +104,12 @@ class CarSearch extends Car {
 			return $dataProvider;
 		}
 		
-		if ($stats==true)
-		{
-			$query->select = ['max(price) as max_price,min(price) as min_price'];
-		}
-		else
-		{
-			$dataProvider = new ActiveDataProvider ( [
-					'query' => $query,
-					'pagination' => [
-							'pageSize' => 6,
-					],
-			] );
-		}
+		$dataProvider = new ActiveDataProvider ( [
+				'query' => $query,
+				'pagination' => [
+						'pageSize' => 6,
+				],
+		] );
 		
 		// grid filtering conditions
 		$query->andFilterWhere ( [ 
@@ -231,7 +220,7 @@ class CarSearch extends Car {
 		if (!empty($startDate) && !empty($endDate))
 		{
 
-			$query->joinWith('bookings',true,'LEFT JOIN')->andWhere ('(
+			$query->joinWith('bookings',true,'INNER JOIN')->andWhere ('(
 			date_start NOT BETWEEN :date_start AND :date_end
 			AND date_end NOT BETWEEN :date_start AND :date_end
 			AND !(date_start < :date_start AND date_end > :date_end)
@@ -240,14 +229,7 @@ class CarSearch extends Car {
 					':date_end' => $endDate
 			]);
 		}
-		if ($stats==true)
-		{
-			return $query->asArray()->one();
-		}
-		else
-		{
-			$query->joinWith('make')->joinWith('model');
-			return $dataProvider;
-		}
+		$query->joinWith('make')->joinWith('model');
+		return $dataProvider;
 	}
 }

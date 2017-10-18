@@ -31,16 +31,6 @@ class SearchController extends Controller
         ];
     }
 
-    public function actionHasansearch()
-    {
-    	$searchModel = new CarSearch();
-    	$searchModel->load(Yii::$app->request->queryParams);
-    	$dataProvider = $searchModel->search();
-    	return $this->render('hasansearch', [
-    			'searchModel' => $searchModel,
-    			'dataProvider' => $dataProvider,
-    	]);
-    }
     /**
      * Lists all Car models.
      * @return mixed

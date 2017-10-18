@@ -65,7 +65,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 				<section>
 					<h3>Description</h3>
 					<p>
-						<?=$carInfo['description']?>... <a href="#">See all</a>
+						<?=$carInfo['description']?></a>
 					</p>
 				</section>
 
@@ -80,16 +80,6 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 						<?php endforeach;?>
 					</ul>
 				</section>
-
-				<section>
-					<h3>Miles Included</h3>
-					<?php if (!empty($carInfo['milage_limitation'])):?>
-						<p><?=$carInfo['milage_limitation']?> KM</p>
-					<?php else :?>
-						<p>Unlimited Miles</p>
-					<?php endif;?>
-				</section>
-
 			</div>
 
 			<div class="car-owner">

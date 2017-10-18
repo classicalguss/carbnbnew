@@ -71,21 +71,6 @@ class CarController extends Controller
 	}
 
 	/**
-	 * Lists all Car models.
-	 * @return mixed
-	 */
-	public function actionSearch()
-	{
-		$searchModel = new CarSearch();
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-		return $this->render('search', [
-			'searchModel' => $searchModel,
-			'dataProvider' => $dataProvider,
-		]);
-	}
-
-	/**
 	 * Displays a single Car model.
 	 * @param string $id
 	 * @return mixed
