@@ -447,17 +447,17 @@
 
 .slider-img {
 	position: absolute;
-	top: 50%;
+	top: 0;
 	left: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-	max-height: 400px;
-	width: auto;
+	transform: translate(-50%, -35%);
+	max-height: 100%;
+	width: 100%;
 }
 
 .img-slider-container {
-	height: 100vh;
+	height: 130vh;
 	background-color: #f6f6f6;
 }
 /*# sourceMappingURL=car-details.css.map */
