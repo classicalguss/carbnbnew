@@ -56,7 +56,6 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 				<div class="pull-right right-side">
 					<img class="img-circle" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
 					<h6>Owned by <?=$ownerInfo['first_name']?></h6>
-					<span>(Responds in 2 days)</span>
 				</div>
 			</div>
 
@@ -83,28 +82,12 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 				</section>
 
 				<section>
-					<h3>Insurance Provided by</h3>
-					<p><?=$carInfo['insurance_tip']?></p>
-				</section>
-
-				<section>
 					<h3>Miles Included</h3>
 					<?php if (!empty($carInfo['milage_limitation'])):?>
 						<p><?=$carInfo['milage_limitation']?> KM</p>
 					<?php else :?>
 						<p>Unlimited Miles</p>
 					<?php endif;?>
-				</section>
-
-				<section>
-					<h3>Car Terms</h3>
-					<ul class="list-unstyled">
-						<?php for ($c=1;$c<=4;$c++):?>
-							<?php if (!empty($carInfo['rule_'.$c])):?>
-								<li><?=$carInfo['rule_'.$c]?></li>
-							<?php endif;?>
-						<?php endfor;?>
-					</ul>
 				</section>
 
 				<section>
