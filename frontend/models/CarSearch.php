@@ -111,6 +111,7 @@ class CarSearch extends Car {
 				],
 		] );
 		
+		$query->distinct = true;
 		// grid filtering conditions
 		$query->andFilterWhere ( [ 
 				'id' => $this->id,
@@ -220,7 +221,7 @@ class CarSearch extends Car {
 		if (!empty($startDate) && !empty($endDate))
 		{
 
-			$query->joinWith('bookings',true,'INNER JOIN')->andWhere ('(
+			$query->joinWith('bookings',true,'LEFT JOIN')->andWhere ('(
 			date_start NOT BETWEEN :date_start AND :date_end
 			AND date_end NOT BETWEEN :date_start AND :date_end
 			AND !(date_start < :date_start AND date_end > :date_end)
