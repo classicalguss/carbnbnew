@@ -7,8 +7,8 @@ use yii\helpers\Url;
 		<div data-thumb-class="col-md-12" data-list-class="col-md-6"
 			class="col-md-12">
 			<div class="img-wrap">
-				<a href="<?=Url::to(['car/view/','id'=>$model->id])?>" class="block"> 
-					<img width="350" height="220" class="carved" src="<?=$model->photoFile1Array['path']?>" alt="">
+				<a href="<?=Url::to(['car/view/','id'=>$model->id])?>" class="block">
+					<img width="350" height="220" class="carved img-responsive" src="<?=$model->photoFile1Array['path']?>" alt="">
 				</a>
 			</div>
 		</div>

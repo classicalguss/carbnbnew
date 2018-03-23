@@ -28,7 +28,7 @@ $this->title = 'Carbnb2';
 					<?php echo $this->render('_search', ['allMakes'=>$allMakes,'stats'=>$stats,'model' => $searchModel]); ?>
 			</aside>
 			<?php EPjax::begin(['options'=>['tag'=>'section','class'=>'col-md-9'],'formSelector'=>'#car-search-form']); ?>
-				
+
 					<div class="search-header clearfix">
 						<div class="pull-left"><?=$dataProvider->totalCount?> Results</div>
 						<div data-layout-switcher="" class="pull-right layout-switcher">
@@ -37,14 +37,14 @@ $this->title = 'Carbnb2';
 								data-layout="list" class=""><i class="fa fa-th-list"></i></a>
 						</div>
 					</div>
-				
+
 					<?php echo ListView::widget([
 						'dataProvider' => $dataProvider,
 						'itemView' => '_item',
 						'itemOptions'=>[
 							'data-thumb-class'=>'col-md-6',
 							'data-list-class'=>'col-md-12',
-							'class'=>'col-md-6'
+							'class'=>'col-sm-6'
 						],
 						'summary'=>'',
 						'options'=>['class'=>'search-list view-grid','data-thumb-class'=>'view-grid','data-list-class'=>'view-list'],
