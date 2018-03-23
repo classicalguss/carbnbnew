@@ -1,9 +1,9 @@
 <section class="grid-carousel">
 	<header class="row">
-		<div class="col-sm-6 text-left">
+		<div class="col-xs-6 text-left">
 			<h3><?= $title ?></h3>
 		</div>
-		<div class="col-sm-6 text-right">
+		<div class="col-xs-6 text-right">
 			<a href="#">See All cars</a>
 		</div>
 	</header>

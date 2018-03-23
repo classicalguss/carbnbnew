@@ -33,6 +33,12 @@ AppAsset::register ( $this );
 <body>
 <?php $this->beginBody() ?>
 <div class="main-nav">
+	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu" aria-expanded="false">
+	 <span class="sr-only">Toggle navigation</span>
+	 <span class="icon-bar"></span>
+	 <span class="icon-bar"></span>
+	 <span class="icon-bar"></span>
+ </button>
 	<div class="container wide">
 		<div class="row">
 			<div class="col-md-4">
@@ -41,7 +47,7 @@ AppAsset::register ( $this );
 				</a>
 			</div>
 			<div class="col-md-8 text-right">
-				<ul class="list-inline list-links">
+				<ul id="main-menu" class="list-inline list-links collapse navbar-collapse">
 					<li><a href="<?=Url::to(['car/your-cars'])?>">List Your Car</a></li>
 					<li><a href="<?=Url::to(['car/my-drives'])?>">My Drives</a></li>
 					<li><a href="<?=Url::to([''])?>">Messages</a></li>
@@ -63,7 +69,7 @@ AppAsset::register ( $this );
 									], 'post' )?>
 										<a href="#" onclick="$(this).closest('form').submit(); return false;" style="padding: 3px 20px">Logout</a>
 									<?=Html::endForm ()?>
-									
+
 								</li>
 							</ul>
 

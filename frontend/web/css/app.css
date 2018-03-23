@@ -7027,3 +7027,20 @@ h4 {
     color: #000;
     font-weight: normal
 }
+.navbar-toggle {
+  border: 1px solid #028aff;
+  border-radius: 0;
+  top: 10px;
+  right: 0;
+  z-index: 10;
+  position: absolute;
+}
+.navbar-toggle .icon-bar {
+  background: #028aff;``
+}
+@media (max-width: 767px) {
+  #main-menu.list-links > li {
+    display: block;
+    margin: 15px 0;
+  }
+}
