@@ -1,10 +1,17 @@
+<?php 
+use yii\helpers\Url;
+?>
 <section class="grid-carousel">
 	<header class="row">
 		<div class="col-xs-6 text-left">
 			<h3><?= $title ?></h3>
 		</div>
 		<div class="col-xs-6 text-right">
-			<a href="#">See All cars</a>
+			<?php if ($filter == 'featured'):?>
+				<a href="<?=Url::to(['search/index', "CarSearch[is_featured]"=>true])?>">See All Cars</a>
+			<?php else:?>
+				<a href="<?=Url::to(['search/index'])?>">See All Cars</a>
+			<?php endif;?>
 		</div>
 	</header>
 

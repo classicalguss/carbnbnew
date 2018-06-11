@@ -75,6 +75,7 @@ class SiteController extends Controller {
 		[
 				'title'      => 'Featured Cars',
 				'columns'    => 4,
+				'filter'		=> 'featured',
 				'listOfCars' => $featuredCars,
 				'imagesPath' => $imagesPath,
 				'carsRating' => $carsRating,
@@ -83,6 +84,7 @@ class SiteController extends Controller {
 		[
 				'title'      => 'Recently Listed Cars',
 				'columns'    => 3,
+				'filter'	=> 'recentlyListed',
 				'listOfCars' => $recentlyListed,
 				'imagesPath' => $imagesPath,
 				'carsRating' => $carsRating,
@@ -95,6 +97,7 @@ class SiteController extends Controller {
 			[
 					'title'      => $makeName,
 					'columns'    => 4,
+					'filter' 	 => null,
 					'listOfCars' => $cars,
 					'imagesPath' => $imagesPath,
 					'carsRating' => $carsRating,

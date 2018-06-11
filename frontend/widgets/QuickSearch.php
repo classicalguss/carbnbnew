@@ -23,8 +23,8 @@ class QuickSearch extends Widget
 	 */
 	public function renderWidget()
 	{
-		$startDate = '2017-01-01';
-		$endDate = '2017-12-31';
+		$startDate = '2018-01-01';
+		$endDate = '2018-12-31';
 		$dates = Yii::$app->request->get('daterange','2017-01-01 - 2017-12-31');
 		$dates = explode(' - ',$dates);
 		if (isset($dates[0]) && Util::isValidDate($dates[0]))

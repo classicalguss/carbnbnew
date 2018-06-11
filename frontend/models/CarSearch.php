@@ -122,7 +122,6 @@ class CarSearch extends Car {
 				'owner_id' => $this->owner_id,
 				'city_id' => $this->city_id,
 				'model_id' => $this->model_id,
-				'is_featured' => $this->is_featured,
 				'number_of_doors' => $this->number_of_doors,
 				'number_of_seats' => $this->number_of_seats,
 				'gas_type_id' => $this->gas_type_id,
@@ -139,6 +138,7 @@ class CarSearch extends Car {
 		$query->andFilterWhere(['in','car.make_id',$this->make_id]);
 		$query->andFilterWhere(['>=','price',$this->min_price]);
 		$query->andFilterWhere(['<=','price',$this->max_price]);
+		$query->andFilterWhere(['=','car.is_featured',$this->is_featured]);
 		$query->andFilterWhere(['between','milage_limitation',$this->min_milage_limitation,$this->max_milage_limitation]);
 		
 		$query->andFilterWhere ( [ 
