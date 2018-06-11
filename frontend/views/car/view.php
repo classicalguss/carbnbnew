@@ -29,7 +29,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 			<div class="carousel-inner" role="listbox">
 				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
 					<div class="item <?php if($i==0):?>active<?php endif;?>">
-						<div class="img-slider-container" style="background-image: url(<?=urlencode($imagePath)?>);
+						<div class="img-slider-container" style="background-image: url('<?=$imagePath?>');
 																 background-position: 0% -100px;
     															 background-repeat: no-repeat;
    																 background-size: cover;">
