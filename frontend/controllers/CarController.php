@@ -143,6 +143,7 @@ class CarController extends Controller
 		[
 			'title'      => 'Recently Listed Cars',
 			'columns'    => 3,
+			'filter'	=> null,
 			'listOfCars' => $recentlyListed,
 			'imagesPath' => $imagesPath,
 			'carsRating' => $recentlyListedCarsRatings,
