@@ -63,7 +63,7 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 			</div>
 
 			<!-- Car more info -->
-			<div class="car-content">
+			<div class="car-content" style="margin-bottom: 50px">
 
 				<section>
 					<h3>Description</h3>
