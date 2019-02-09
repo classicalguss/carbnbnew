@@ -35,7 +35,7 @@ $this->title = 'Uchaise';
 		<?=$recentlyListedHTML?>
 
 		<section class="block-list-car text-center">
-			<h2>Ready To Make Extra Money? Upload Your Car.</h2>
+			<h2>Ready To Make Extra Money? Upload Your Car!</h2>
 			<p>Do you want to make extra money? Upload your car now and make money instantly by renting it out.</p>
 			<p><a class="btn btn-primary btn-lg" href="#" role="button">List Your Car Now</a></p>
 		</section>
