@@ -50,19 +50,19 @@ $this->title = 'Uchaise';
 				<div class="col-sm-6 col-md-3">
 					<div class="box text-center">
 						<strong><span class="count" data-count-up="86">0</span>k</strong>
-						<span>experiences shared</span>
+						<span>Experiences shared</span>
 					</div>
 				</div>
 				<div class="col-sm-6 col-md-3">
 					<div class="box text-center">
 						<strong><span class="count" data-count-up="156">0</span></strong>
-						<span>cities available</span>
+						<span>Cities available</span>
 					</div>
 				</div>
 				<div class="col-sm-6 col-md-3">
 					<div class="box text-center">
 						<strong>$<span class="count" data-count-up="25">0</span></strong>
-						<span>average price</span>
+						<span>Average price</span>
 					</div>
 				</div>
 				<div class="col-sm-6 col-md-3">
