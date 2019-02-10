@@ -26,7 +26,7 @@ class QuickSearch extends Widget
 		$startDate = '2018-01-01';
 		$endDate = '2018-12-31';
 		$dates = Yii::$app->request->get('daterange',date("Y-m-d") .' - ' . date("Y-m-d", strtotime('+1 year')));
-		$dates = explode(' - ',$dates);
+		$dates = explode(' - ',$dates); 
 		if (isset($dates[0]) && Util::isValidDate($dates[0]))
 			$startDate = $dates[0];
 		
