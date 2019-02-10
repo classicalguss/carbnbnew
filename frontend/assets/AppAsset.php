@@ -21,7 +21,7 @@ class AppAsset extends AssetBundle
 		'js/app.js',
 		'js/omni-slider.js',
 	];
- 
+
 	public $depends = [
 // 		'yii\web\YiiAsset',
 		'yii\bootstrap\BootstrapAsset',
