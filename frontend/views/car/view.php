@@ -95,9 +95,9 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 						</div>
 						<div class="pick-up-time">
 								<h5 class="bold">Set your reservation period</h5>
-								From:<input type="date" class="form-control" name="start_date" placeholder="YYYY-MM-DD">
+								From:<input type="date" class="form-control" name="start_date" placeholder="YYYY-MM-DD" value="<?=$dateStart?>">
 								<br/>
-								To:<input type="date" class="form-control" name="end_date" placeholder="YYYY-MM-DD">
+								To:<input type="date" class="form-control" name="end_date" placeholder="YYYY-MM-DD" value="<?=$dateEnd?>">
 						</div>
 					</div>
 					<div id="w0-error-0" class="alert-danger fade in">

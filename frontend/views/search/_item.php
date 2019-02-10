@@ -7,7 +7,7 @@ use yii\helpers\Url;
 		<div data-thumb-class="col-md-12" data-list-class="col-md-6"
 			class="col-md-12">
 			<div class="img-wrap">
-				<a href="<?=Url::to(['car/view/','id'=>$model->id])?>" class="block">
+				<a href="<?=Url::to(['car/view/','id'=>$model->id,'daterange'=>Yii::$app->request->get('daterange')])?>" class="block">
 					<img width="350" height="220" class="carved img-responsive" src="<?=$model->photoFile1Array['path']?>" alt="">
 				</a>
 			</div>
@@ -16,7 +16,9 @@ use yii\helpers\Url;
 			<div class="clearfix">
 				<div class="title pull-left">
 					<h3>
-						<a href="<?=Url::to(['car/view/','id'=>$model->id])?>"><?=$model->make->value.' '.$model->model->value?></a>
+						<a href="<?=Url::to(['car/view/','id'=>$model->id,'daterange'=>Yii::$app->request->get('daterange')])?>">
+							<?=$model->make->value.' '.$model->model->value?>
+						</a>
 					</h3>
 					<span class="rating-stars"> <span class="rated"
 						style="width: <?=$model->rate*20?>%"></span>

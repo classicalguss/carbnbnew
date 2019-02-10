@@ -49,7 +49,7 @@ $this->title = 'Uchaise';
 
 				<div class="col-sm-6 col-md-3">
 					<div class="box text-center">
-						<strong><span class="count" data-count-up="86">0</span>k</strong>
+						<strong><span class="count" data-count-up="87">0</span>k</strong>
 						<span>Experiences shared</span>
 					</div>
 				</div>
