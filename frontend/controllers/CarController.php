@@ -67,9 +67,6 @@ class CarController extends Controller {
 										'allow' => true,
 										'actions' => [
 												'view'
-										],
-										'roles' => [
-												'*'
 										]
 								]
 						]
