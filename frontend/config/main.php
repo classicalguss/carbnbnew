@@ -15,11 +15,17 @@ return [
 								'facebook' => [
 										'class' => 'yii\authclient\clients\Facebook',
 										'authUrl' => 'https://www.facebook.com/dialog/oauth',
-										'clientId' => $params['facebookAppId'],
-										'clientSecret' => $params['facebookAppSecret'],
-										'attributeNames' => ['picture','name', 'email', 'first_name', 'last_name'],
-								],
-						],
+										'clientId' => $params ['facebookAppId'],
+										'clientSecret' => $params ['facebookAppSecret'],
+										'attributeNames' => [
+												'picture',
+												'name',
+												'email',
+												'first_name',
+												'last_name'
+										]
+								]
+						]
 				],
 				'request' => [
 						'csrfParam' => '_csrf-frontend'
@@ -31,7 +37,9 @@ return [
 								'name' => '_identity-frontend',
 								'httpOnly' => true
 						],
-						'loginUrl'=>['user/login'],
+						'loginUrl' => [
+								'user/login'
+						]
 
 				],
 				'session' => [
@@ -44,16 +52,16 @@ return [
 								[
 										'class' => 'yii\log\FileTarget',
 										'levels' => [
-												'error',
-										],
+												'error'
+										]
 
 								],
 								[
 										'class' => 'yii\log\FileTarget',
 										'levels' => [
-												'warning',
+												'warning'
 										],
-										'logVars' => [],
+										'logVars' => [ ]
 								]
 						]
 				],
@@ -63,6 +71,16 @@ return [
 				'urlManager' => [
 						'enablePrettyUrl' => true,
 						'showScriptName' => false,
+						'normalizer' => [
+								'class' => 'yii\web\UrlNormalizer',
+								'collapseSlashes' => true,
+								'normalizeTrailingSlash' => true,
+						],
+						'rules' => [
+								'<controller:\w+>/<id:\d+>' => '<controller>/view',
+								'<controller:\w+>/<action:[\w-]+>/<id:\d+>' => '<controller>/<action>',
+								'<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
+						]
 				],
 				'request' => [
 						'parsers' => [
@@ -72,15 +90,18 @@ return [
 				'assetManager' => [
 						'bundles' => [
 								'yii\web\JqueryAsset' => [
-// 										'jsOptions' => [ 'position' => \yii\web\View::POS_HEAD ],
-										'js' => [],
+										// 'jsOptions' => [ 'position' => \yii\web\View::POS_HEAD ],
+										'js' => [ ]
 								],
 								'yii\web\YiiAsset' => [
-										'jsOptions' => [ 'position' => \yii\web\View::POS_BEGIN ],
-										'depends' => [],
-								],
+										'jsOptions' => [
+												'position' => \yii\web\View::POS_BEGIN
+										],
+										'depends' => [ ]
+								]
 						],
-				],
+						'appendTimestamp' => true
+				]
 		],
 		'params' => $params
 ];

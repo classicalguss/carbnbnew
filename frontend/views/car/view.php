@@ -1,43 +1,76 @@
 <?php
-
 use frontend\assets\CarViewAsset;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use common\widgets\Alert;
-CarViewAsset::register($this);
+CarViewAsset::register ( $this );
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
 
 $this->title = 'Car View';
-$carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRatings) : 0);
+$carRatingPercentage = (count ( $carRatings ) > 0 ? 20 * $ratingsSum / count ( $carRatings ) : 0);
 
 ?>
 <!-- Slider -->
 <div class="container wide">
 	<div class="full-width-slider">
-		<div id="carousel-full-width" class="carousel slide car-details-slider" data-ride="carousel">
+		<div id="carousel-full-width"
+			class="carousel slide car-details-slider" data-ride="carousel">
 			<!-- Indicators -->
 			<ol class="carousel-indicators">
-				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
-					<li data-target="#carousel-full-width" data-slide-to="<?=$i?>" <?php if ($i==0):?>class="active"<?php endif;?>></li>
-					<?php $i++;?>
-				<?php endforeach;?>
+				<?php
+
+				$i = 0;
+				foreach ( $carInfo ['images'] as $imageName => $imagePath ) :
+					?>
+					<li data-target="#carousel-full-width" data-slide-to="<?=$i?>"
+					<?php
+
+					if ($i == 0) :
+						?> class="active"
+					<?php endif;
+
+					?>></li>
+					<?php
+
+					$i ++;
+					?>
+				<?php
+				endforeach
+				;
+				?>
 			</ol>
 
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner" role="listbox">
-				<?php $i=0; foreach ($carInfo['images'] as $imageName=>$imagePath):?>
-					<div class="item <?php if($i==0):?>active<?php endif;?>">
-						<div class="img-slider-container" style="background-image: url('<?=$imagePath?>');
+				<?php
+
+				$i = 0;
+				foreach ( $carInfo ['images'] as $imageName => $imagePath ) :
+					?>
+					<div
+					class="item <?php
+
+					if ($i == 0) :
+						?>active<?php endif;
+
+					?>">
+					<div class="img-slider-container" style="background-image: url('<?=$imagePath?>');
 																 background-position: 0% -100px;
     															 background-repeat: no-repeat;
-   																 background-size: cover;">
-						</div>
-						<a href="<?=$imagePath?>" title="Title goes here" class="view-photos" data-fancybox="gallery"> View Photos </a>
-					</div>
-					<?php $i++;?>
-				<?php endforeach;?>
+   																 background-size: cover;"></div>
+					<a href="<?=$imagePath?>" title="Title goes here"
+						class="view-photos" data-fancybox="gallery"> View Photos </a>
+				</div>
+					<?php
+
+					$i ++;
+					?>
+				<?php
+				endforeach
+				;
+				?>
 			</div>
 		</div>
 	</div>
@@ -51,14 +84,17 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 			<!-- Car details -->
 			<div class="car-details clearfix">
 				<div class="pull-left">
-					<h1><?=$carInfo['makeName']?> <?=$carInfo['modelName']?> <?=$carInfo['year_model']?></h1>
-					<h5><?=$carInfo['properties']['type_id']?></h5>
-					<span class="rating-stars"> <span class="rated" style="width:<?=(5-($carInfo['id']%5))*20?>%"></span> </span> <span class="total-reviews"></span>
-					<p class="text-gray"><?=$carInfo['location']?></p>
+					<h1><?=$carInfo ['makeName']?> <?=$carInfo ['modelName']?> <?=$carInfo ['year_model']?></h1>
+					<h5><?=$carInfo ['properties'] ['type_id']?></h5>
+					<span class="rating-stars"> <span class="rated" style="width:<?=(5 - ($carInfo ['id'] % 5)) * 20?>%"></span>
+					</span> <span class="total-reviews"></span>
+					<p class="text-gray"><?=$carInfo ['location']?></p>
 				</div>
 				<div class="pull-right right-side">
-					<img class="img-circle" width="70" height="70" src="<?=$imagesPath?><?=$ownerInfo['photo']?>" alt="<?=$ownerInfo['first_name']?>" />
-					<h6>Owned by <?=$ownerInfo['first_name']?></h6>
+					<img class="img-circle" width="70" height="70"
+						src="<?=$imagesPath?><?=$ownerInfo ['photo']?>"
+						alt="<?=$ownerInfo ['first_name']?>" />
+					<h6>Owned by <?=$ownerInfo ['first_name']?></h6>
 				</div>
 			</div>
 
@@ -68,44 +104,50 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 				<section>
 					<h3>Description</h3>
 					<p>
-						<?=$carInfo['description']?></a>
+						<?=$carInfo ['description']?></a>
 					</p>
 				</section>
 
 				<section>
 					<h3>Features</h3>
 					<ul class="list-inline list-options">
-						<?php foreach ($carInfo['features'] as $featureId=>$featureTxt):?>
-							<li>
-								<img src="<?=Yii::$app->params['siteImagesPath'].'/'.$featureTxt.'_icon_sm.png'?>">
-								<h5><?=$featureTxt?></h5>
-							</li>
-						<?php endforeach;?>
+						<?php
+
+						foreach ( $carInfo ['features'] as $featureId => $featureTxt ) :
+							?>
+							<li><img
+							src="<?=Yii::$app->params ['siteImagesPath'] . '/' . $featureTxt . '_icon_sm.png'?>">
+							<h5><?=$featureTxt?></h5></li>
+						<?php
+						endforeach
+						;
+						?>
 					</ul>
 				</section>
 			</div>
 		</div>
 		<aside class="col-md-4 price-box">
-			<?= Html::beginForm (['/car/reserve-a-car'], 'post',['id'=>'reserver-form'])
-				.Html::hiddenInput('id', $carInfo['id'])?>
+			<?=Html::beginForm ( [ '/car/reserve-a-car'], 'post', [ 'id' => 'reserver-form'] ) . Html::hiddenInput ( 'id', $carInfo ['id'] )?>
 				<div class="price-and-reserve">
-					<div class="price-details">
-						<div class="price">
-							<span><?=$carInfo['price']?> <?=$carInfo['currency']?></span> Per day
-						</div>
-						<div class="pick-up-time">
-								<h5 class="bold">Set your reservation period</h5>
-								From:<input type="date" class="form-control" name="start_date" placeholder="YYYY-MM-DD" value="<?=$dateStart?>">
-								<br/>
-								To:<input type="date" class="form-control" name="end_date" placeholder="YYYY-MM-DD" value="<?=$dateEnd?>">
-						</div>
+				<div class="price-details">
+					<div class="price">
+						<span><?=$carInfo ['price']?> <?=$carInfo ['currency']?></span>
+						Per day
 					</div>
-					<div id="w0-error-0" class="alert-danger fade in">
+					<div class="pick-up-time">
+						<h5 class="bold">Set your reservation period</h5>
+						From:<input type="date" class="form-control" name="start_date"
+							placeholder="YYYY-MM-DD" value="<?=$dateStart?>"> <br /> To:<input
+							type="date" class="form-control" name="end_date"
+							placeholder="YYYY-MM-DD" value="<?=$dateEnd?>">
 					</div>
-					<?= Html::submitButton ( 'Get it now!', ['class' => 'btn btn-primary btn-block no-radius btn-lg'] )?>
 				</div>
-			<?= Html::endForm ()?>
-			<a class="btn btn-blank btn-block btn-save" href="#"><i class="fa fa-star-o"></i> Save for later</a>
+				<div id="w0-error-0" class="alert-danger fade in"></div>
+					<?=Html::submitButton ( 'Get it now!', [ 'class' => 'btn btn-primary btn-block no-radius btn-lg'] )?>
+				</div>
+			<?=Html::endForm ()?>
+			<a class="btn btn-blank btn-block btn-save" href="#"><i
+				class="fa fa-star-o"></i> Save for later</a>
 			<ul class="list-inline social-media-view">
 				<li><a href="#"><i class="fa fa-facebook"></i></a></li>
 				<li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -116,25 +158,37 @@ $carRatingPercentage = (count($carRatings) > 0 ? 20*$ratingsSum/count($carRating
 	<?=$recentlyListedHTML?>
 
 </div>
-<form action='https://checkout.payfort.com/FortAPI/paymentPage' method='post' name='frm'>
-<?php foreach($paymentParams as $key=>$param):?>
-	<?php echo "\t<input type='hidden' name='".htmlentities($key)."' value='".htmlentities($param)."'>\n";?>
-<?php endforeach;?>
+<form action='https://checkout.payfort.com/FortAPI/paymentPage'
+	method='post' name='frm'>
+<?php
+
+foreach ( $paymentParams as $key => $param ) :
+	?>
+	<?php
+
+	echo "\t<input type='hidden' name='" . htmlentities ( $key ) . "' value='" . htmlentities ( $param ) . "'>\n";
+	?>
+<?php
+endforeach
+;
+?>
 </form>
 <script>
-$('#reserver-form').submit(function() { 
-    $.ajax({ 
-        url: '/car/ajax-reserve-a-car', 
-        type: 'post', 
-        data: $(this).serialize(), 
-        success: function(data) { 
+$('#reserver-form').submit(function() {
+    $.ajax({
+        url: '/car/ajax-reserve-a-car',
+        type: 'post',
+        data: $(this).serialize(),
+        success: function(data) {
             if (data.success == true)
             {
-                document.frm['amount'].value = data.amount;
-                document.frm['signature'].value = data.signature;
-                document.frm['return_url'].value = data.return_url;
-                document.frm['merchant_reference'].value = data.merchant_reference;
-                document.frm.submit();
+//                 document.frm['amount'].value = data.amount;
+//                 document.frm['signature'].value = data.signature;
+//                 document.frm['return_url'].value = data.return_url;
+//                 document.frm['merchant_reference'].value = data.merchant_reference;
+//                 document.frm.submit();
+				
+				window.location.replace(data.return_url);
             }
             else
             {
@@ -144,7 +198,7 @@ $('#reserver-form').submit(function() {
         error: function(data) {
 			$('#w0-error-0').addClass('alert').html(data.error);
         }
-    }); 
+    });
     return false;
-}); 
+});
 </script>

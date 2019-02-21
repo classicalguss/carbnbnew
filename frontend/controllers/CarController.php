@@ -10,6 +10,7 @@ use frontend\models\Rating;
 use common\models\User;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\base\Model;
@@ -17,6 +18,7 @@ use frontend\models\carDetailsForm;
 use frontend\models\carFeaturesForm;
 use frontend\models\carPhotosForm;
 use frontend\models\carPublishForm;
+use frontend\models\ReserveConfirmationForm;
 use common\models\Carmodel;
 use common\models\Booking;
 use yii\web\UploadedFile;
@@ -260,7 +262,6 @@ class CarController extends Controller {
 					'id' => $model->id
 			] );
 		} else {
-			Yii::warning ( $model->errors );
 			$models = [
 					'carDetailsModel' => new carDetailsForm (),
 					'carFeaturesModel' => new carFeaturesForm (),
@@ -655,9 +656,9 @@ class CarController extends Controller {
 
 		$renterId = Yii::$app->user->id;
 
-		$carModal = $this->findModel ( $carId );
+		$carModel = $this->findModel ( $carId );
 
-		if ($renterId == $carModal->owner_id)
+		if ($renterId == $carModel->owner_id)
 			$errorMsg = 'You can\'t rent your own car!';
 
 		if (! empty ( $errorMsg )) {
@@ -674,134 +675,115 @@ class CarController extends Controller {
 						'error' => 'Sorry, This car is already reserved during this period'
 				];
 				return $data;
+			} else if (Booking::isCarRequestedOnAPeriod ( $carId, $startDate, $endDate )) {
+				$data = [
+						'success' => false,
+						'error' => 'You already requested to rent the car during this period'
+				];
+				return $data;
 			}
 		}
-
-		return $this->redirect ( [
-				'reserve-confirmation',
-				'id' => $carId
+		$session = Yii::$app->session;
+		$session->set ( 'reserveConfirmationData', [
+				'carModel' => $carModel,
+				'carId' => $carId,
+				'carOwner' => $carModel->user,
+				'startDate' => $startDate,
+				'endDate' => $endDate
 		] );
+		$data = [
+				'success' => TRUE,
+				'return_url' => Url::to ( '/booking/reserve-confirmation' )
+		];
 
-		// $amount = $carModal->price * Util::dateDiff ( $startDate, $endDate )->days * 100;
-		// $merchantReference = strtotime ( $startDate ) . '-' . strtotime ( $endDate ) . '-' . $carModal->id . '-' . Yii::$app->user->id;
-		// $paymentParams = array (
-		// 'access_code' => 'mjYoPHsRkzTGIlLPVvkX',
-		// 'amount' => $amount,
-		// 'command' => 'AUTHORIZATION',
-		// 'currency' => 'AED',
-		// 'customer_email' => 'test@payfort.com',
-		// 'language' => 'en',
-		// 'merchant_identifier' => 'ULhiPMaP',
-		// 'merchant_reference' => $merchantReference,
-		// 'return_url' => Url::to ( [
-		// 'car/booking'
-		// ], true )
+		return $data;
+	}
+	public function actionBooking() {
+		// $message = '';
+		// $paymentStatus = Yii::$app->request->get ( 'status', '00' );
+		// if ($paymentStatus !== '02') {
+		// $message = 'Oops! Something went wrong with the payment, please contact us on barghouti_since88@hotmail.com';
+		// return $this->render ( 'carReservedSuccessfully', [
+		// 'message' => $message
+		// ] );
+		// }
+
+		// $merchantReference = Yii::$app->request->get ( 'merchant_reference', [ ] );
+		// $merchantReferenceArray = explode ( '-', $merchantReference );
+		// if (count ( $merchantReferenceArray ) != 4) {
+		// $message = 'Oops! Something went wrong with your purchase, please contact us on barghouti_since88@hotmail.com';
+		// return $this->render ( 'carReservedSuccessfully', [
+		// 'message' => $message
+		// ] );
+		// }
+		// $startDate = date ( 'Y-m-d', $merchantReferenceArray [0] );
+		// $endDate = date ( 'Y-m-d', $merchantReferenceArray [1] );
+		// $carId = $merchantReferenceArray [2];
+		// $renterId = $merchantReferenceArray [3];
+		// if (( int ) $renterId !== Yii::$app->user->id) {
+		// $message = 'It doesn\'t seem that this purchase belongs to you! Please contact us on barghouti_since88@hotmail.com';
+		// return $this->render ( 'carReservedSuccessfully', [
+		// 'message' => $message
+		// ] );
+		// }
+
+		// $carModel = Car::findOne ( $carId );
+		// if ($carModel === null) {
+		// $message = 'Invalid car. Please contact us on barghouti_since88@hotmail.com';
+		// return $this->render ( 'carReservedSuccessfully', [
+		// 'message' => $message
+		// ] );
+		// }
+
+		// if (Booking::isCarRentedOnAPeriod ( $carId, $startDate, $endDate )) {
+		// $message = 'Oops! Sorry but it seems someone already rented the car in this period!';
+		// return $this->render ( 'carReservedSuccessfully', [
+		// 'message' => $message
+		// ] );
+		// }
+
+		// // Capture the purchase
+		// $url = 'https://paymentservices.payfort.com/FortAPI/paymentApi';
+
+		// $arrData = array (
+		// 'access_code' => Yii::$app->request->get ( 'access_code' ),
+		// 'amount' => Yii::$app->request->get ( 'amount' ),
+		// 'command' => 'CAPTURE',
+		// 'currency' => Yii::$app->request->get ( 'currency' ),
+		// 'language' => Yii::$app->request->get ( 'language' ),
+		// 'merchant_identifier' => Yii::$app->request->get ( 'merchant_identifier' ),
+		// 'merchant_reference' => Yii::$app->request->get ( 'merchant_reference' )
 		// );
+
 		// $signature = 'iuytrertyui';
-		// foreach ( $paymentParams as $key => $value ) {
+		// foreach ( $arrData as $key => $value ) {
 		// $signature .= $key . '=' . $value;
 		// }
 		// $signature .= 'iuytrertyui';
-		// $data = [
-		// 'success' => true,
-		// 'amount' => $amount,
-		// 'signature' => hash ( 'sha256', $signature ),
-		// 'merchant_reference' => $merchantReference,
-		// 'return_url' => Url::to ( [
-		// 'car/booking'
-		// ], true )
-		// ];
 
-		// return $data;
-	}
-	public function actionReserveConfirmation($id) {
-		return $this->render ( 'reserveCar', [ ] );
-	}
-	public function actionBooking() {
-		$message = '';
-		$paymentStatus = Yii::$app->request->get ( 'status', '00' );
-		if ($paymentStatus !== '02') {
-			$message = 'Oops! Something went wrong with the payment, please contact us on barghouti_since88@hotmail.com';
-			return $this->render ( 'carReservedSuccessfully', [
-					'message' => $message
-			] );
-		}
-
-		$merchantReference = Yii::$app->request->get ( 'merchant_reference', [ ] );
-		$merchantReferenceArray = explode ( '-', $merchantReference );
-		if (count ( $merchantReferenceArray ) != 4) {
-			$message = 'Oops! Something went wrong with your purchase, please contact us on barghouti_since88@hotmail.com';
-			return $this->render ( 'carReservedSuccessfully', [
-					'message' => $message
-			] );
-		}
-		$startDate = date ( 'Y-m-d', $merchantReferenceArray [0] );
-		$endDate = date ( 'Y-m-d', $merchantReferenceArray [1] );
-		$carId = $merchantReferenceArray [2];
-		$renterId = $merchantReferenceArray [3];
-		if (( int ) $renterId !== Yii::$app->user->id) {
-			$message = 'It doesn\'t seem that this purchase belongs to you! Please contact us on barghouti_since88@hotmail.com';
-			return $this->render ( 'carReservedSuccessfully', [
-					'message' => $message
-			] );
-		}
-
-		$carModel = Car::findOne ( $carId );
-		if ($carModel === null) {
-			$message = 'Invalid car. Please contact us on barghouti_since88@hotmail.com';
-			return $this->render ( 'carReservedSuccessfully', [
-					'message' => $message
-			] );
-		}
-
-		if (Booking::isCarRentedOnAPeriod ( $carId, $startDate, $endDate )) {
-			$message = 'Oops! Sorry but it seems someone already rented the car in this period!';
-			return $this->render ( 'carReservedSuccessfully', [
-					'message' => $message
-			] );
-		}
-
-		// Capture the purchase
-		$url = 'https://paymentservices.payfort.com/FortAPI/paymentApi';
-
-		$arrData = array (
-				'access_code' => Yii::$app->request->get ( 'access_code' ),
-				'amount' => Yii::$app->request->get ( 'amount' ),
-				'command' => 'CAPTURE',
-				'currency' => Yii::$app->request->get ( 'currency' ),
-				'language' => Yii::$app->request->get ( 'language' ),
-				'merchant_identifier' => Yii::$app->request->get ( 'merchant_identifier' ),
-				'merchant_reference' => Yii::$app->request->get ( 'merchant_reference' )
-		);
-
-		$signature = 'iuytrertyui';
-		foreach ( $arrData as $key => $value ) {
-			$signature .= $key . '=' . $value;
-		}
-		$signature .= 'iuytrertyui';
-
-		$arrData ['signature'] = hash ( 'sha256', $signature );
-		$ch = curl_init ( $url );
-		// Setup request to send json via POST.
-		$data = json_encode ( $arrData );
-		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
-		curl_setopt ( $ch, CURLOPT_HTTPHEADER, array (
-				'Content-Type:application/json'
-		) );
-		// Return response instead of printing.
-		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
-		// Send request.
-		$result = curl_exec ( $ch );
-		curl_close ( $ch );
-		// Print response.
-		$result = json_decode ( $result, true );
-		if ($result ['status'] !== '04') {
-			$message = 'Oops! Something went wrong with authorizing your purchase, please contact us on barghouti_since88@hotmail.com';
-			return $this->render ( 'carReservedSuccessfully', [
-					'message' => $message
-			] );
-		}
+		// $arrData ['signature'] = hash ( 'sha256', $signature );
+		// $ch = curl_init ( $url );
+		// // Setup request to send json via POST.
+		// $data = json_encode ( $arrData );
+		// curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
+		// curl_setopt ( $ch, CURLOPT_HTTPHEADER, array (
+		// 'Content-Type:application/json'
+		// ) );
+		// // Return response instead of printing.
+		// curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		// curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
+		// // Send request.
+		// $result = curl_exec ( $ch );
+		// curl_close ( $ch );
+		// // Print response.
+		// $result = json_decode ( $result, true );
+		// if ($result ['status'] !== '04') {
+		// $message = 'Oops! Something went wrong with authorizing your purchase, please contact us on barghouti_since88@hotmail.com';
+		// return $this->render ( 'carRes
+		// ccessfully', [
+		// 'message' => $message
+		// ] );
+		// }
 		$booking = new Booking ();
 		$booking->car_id = $carId;
 		$booking->date_start = $startDate;
@@ -844,7 +826,8 @@ class CarController extends Controller {
 		] );
 	}
 	public function actionGetCarMakeModels($id) {
-		return $this->renderAjax ( 'carModelsDropDownListView', [
+		return $this->renderAjax ( 'carModel
+				ownListView', [
 				'list' => Carmodel::getCarMakeModels ( $id )
 		] );
 	}

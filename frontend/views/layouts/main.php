@@ -14,17 +14,22 @@ AppAsset::register ( $this );
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
-	<meta charset="<?= Yii::$app->charset ?>">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="<?= Yii::$app->charset ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?= Html::csrfMetaTags() ?>
 	<title><?= Html::encode($this->title) ?></title>
-	<!-- Load External font file -->
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,900,900i" rel="stylesheet">
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="icon" href="<?=Yii::$app->params['siteImagesPath']?>/favicon.ico">
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
+<!-- Load External font file -->
+<link
+	href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,900,900i"
+	rel="stylesheet">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+<link rel="icon"
+	href="<?=Yii::$app->params['siteImagesPath']?>/favicon.ico">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
@@ -33,108 +38,123 @@ AppAsset::register ( $this );
 <body>
 <?php $this->beginBody() ?>
 <div class="main-nav">
-	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu" aria-expanded="false">
-	 <span class="sr-only">Toggle navigation</span>
-	 <span class="icon-bar"></span>
-	 <span class="icon-bar"></span>
-	 <span class="icon-bar"></span>
- </button>
-	<div class="container wide">
-		<div class="row">
-			<div class="col-md-4">
-				<a href="<?=Url::to(['site/index'])?>" title="Uchaise">
-					<img width="88" height="20" src="<?=Yii::$app->params ['siteImagesPath']?>/logo.svg" alt="Uchaise" />
-				</a>
-			</div>
-			<div class="col-md-8 text-right">
-				<ul id="main-menu" class="list-inline list-links collapse navbar-collapse">
-					<li><a href="<?=Url::to(['car/your-cars'])?>">List Your Car</a></li>
-					<li><a href="<?=Url::to(['car/my-drives'])?>">My Drives</a></li>
-					<li><a href="<?=Url::to([''])?>">Messages</a></li>
+		<button type="button" class="navbar-toggle collapsed"
+			data-toggle="collapse" data-target="#main-menu" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+			<span class="icon-bar"></span> <span class="icon-bar"></span>
+		</button>
+		<div class="container wide">
+			<div class="row">
+				<div class="col-md-4">
+					<a href="<?=Url::to(['site/index'])?>" title="Uchaise"> <img
+						width="88" height="20"
+						src="<?=Yii::$app->params ['siteImagesPath']?>/logo.svg"
+						alt="Uchaise" />
+					</a>
+				</div>
+				<div class="col-md-8 text-right">
+					<ul id="main-menu"
+						class="list-inline list-links collapse navbar-collapse">
+						<li><a href="<?=Url::to(['car/your-cars'])?>">List Your Car</a></li>
+						<li><a href="<?=Url::to(['car/my-drives'])?>">My Drives</a></li>
+						<li><a href="<?=Url::to([''])?>">Messages</a></li>
 					<?php if (Yii::$app->user->isGuest):?>
 						<li><a href="<?=Url::to(['user/login'])?>">Sign In</a></li>
-						<li><a href="<?=Url::to(['user/signup'])?>" class="btn btn-primary">Sign Up</a></li>
+						<li><a href="<?=Url::to(['user/signup'])?>"
+							class="btn btn-primary">Sign Up</a></li>
 					<?php else :?>
-						<li class="dropdown">
-							<a href="#" class="user-profile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<img src="<?=frontend\controllers\UserController::getUserPhoto()?>" width="40" class="img-circle" alt="<?=Yii::$app->user->identity->first_name?>"> <span class="caret"></span>
-							</a>
+						<li class="dropdown"><a href="#" class="user-profile"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<img
+								src="<?=frontend\controllers\UserController::getUserPhoto()?>"
+								width="40" class="img-circle"
+								alt="<?=Yii::$app->user->identity->first_name?>"> <span
+								class="caret"></span>
+						</a>
 							<ul class="dropdown-menu dropdown-menu-right">
 								<li><a href="#">My Profile</a></li>
 								<li><a href="#">Favorites</a></li>
 								<li role="separator" class="divider"></li>
 								<li>
-									<?=Html::beginForm ([
-										'/user/logout'
-									], 'post' )?>
-										<a href="#" onclick="$(this).closest('form').submit(); return false;" style="padding: 3px 20px">Logout</a>
+									<?=Html::beginForm ( [ '/user/logout'], 'post' )?>
+										<a href="#"
+									onclick="$(this).closest('form').submit(); return false;"
+									style="padding: 3px 20px">Logout</a>
 									<?=Html::endForm ()?>
 
 								</li>
-							</ul>
-
-						</li>
+							</ul></li>
 					<?php endif;?>
 				</ul>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<?php if (in_array(Yii::$app->requestedRoute,['car/view'])):?>
-	<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
-	<?= $content ?>
-<?php else:?>
-	<div class="
+	<div
+		class="
 		<?php if (in_array(Yii::$app->requestedRoute, ['car/my-drives'])):?>
 			container user-drives
 		<?php endif;?>
-		<?php if (in_array(Yii::$app->requestedRoute,['car/car-listed-successfully','car/booking','car/list-a-car','car/your-cars','car/my-approvals','car/approved-requests'])):?>
+		<?php if (in_array(Yii::$app->requestedRoute,[
+				'car/car-listed-successfully',
+				'car/booking',
+				'car/list-a-car',
+				'car/your-cars',
+				'car/my-approvals',
+				'car/approved-requests',
+				'booking/reserve-confirmation'
+		])):?>
 			container
-		<?php endif;?>"
-	>
+		<?php endif;?>">
 		<!-- <?=Breadcrumbs::widget ( [ 'links' => isset ( $this->params ['breadcrumbs'] ) ? $this->params ['breadcrumbs'] : [ ] ] )?> -->
 		<?= Alert::widget() ?>
 		<?= $content ?>
 	</div>
-<?php endif;?>
-<div class="container">
-	<footer class="main-footer">
-		<div class="row">
-			<div class="col-sm-6">
-				<h4>About Uchaise</h4>
-				<p>Put your car to work with just a few clicks. upload your registration along with quality photos and your car is ready to go!</p>
-				<ul class="list-inline social-media-links">
-					<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-					<li><a href="#"><i class="fa fa-instagram"></i></a></li>
-				</ul>
-				<p class="copy-right">Copyright &copy; 2017 UChaise. All rights Reserved</p>
-			</div>
+	<div class="container">
+		<footer class="main-footer">
+			<div class="row">
+				<div class="col-sm-6">
+					<h4>About Uchaise</h4>
+					<p>Put your car to work with just a few clicks. upload your
+						registration along with quality photos and your car is ready to
+						go!</p>
+					<ul class="list-inline social-media-links">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+					</ul>
+					<p class="copy-right">Copyright &copy; 2017 UChaise. All rights
+						Reserved</p>
+				</div>
 
-			<div class="col-sm-3">
-				<h4>Learn more</h4>
-				<ul class="list-unstyled">
-					<li><a href="#">How Uchaise works Policies</a></li>
-					<li><a href="#">Trust &amp; safety</a></li>
-					<li><a href="#">About Us</a></li>
-					<li><a href="#">Contact Us</a></li>
-					<li><a href="#">Careers</a></li>
-					<li><a href="#">Press Corner</a></li>
-				</ul>
-			</div>
+				<div class="col-sm-3">
+					<h4>Learn more</h4>
+					<ul class="list-unstyled">
+						<li><a href="#">How Uchaise works Policies</a></li>
+						<li><a href="#">Trust &amp; safety</a></li>
+						<li><a href="#">About Us</a></li>
+						<li><a href="#">Contact Us</a></li>
+						<li><a href="#">Careers</a></li>
+						<li><a href="#">Press Corner</a></li>
+					</ul>
+				</div>
 
-			<div class="col-sm-3">
-				<h4>Get Started</h4>
-				<ul class="list-unstyled">
-					<li><a href="#">Rent a car</a></li>
-					<li><a href="#">Make money with your car</a></li>
-					<li class="download-app"><a href="#"><img src="<?=Yii::$app->params ['siteImagesPath']?>/download-app-store.png" alt="Download on the app store"></a></li>
-					<li><a href="#"><img src="<?=Yii::$app->params ['siteImagesPath']?>/google-play.png" alt="Get it on google play"></a></li>
-				</ul>
+				<div class="col-sm-3">
+					<h4>Get Started</h4>
+					<ul class="list-unstyled">
+						<li><a href="#">Rent a car</a></li>
+						<li><a href="#">Make money with your car</a></li>
+						<li class="download-app"><a href="#"><img
+								src="<?=Yii::$app->params ['siteImagesPath']?>/download-app-store.png"
+								alt="Download on the app store"></a></li>
+						<li><a href="#"><img
+								src="<?=Yii::$app->params ['siteImagesPath']?>/google-play.png"
+								alt="Get it on google play"></a></li>
+					</ul>
+				</div>
 			</div>
-		</div>
-	</footer>
-</div>
+		</footer>
+	</div>
 
 <?php $this->endBody() ?>
 </body>
