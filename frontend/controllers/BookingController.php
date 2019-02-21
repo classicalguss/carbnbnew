@@ -59,7 +59,6 @@ class BookingController extends Controller {
 				$loggedInUser->setIsNewRecord(false);
 				$loggedInUser->phonenumber =  $reserveConfirmationForm->phonenumber;
 				$loggedInUser->save(true, ['phonenumber']);
-				var_dump($loggedInUser->errors);
 			}
 			$booking = new Booking ();
 			$booking->car_id = $reserveConfirmationData ['carId'];
