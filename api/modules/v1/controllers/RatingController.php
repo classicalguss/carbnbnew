@@ -5,6 +5,7 @@ namespace api\modules\v1\controllers;
 use yii\rest\ActiveController;
 use Yii;
 use yii\helpers\Url;
+use yii\web\ServerErrorHttpException;
 use yii\filters\auth\HttpBearerAuth;
 use api\modules\v1\models\User;
 use yii\data\ActiveDataProvider;
@@ -26,21 +27,21 @@ class RatingController extends ActiveController {
 	}
 	public function behaviors() {
 		$behaviors = parent::behaviors ();
-		$behaviors ['authenticator'] = [ 
+		$behaviors ['authenticator'] = [
 				'class' => HttpBearerAuth::className (),
 				'only' => [
 						'create'
-				] 
+				]
 		];
 		return $behaviors;
 	}
 
 	public function actionCreate() {
 		$model = new $this->modelClass([]);
-		
+
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
 		$model->user_id = Yii::$app->user->id;
-		
+
 		if ($model->save()) {
 			$response = Yii::$app->getResponse();
 			$response->setStatusCode(201);
@@ -52,10 +53,10 @@ class RatingController extends ActiveController {
 		} elseif (!$model->hasErrors()) {
 			throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
 		}
-		
+
 		return $model;
 	}
-	
+
 	public function prepareDataProvider()
 	{
 		$searchModel = new RatingSearch();

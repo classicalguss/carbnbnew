@@ -26,46 +26,46 @@ AppAsset::register ( $this );
 
 <div class="wrap">
     <?php
-				NavBar::begin ( [ 
+				NavBar::begin ( [
 						'brandLabel' => 'My Company',
 						'brandUrl' => Yii::$app->homeUrl,
-						'options' => [ 
-								'class' => 'navbar-inverse navbar-fixed-top' 
-						] 
+						'options' => [
+								'class' => 'navbar-inverse navbar-fixed-top'
+						]
 				] );
-				$menuItems = [ 
-						[ 
+				$menuItems = [
+						[
 								'label' => 'Home',
-								'url' => [ 
-										'/site/index' 
-								] 
+								'url' => [
+										'/site/index'
+								]
 						],
-						[ 
+						[
 								'label' => 'Car Interfaces',
-								'url' => [ 
-										'/car/index' 
-								] 
-						] 
+								'url' => [
+										'/car/index'
+								]
+						]
 				];
 				if (Yii::$app->user->isGuest) {
-					$menuItems [] = [ 
+					$menuItems [] = [
 							'label' => 'Login',
-							'url' => [ 
-									'/user/login' 
-							] 
+							'url' => [
+									'/user/login'
+							]
 					];
 				} else {
-					$menuItems [] = '<li>' . Html::beginForm ( [ 
-							'/user/logout' 
-					], 'post' ) . Html::submitButton ( 'Logout (' . Yii::$app->user->identity->first_name . ')', [ 
-							'class' => 'btn btn-link logout' 
+					$menuItems [] = '<li>' . Html::beginForm ( [
+							'/user/logout'
+					], 'post' ) . Html::submitButton ( 'Logout (' . Yii::$app->user->identity->first_name . ')', [
+							'class' => 'btn btn-link logout'
 					] ) . Html::endForm () . '</li>';
 				}
-				echo Nav::widget ( [ 
-						'options' => [ 
-								'class' => 'navbar-nav navbar-right' 
+				echo Nav::widget ( [
+						'options' => [
+								'class' => 'navbar-nav navbar-right'
 						],
-						'items' => $menuItems 
+						'items' => $menuItems
 				] );
 				NavBar::end ();
 				?>
