@@ -117,8 +117,8 @@ class Booking extends \yii\db\ActiveRecord
 	/**
 	 * check if car already reserved on the same period
 	 * @param number $carId
-	 * @param date $startDate
-	 * @param date $endDate
+	 * @param string $startDate
+	 * @param string $endDate
 	 * @return boolean
 	 */
 	public static function isCarRentedOnAPeriod($carId, $startDate, $endDate)

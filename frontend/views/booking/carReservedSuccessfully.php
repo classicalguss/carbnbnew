@@ -17,6 +17,6 @@ $this->title = 'Car Reserved Successfully';
     	<h1>Sorry <?=Yii::$app->user->identity->first_name?></h1>
     	<p><?=$message?></p>
     <?php endif;?>
-	
+
 	<a href="<?=Url::to(['car/my-drives'])?>" class="btn btn-primary btn-lg">See Reservations</a>
 </div>

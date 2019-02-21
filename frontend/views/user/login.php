@@ -8,8 +8,6 @@ use yii\bootstrap\ActiveForm;
 use frontend\assets\UserAsset;
 use frontend\assets\AppAsset;
 use yii\helpers\Url;
-use yii\authclient\widgets\AuthChoice;
-use yii\base\Widget;
 
 $this->title = 'Login';
 $this->params ['breadcrumbs'] [] = $this->title;

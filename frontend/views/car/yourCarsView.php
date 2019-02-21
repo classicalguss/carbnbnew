@@ -1,10 +1,11 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\bootstrap\Tabs;
 use frontend\assets\CarAsset;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
+/* @var $unPublishedCars array */
+/* @var $publishedCars array */
 
 $this->title = 'Your Cars';
 CarAsset::register ( $this );
@@ -46,7 +47,7 @@ CarAsset::register ( $this );
 							</h3>
 							<p class="trips"><?=$car['trips']?> Trips</p>
 							<p class="text-gray">Last updated on <?=$car['updated_at']?></p>
-	
+
 							<ul class="list-inline">
 								<li><a target="_blank"
 									href="<?=Url::to(['car/update', 'id'=>$car['id']])?>"
@@ -55,7 +56,7 @@ CarAsset::register ( $this );
 									<?=Html::beginForm ( [ '/car/toggle-publish' ], 'post' ) . Html::hiddenInput ( 'id', $car ['id'] ) . Html::hiddenInput ( 'is_published', '0' ) . Html::submitButton ( 'Unpublish', [ 'class' => 'btn btn-default' ] ) . Html::endForm ()?>
 								</li>
 							</ul>
-	
+
 							<a href="#" class="text-gray">Remove from list</a>
 						</div>
 					</div>
@@ -81,7 +82,7 @@ CarAsset::register ( $this );
 							</h3>
 							<p class="trips"><?=$car['trips']?> Trips</p>
 							<p class="text-gray">Last updated on <?=$car['updated_at']?></p>
-	
+
 							<ul class="list-inline">
 								<li><a target="_blank"
 									href="<?=Url::to(['car/update', 'id'=>$car['id']])?>"
@@ -91,7 +92,7 @@ CarAsset::register ( $this );
 								</li>
 							</ul>
 							<?=Html::beginForm ( [ '/car/delete' ], 'post' ) . Html::hiddenInput ( 'id', $car ['id'] ) . Html::a( 'Remove from list', 'javascript:;', [ 'onclick'=>'$(this).closest(\'form\').submit()','class' => 'text-gray' ] ) . Html::endForm ()?>
-							
+
 						</div>
 					</div>
 				</div>

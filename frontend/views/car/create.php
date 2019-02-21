@@ -1,16 +1,12 @@
 <?php
+/* @var $this yii\web\View */
+/* @var $model frontend\models\Car */
 
 use frontend\widgets\ETabs;
-use yii\helpers\Html;
-use yii\bootstrap\Tabs;
-use yii\web\View;
-use yii\helpers\Url;
 use frontend\assets\JqueryUIAsset;
 use frontend\assets\CarAsset;
 JqueryUIAsset::register($this);
 CarAsset::register($this);
-/* @var $this yii\web\View */
-/* @var $model frontend\models\Car */
 
 $this->title = 'Create Car';
 ?>
@@ -33,8 +29,8 @@ $this->title = 'Create Car';
 			'content' => $this->render('carPhotosFormView', ['model' => $models['carPhotosModel'], 'formNum' => 3]),
 			'linkOptions' => ['id' => 'tab3'],
 			'options'=>['class'=>'disabled'],
-				
-				
+
+
 		],
 		[
 			'label' => 'Publish',
@@ -72,35 +68,6 @@ $this->title = 'Create Car';
 			submitCar();
 			return false;
 		});
-
-		$("#location-autocomplete").autocomplete({
-			source: function( request, response ) {
-				$.ajax({
-					url: "<?=Url::to(['lists/area-autocomplete'])?>",
-					dataType: "json",
-					data: {
-						q: request.term
-					},
-					success: function( data ) {
-						response( data );
-					}
-				});
-			},
-			minLength: 3,
-			select: function(event, ui) {
-				var location = ui.item.id;
-				if(location)
-				{
-					location = location.split(",");
-					if(location.length == 3)
-					{
-						$("#cardetailsform-country_iso").val(location[0]);
-						$("#cardetailsform-city_id").val(location[1]);
-						$("#cardetailsform-area_id").val(location[2]);
-					}
-				}
-			}
-		});
 	});
 	function switchForm(formNum, formObj)
 	{
@@ -117,7 +84,6 @@ $this->title = 'Create Car';
 		form.yiiActiveForm("validate");
 
 		var errorsCount = form.find(".has-error").length;
-		console.log(errorsCount);
 		if (errorsCount == 0 )
 		{
 			$('#tab'+nextForm).click(); // click on next tab

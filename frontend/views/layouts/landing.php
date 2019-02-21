@@ -20,7 +20,7 @@ LandingAsset::register ( $this );
 	<?php $this->head() ?>
 </head>
 <body>
-<?php $this->beginBody() 
+<?php $this->beginBody()
 
 ?>
 	<div class="Rectangle-5">
@@ -34,7 +34,7 @@ LandingAsset::register ( $this );
 		</div>
 		<form class="registration-form">
 			<input class="registration-input" placeholder="Your Email" type="text" />
-			
+
 			<button onclick="submitForm(this);return false;" class="registration-submit" type="submit">
 				<span>Keep me Updated</span>
 				<img class="hide loading-icon" src="https://www.createwebsite.net/wp-content/uploads/2015/09/GD.gif" />

@@ -5,16 +5,15 @@ namespace api\modules\v1\controllers;
 use yii\rest\ActiveController;
 use Yii;
 use yii\helpers\Url;
+use yii\web\BadRequestHttpException;
+use yii\web\ServerErrorHttpException;
+use yii\base\InvalidParamException;
 use yii\filters\auth\HttpBearerAuth;
 use api\modules\v1\models\User;
-use common\models\Carmake;
-use common\models\City;
-use common\models\Area;
 use yii\web\UploadedFile;
 use api\modules\v1\models\PasswordResetRequestForm;
 use api\modules\v1\models\ResetPasswordForm;
 use common\models\Util;
-use api\modules\v1\models\Car;
 
 /**
  * Country Controller API
@@ -24,7 +23,7 @@ use api\modules\v1\models\Car;
 class UserController extends ActiveController {
 	public $modelClass = 'api\modules\v1\models\User';
 	public $show_credentials = false;
-	
+
 	protected function verbs()
 	{
 		return [
@@ -34,7 +33,7 @@ class UserController extends ActiveController {
 				'update' => ['POST'],
 		];
 	}
-	
+
 	public function actions() {
 		$actions = parent::actions ();
 		unset ( $actions ['delete'], $actions ['create'], $actions['update']);
@@ -42,7 +41,7 @@ class UserController extends ActiveController {
 	}
 	public function behaviors() {
 		$behaviors = parent::behaviors ();
-		$behaviors ['authenticator'] = [ 
+		$behaviors ['authenticator'] = [
 				'class' => HttpBearerAuth::className(),
 				'only'=>['update','logout']
 		];
@@ -59,7 +58,7 @@ class UserController extends ActiveController {
 		$model = User::findIdentity($id);
 		if ($model->id !== Yii::$app->user->id)
 			throw new \yii\web\ForbiddenHttpException('You can only update your own user');
-		
+
 		$model->setAttributes(Yii::$app->request->post());
 		$model->photoFile = UploadedFile::getInstanceByName ('photoFile');
 		$model->licenseImage = UploadedFile::getInstanceByName ('licenseImage');
@@ -67,17 +66,17 @@ class UserController extends ActiveController {
 			$model->photo = Util::generateRandomString(). '_' . $model->photoFile->name;
 		if (!empty($model->licenseImage))
 			$model->license_image_file = Util::generateRandomString(). '_' . $model->licenseImage->name;
-		
+
 		$model->save ();
 		$model->upload();
 		if (empty($model->errors))
 			$model = $model->findIdentity($id);
-		
+
 		return $model;
 	}
 	public function actionCreate() {
-		$model = new $this->modelClass ( [ 
-				'scenario' => 'signup' 
+		$model = new $this->modelClass ( [
+				'scenario' => 'signup'
 		] );
 		$model->load ( Yii::$app->getRequest ()->getBodyParams (), '' );
 		$model->photoFile = UploadedFile::getInstanceByName ('photoFile');
@@ -90,14 +89,14 @@ class UserController extends ActiveController {
 				$model->photo = Util::generateRandomString(). '_' . $model->photoFile->name;
 			if (!empty($model->licenseImage))
 				$model->license_image_file = Util::generateRandomString(). '_' . $model->licenseImage->name;
-			
+
 			if ($model->save ()) {
 				$model->upload();
 				$response = Yii::$app->getResponse ();
 				$response->setStatusCode ( 201 );
 				$id = implode ( ',', array_values ( $model->getPrimaryKey ( true ) ) );
 				$this->show_credentials = true;
-				$response->getHeaders ()->set ( 'Location', Url::toRoute ( [ 
+				$response->getHeaders ()->set ( 'Location', Url::toRoute ( [
 						'view',
 						'id' => $id
 				], true ) );
@@ -117,10 +116,10 @@ class UserController extends ActiveController {
 				throw new ServerErrorHttpException ( 'Failed to create the object for unknown reason.' );
 			}
 		}
-		
+
 		return $model;
 	}
-	
+
 	public function actionFacebooklogin() {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,'https://graph.facebook.com/me');
@@ -131,7 +130,7 @@ class UserController extends ActiveController {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //to suppress the curl output
 		$result = curl_exec($ch);
 		curl_close ($ch);
-		
+
 		$result = json_decode($result,true);
 		if (isset($result['error']))
 		{
@@ -143,7 +142,7 @@ class UserController extends ActiveController {
 			Yii::$app->response->setStatusCode(422, 'Unknown error');
 			return $result;
 		}
-		
+
 		$user = User::findOne(['registration_token'=>$result['id']]);
 		$response = Yii::$app->getResponse ();
 		if (empty($user))
@@ -162,7 +161,7 @@ class UserController extends ActiveController {
 				Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
 				return $user->errors;
 			}
-			
+
 			$response->setStatusCode ( 201 );
 		}
 		else
@@ -183,7 +182,7 @@ class UserController extends ActiveController {
 				'access_key'=>$user->access_key
 		];
 	}
-	
+
 	public function actionLogin() {
 		$model = User::findOne([
 				'email'=>Yii::$app->request->post('email')
@@ -200,7 +199,7 @@ class UserController extends ActiveController {
 			$response->setStatusCode ( 401,' Wrong email or password' );
 			return null;
 		}
-		
+
 		if (empty($model->access_key))
 		{
 			$model->generateAuthKey();
@@ -215,7 +214,7 @@ class UserController extends ActiveController {
 				'access_key'=>$model->access_key
 		];
 	}
-	
+
 	public function actionLogout() {
 		$model = User::findIdentity(Yii::$app->user->id);
 		$model->access_key = '';
@@ -232,7 +231,7 @@ class UserController extends ActiveController {
 	 */
 	public function actionRequestpasswordreset() {
 		$model = new PasswordResetRequestForm();
-		
+
 		if ($model->load ( Yii::$app->request->post (),'' ) && $model->validate ()) {
 			if(!empty($_SERVER['HTTP_CLIENT_IP'])){
 				$ip=$_SERVER['HTTP_CLIENT_IP'];
@@ -258,7 +257,7 @@ class UserController extends ActiveController {
 			return $model->errors;
 		}
 	}
-	
+
 	/**
 	 * Resets password.
 	 *
@@ -281,7 +280,7 @@ class UserController extends ActiveController {
 		} catch ( InvalidParamException $e ) {
 			throw new BadRequestHttpException ( $e->getMessage () );
 		}
-		
+
 		if ($model == null)
 		{
 			Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
@@ -291,7 +290,7 @@ class UserController extends ActiveController {
 					'msg'=>'Reset Password number code has been sent to email '.$model->email
 			];
 		}
-		
+
 		Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
 		return $model->errors;
 	}
