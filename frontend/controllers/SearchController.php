@@ -37,16 +37,9 @@ class SearchController extends Controller
      */
     public function actionIndex()
     {
+        $this->view->title = "Search Cars";
     	$searchModel = new CarSearch();
     	$searchModel->load(Yii::$app->request->queryParams);
-    	if ($searchModel->book_instantly == null)
-    	{
-    		$searchModel->book_instantly = 1;
-    	}
-    	if ($searchModel->delivery == null)
-    	{
-    		$searchModel->delivery = 0;
-    	}
     	$dataProvider = $searchModel->search();
 
     	$stats = CarSearch::find()->select(['min(price) as min_price,max(price) as max_price,min(milage_limitation) as min_milage_limitation, max(milage_limitation) max_milage_limitation'])->asArray()->one();

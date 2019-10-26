@@ -12,14 +12,15 @@ use yii\helpers\Url;
 				</a>
 			</div>
 		</div>
-		<div data-thumb-class="col-md-12" data-list-class="col-md-6" class="col-md-12">
+		<div data-thumb-class="col-md-12" data-list-class="col-md-6" class="search-car-details col-md-12">
 			<div class="clearfix">
-				<div class="title pull-left">
+				<div class="title pull-left left-portion">
 					<h3>
 						<a href="<?=Url::to(['car/view/','id'=>$model->id,'daterange'=>Yii::$app->request->get('daterange')])?>">
 							<?=$model->make->value.' '.$model->model->value?>
 						</a>
 					</h3>
+
 					<span class="rating-stars"> <span class="rated"
 						style="width: <?=$model->rate*20?>%"></span>
 					</span> <span class="total-reviews"><?=$model->reviews?> Reviews</span>

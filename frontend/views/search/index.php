@@ -11,10 +11,8 @@ use yii\widgets\ListView;
 /* @var $searchModel frontend\models\CarSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Cars';
 $this->params ['breadcrumbs'] [] = $this->title;
 SearchPageAsset::register ( $this );
-$this->title = 'Carbnb2';
 ?>
 <?php
 

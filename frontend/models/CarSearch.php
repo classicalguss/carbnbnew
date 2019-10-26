@@ -97,20 +97,20 @@ class CarSearch extends Car {
 	 */
 	public function search() {
 		$query = Car::find ();
-		
-		if (! $this->validate ()) {
-			// uncomment the following line if you do not want to return any records when validation fails
-			// $query->where('0=1');
-			return $dataProvider;
-		}
-		
+
 		$dataProvider = new ActiveDataProvider ( [
 				'query' => $query,
 				'pagination' => [
 						'pageSize' => 6,
 				],
 		] );
-		
+
+        if (! $this->validate ()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
 		$query->distinct = true;
 		// grid filtering conditions
 		$query->andFilterWhere ( [ 
@@ -131,6 +131,7 @@ class CarSearch extends Car {
 				'book_instantly' => $this->book_instantly,
 				'delivery'=>$this->delivery
 		] );
+
 		$query->andFilterWhere(['in','year_model',$this->year_model]);
 		$query->andFilterWhere(['in','type_id',$this->type_id]);
 		$query->andFilterWhere(['in','color',$this->color]);

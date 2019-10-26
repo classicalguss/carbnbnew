@@ -46,7 +46,7 @@ use frontend\models\Car;
 			</div>
 			<div class="col col-xs-3">
 				<div class="switch pull-right">
-					<?= $form->field($model, 'book_instantly')->checkbox(['id'=>'filter-1','class'=>'cmn-toggle cmn-toggle-round'],false)->label('',['for'=>'filter-1']) ?>
+					<?= $form->field($model, 'book_instantly')->checkbox(['id'=>'filter-1','uncheck'=>null,'class'=>'cmn-toggle cmn-toggle-round'],false)->label('',['for'=>'filter-1']) ?>
 				</div>
 			</div>
 		</li>
@@ -57,7 +57,7 @@ use frontend\models\Car;
 			</div>
 			<div class="col col-xs-3">
 				<div class="switch pull-right">
-					<?= $form->field($model, 'delivery')->checkbox(['id'=>'filter-2','class'=>'cmn-toggle cmn-toggle-round'],false)->label('',['for'=>'filter-2']) ?>
+					<?= $form->field($model, 'delivery')->checkbox(['id'=>'filter-2','uncheck'=>null,'class'=>'cmn-toggle cmn-toggle-round'],false)->label('',['for'=>'filter-2']) ?>
 				</div>
 			</div>
 		</li>

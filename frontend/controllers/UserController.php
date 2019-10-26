@@ -119,7 +119,10 @@ class UserController extends Controller {
 		if ($model->load ( Yii::$app->request->post () )) {
 			if ($user = $model->signup ()) {
 				if (Yii::$app->getUser ()->login ( $user )) {
-					return $this->goHome ();
+				    if (Yii::$app->request->getQueryParam('redirectUrl'))
+				        return $this->redirect(Yii::$app->urlManager->createUrl([Yii::$app->request->getQueryParam('redirectUrl')]));
+				    else
+                        return $this->goHome ();
 				}
 			}
 		}

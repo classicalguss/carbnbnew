@@ -222,7 +222,13 @@ class User extends ActiveRecord implements IdentityInterface {
 	 */
 	public static function findIdentityByAccessToken($token, $type = null)
 	{
-		return static::findOne(['access_key' => $token]);
+		foreach (self::$users as $user) {
+            if ($user['id'] === (string) $token->getClaim('uid')) {
+                return new static($user);
+            }
+        }
+
+        return null;
 	}
 	
 	/**
