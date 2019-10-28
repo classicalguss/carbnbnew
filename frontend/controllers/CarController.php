@@ -45,6 +45,7 @@ class CarController extends Controller {
 								[
 										'allow' => true,
 										'actions' => [
+										        'get-car-make-models',
 												'approved-requests',
 												'booking',
 												'list-a-car',
@@ -836,8 +837,7 @@ class CarController extends Controller {
 		] );
 	}
 	public function actionGetCarMakeModels($id) {
-		return $this->renderAjax ( 'carModel
-				ownListView', [
+		return $this->renderAjax ( 'carModelsDropDownListView', [
 				'list' => Carmodel::getCarMakeModels ( $id )
 		] );
 	}
