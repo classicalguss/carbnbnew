@@ -47,7 +47,6 @@ class CarController extends Controller {
 										'actions' => [
 												'approved-requests',
 												'booking',
-												'ajax-reserve-a-car',
 												'list-a-car',
 												'update',
 												'delete',
@@ -55,7 +54,6 @@ class CarController extends Controller {
 												'toggle-publish',
 												'my-drives',
 												'my-approvals',
-												'reserve-a-car',
 												'car-listed-successfully',
 												'approve-booking',
 												'decline-booking',
@@ -68,7 +66,8 @@ class CarController extends Controller {
 								[
 										'allow' => true,
 										'actions' => [
-												'view'
+												'view',
+                                                'ajax-reserve-a-car'
 										]
 								]
 						]
@@ -654,6 +653,17 @@ class CarController extends Controller {
 		elseif ($startDate < date ( 'Y-m-d' ))
 			$errorMsg = 'Reservation should be in future';
 
+		if ($errorMsg) {
+            return [
+                'success' => false,
+                'error' => $errorMsg
+            ];
+        }
+
+
+		if (Yii::$app->user->isGuest) {
+		    return $this->redirect(Yii::$app->urlManager->createUrl(['user/login', 'redirectUrl' => 'car/'.$carId.'?daterange='.$startDate.'+-+'.$endDate]));
+        }
 		$renterId = Yii::$app->user->id;
 
 		$carModel = $this->findModel ( $carId );

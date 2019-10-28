@@ -84,14 +84,18 @@ class UserController extends Controller {
 	 */
 	public function actionLogin() {
 		if (! Yii::$app->user->isGuest) {
-			return $this->goHome ();
+            return $this->goHome();
 		}
 
 		$model = new LoginForm ();
 		if ($model->load ( Yii::$app->request->post () ) && $model->login ()) {
-			return $this->goBack ();
+            if (Yii::$app->request->getQueryParam('redirectUrl'))
+                return $this->redirect(Yii::$app->urlManager->createUrl([Yii::$app->request->getQueryParam('redirectUrl')]));
+            else
+                return $this->goBack();
 		} else {
 			$this->layout = 'signup-nav';
+			Yii::$app->user->setReturnUrl(Yii::$app->request->referrer);
 			return $this->render ( 'login', [
 					'model' => $model
 			] );
