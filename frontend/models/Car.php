@@ -375,7 +375,6 @@ class Car extends \yii\db\ActiveRecord {
 				[
 						[
 								'price',
-								'area_id',
 								'description',
 								'milage_limitation',
 								'insurance_tip',

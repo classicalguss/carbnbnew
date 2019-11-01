@@ -24,7 +24,7 @@ class carDetailsForm extends Model {
 	public function rules() {
 		return [
 			[
-					['area','country_iso','city_id','area_id','make_id','model_id','year_model','odometer','insurance_tip'],
+					['area','country_iso','city_id','make_id','model_id','year_model','odometer','insurance_tip'],
 					'required'
 			],
 			[
