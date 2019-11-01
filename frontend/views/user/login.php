@@ -51,7 +51,7 @@ AppAsset::register ( $this );
 				<h6>Sign in to uchaise</h6>
 				<p>Enter your details below</p>
 				<?php $form = ActiveForm::begin(['id' => 'form-signup','class'=>'form']); ?>
-					<?= $form->field($model, 'email')->textInput(['placeHolder'=>'Email Address','class'=>'form-control input-lg'])->label(false)->error(['tag'=>'span'])?>
+					<?= $form->field($model, 'email')->textInput(['autocomplete'=>'on', 'placeHolder'=>'Email Address','class'=>'form-control input-lg'])->label(false)->error(['tag'=>'span'])?>
 					<?= $form->field($model, 'password')->passwordInput(['placeHolder'=>'Create Password','class'=>'form-control input-lg'])->label(false)->error(['tag'=>'span'])?>
 					<?= Html::a('Forgot password?', ['user/request-password-reset'],['class'=>'forget-password']) ?>
 					<div class="form-group">

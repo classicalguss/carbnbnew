@@ -683,7 +683,21 @@ input.cmn-toggle-round:checked+label:after {
 }
 
 .single-item-lg .img-wrap {
-    margin-bottom: 20px
+    margin-bottom: 20px;
+    height: 244px;
+    overflow: hidden;
+    position: relative;
+}
+
+.single-item-lg .responsive-image {
+    position: absolute;
+    left: -100%;
+    right: -100%;
+    top: -100%;
+    bottom: -100%;
+    margin: auto;
+    height: 100%;
+    width: auto;
 }
 
 .single-item-lg .title a {

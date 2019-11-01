@@ -123,14 +123,14 @@ AppAsset::register ( $this );
 						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
 						<li><a href="#"><i class="fa fa-instagram"></i></a></li>
 					</ul>
-					<p class="copy-right">Copyright &copy; 2017 UChaise. All rights
+					<p class="copy-right">Copyright &copy; 2019 UChaise. All rights
 						Reserved</p>
 				</div>
 
 				<div class="col-sm-3">
 					<h4>Learn more</h4>
 					<ul class="list-unstyled">
-						<li><a href="#">How Uchaise works Policies</a></li>
+						<li><a href="#">How Uchaise works</a></li>
 						<li><a href="#">Trust &amp; safety</a></li>
 						<li><a href="#">About Us</a></li>
 						<li><a href="#">Contact Us</a></li>
