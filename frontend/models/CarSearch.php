@@ -113,11 +113,13 @@ class CarSearch extends Car {
 
 		$query->distinct = true;
 		// grid filtering conditions
+        if ($this->area_id) {
+            $this->city_id = Area::findOne($this->area_id)->city_id;
+        }
 		$query->andFilterWhere ( [ 
 				'id' => $this->id,
 				'price' => $this->price,
 				'created_at' => $this->created_at,
-				'area_id' => $this->area_id,
 				'milage_limitation' => $this->milage_limitation,
 				'owner_id' => $this->owner_id,
 				'city_id' => $this->city_id,

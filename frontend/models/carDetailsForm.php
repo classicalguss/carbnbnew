@@ -48,7 +48,7 @@ class carDetailsForm extends Model {
 	{
 		return [
 				'country_iso' => '',
-				'city_id' => '',
+				'city_id' => 'City',
 				'area_id' => '',
 				'make_id' => 'Make',
 				'model_id' => 'Model',

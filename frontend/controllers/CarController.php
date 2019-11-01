@@ -245,13 +245,13 @@ class CarController extends Controller {
 		$model->photoFile6 = UploadedFile::getInstanceByName ( 'carPhotosForm[photoFile6]' );
 		$model->features = isset ( $allFormsData ['features'] ) ? implode ( ',', $allFormsData ['features'] ) : '';
 		$model->scenario = 'create';
+        $model->country_iso = 'ae';
 
 		if ($model->area_id != null) {
 			$area = Area::find ()->where ( 'id = :areaId', [
 					':areaId' => $model->area_id
 			] )->one ();
 			if ($area != null) {
-				$model->country_iso = 'ae';
 				$model->city_id = $area->city_id;
 			}
 		}
