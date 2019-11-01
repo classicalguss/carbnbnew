@@ -32,8 +32,7 @@ if (!empty($model->make_id))
 	<div class="row-small-gutter clearfix">
 		<div class="col col-xs-4"><?= $form->field($model, 'make_id')
                 ->dropDownList(Carmake::getAllCarMakes(),[
-                        'prompt'=>'Select make', 'id'=>'makeId-dd',
-                        'options'=>[1, ['selected'=>'selected']]
+                        'prompt'=>'Select make', 'id'=>'makeId-dd'
                 ])
             ?></div>
 		<div class="col col-xs-4"><?= $form->field($model, 'model_id')->dropDownList($carModelList, ['prompt'=>'Select model', 'id'=>'modelId-dd']) ?></div>
