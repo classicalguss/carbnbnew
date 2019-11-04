@@ -209,6 +209,7 @@
 }
 
 .car-details-slider {
+	height: 400px;
 	max-height: 400px;
 	overflow: hidden;
 	margin-bottom: 40px
@@ -460,7 +461,7 @@
 }
 
 .img-slider-container {
-	height: 130vh;
+    height: inherit;
 	background-color: #f6f6f6;
 }
 /*# sourceMappingURL=car-details.css.map */

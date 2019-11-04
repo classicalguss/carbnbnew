@@ -57,7 +57,7 @@ $carRatingPercentage = (count ( $carRatings ) > 0 ? 20 * $ratingsSum / count ( $
 
 					?>">
 					<div class="img-slider-container" style="background-image: url('<?=$imagePath?>');
-																 background-position: 0% -100px;
+																 background-position: 0% bottom;
     															 background-repeat: no-repeat;
    																 background-size: cover;"></div>
 					<a href="<?=$imagePath?>" title="Title goes here"
