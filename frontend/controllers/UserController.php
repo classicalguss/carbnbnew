@@ -205,7 +205,6 @@ class UserController extends Controller {
 	public function oAuthSuccess($client) {
 		// get user data from client
 		$userAttributes = $client->getUserAttributes();
-		Yii::warning($userAttributes);
 		$user = User::find()->where(['registration_token'=>$userAttributes['id']])->one();
 		if (!$user)
 		{
@@ -213,7 +212,6 @@ class UserController extends Controller {
 			$photoUrl = $userAttributes['picture']['data']['url'];
 			
 			$image = file_get_contents($photoUrl);
-			Yii::warning($image);
 			$user->setPassword ('facebookPass');
 			$user->generateAuthKey ();
 			$user->email = $userAttributes['id'].'@facebook.com';
@@ -222,14 +220,10 @@ class UserController extends Controller {
 			$user->registration_type = 1;
 			$user->registration_token = $userAttributes['id'];
 			$user->user_type = 1;
-			Yii::warning('>>>'.$photoUrl);
-			$photoName = $userAttributes['id'].'_'.Util::generateRandomString().'.'.pathinfo(parse_url($photoUrl)['path'])['extension'];
-			Yii::warning($photoName);
+			$photoName = $userAttributes['id'].'_'.Util::generateRandomString();
 			file_put_contents('../../uploads/'.$photoName, $image);
 			$user->photo = $photoName;
 			$user->save();
-			
-			Yii::warning($user->errors);
 		}
 		Yii::$app->getUser ()->login ( $user );
 
