@@ -103,7 +103,7 @@ class SiteController extends Controller {
 					'carsRating' => $carsRating,
 			]);
 		}
-		Yii::$app->view->registerMetaTag(['name'=>'google-site-verification','content'=>'Q6OnPwuwsHZDjsuOCdHg4dfSTicgyQtzaXIgSjyAJoE']);
+		Yii::$app->view->registerMetaTag(['name'=>'google-site-verification','content'=>'3fFAKDF-tTxd4FkAgccqyCdniOkHCV8gM-3WqM2UQ0E']);
 		return $this->render ('index', [
 				'siteImagesPath'       => $siteImagesPath,
 				'featuredCarsHTML'     => $featuredCarsHTML,

@@ -7,6 +7,9 @@ CarViewAsset::register ( $this );
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Car */
+/* @var $carRatings */
+/* @var $ratingsSum */
+/* @var $carInfo */
 
 $this->title = 'Car View';
 $carRatingPercentage = (count ( $carRatings ) > 0 ? 20 * $ratingsSum / count ( $carRatings ) : 0);
