@@ -152,6 +152,7 @@ class Car extends \yii\db\ActiveRecord {
                 ];
             }
         }
+	    return $imagesArray;
 	}
 	public function getRules() {
 		return [ 
