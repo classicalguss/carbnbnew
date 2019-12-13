@@ -143,7 +143,7 @@ class Car extends \yii\db\ActiveRecord {
 	}
 	public function getImages() {
 	    $imagesArray = [];
-	    for ($i = 0; $i < 6; $i++) {
+	    for ($i = 1; $i < 7; $i++) {
 	        $imageProperty = 'photo'.$i;
 	        if ($this->$imageProperty) {
                 $imagesArray['photoFile'.$i] = [
