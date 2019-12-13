@@ -146,7 +146,7 @@ class Car extends \yii\db\ActiveRecord {
 	    for ($i = 1; $i < 7; $i++) {
 	        $imageProperty = 'photo'.$i;
 	        if ($this->$imageProperty) {
-                $imagesArray['photoFile'.$i] = [
+                $imagesArray[] = [
                     'fileName' => $this->$imageProperty,
                     'path' => Yii::$app->params['imagesFolder'] . $this->$imageProperty
                 ];
