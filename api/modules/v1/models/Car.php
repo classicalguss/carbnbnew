@@ -142,32 +142,16 @@ class Car extends \yii\db\ActiveRecord {
 		];
 	}
 	public function getImages() {
-		return [
-				'photoFile1' => [ 
-						'fileName' => $this->photo1,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->photo1 
-				],
-				'photoFile2' => [ 
-						'fileName' => $this->photo2,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->photo2
-				],
-				'photoFile3' => [ 
-						'fileName' => $this->photo3,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->photo3
-				],
-				'photoFile4' => [ 
-						'fileName' => $this->photo4,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->photo4
-				],
-				'photoFile5' => [ 
-						'fileName' => $this->photo5,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->photo5
-				],
-				'photoFile6' => [ 
-						'fileName' => $this->photo6,
-						'path' => Yii::$app->params ['imagesFolder'] . $this->photo6
-				] 
-		];
+	    $imagesArray = [];
+	    for ($i = 0; $i < 6; $i++) {
+	        $imageProperty = 'photo'.$i;
+	        if ($this->$imageProperty) {
+                $imagesArray['photoFile'.$i] = [
+                    'fileName' => $this->$imageProperty,
+                    'path' => Yii::$app->params['imagesFolder'] . $this->$imageProperty
+                ];
+            }
+        }
 	}
 	public function getRules() {
 		return [ 
